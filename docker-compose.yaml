@@ -31,6 +31,9 @@ services:
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=guest
       - SPRING_RABBITMQ_PASSWORD=guest
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318
+      - OTEL_SERVICE_NAME=banco-soap
     ports:
       - "8081:8081" 
     networks:
@@ -136,6 +139,16 @@ services:
     container_name: container_comprovantes
     ports:
       - "50051:50051"
+    networks:
+      - app-network
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686" 
+      - "4317:4317"   
+      - "4318:4318"   
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
     networks:
       - app-network
 
