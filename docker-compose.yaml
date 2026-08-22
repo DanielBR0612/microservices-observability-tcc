@@ -16,57 +16,18 @@ services:
     networks:
       - app-network
 
-  core-soap:
-    build: ./BancoCoreSOAP
-    container_name: container_soap
-    depends_on:
-      - db
-      - rabbitmq
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/banco_dsd
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=postgres
-      - SERVER_PORT=8081
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=guest
-      - SPRING_RABBITMQ_PASSWORD=guest
-      - OTEL_TRACES_EXPORTER=otlp
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318
-      - OTEL_SERVICE_NAME=banco-soap
-    ports:
-      - "8081:8081" 
-    networks:
-      - app-network
-
-  rest-api:
-    build: ./BancoRestApi
-    container_name: container_rest
-    depends_on:
-      - db
-      - rabbitmq
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/banco_dsd
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=postgres
-      - SERVER_PORT=8081
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=guest
-      - SPRING_RABBITMQ_PASSWORD=guest
-    ports:
-      - "8082:8081"
-    networks:
-      - app-network
-
   ws-service:
     build: ./ws-service
     container_name: container_ws
+    volumes:
+      - ./ws-service:/app
+      - /app/node_modules
+    command: npx ts-node-dev --respawn server.ts
     ports:
       - "8083:8083"
     environment:
       - PORT=8083
-      - RABBITMQ_URL=amqp://rabbitmq:5672 
+      - RABBITMQ_URL=amqp://rabbitmq:5672
     networks:
       - app-network
 
@@ -90,7 +51,10 @@ services:
   atm-monitor:
     build: ./ATMService
     container_name: atm-monitor
-    command: npx ts-node monitor-server.ts
+    command: npx ts-node-dev --respawn monitor-server.ts
+    volumes:
+      - ./ATMService:/app
+      - /app/node_modules
     ports:
       - "6000:6000/udp" # UDP (Status Heartbeat)
       - "6001:6001"     # TCP (ATM Comandos)
@@ -102,7 +66,10 @@ services:
   atm-cluster:
     build: ./ATMService
     container_name: atm-cluster
-    command: npx ts-node atm-cluster.ts
+    command: npx ts-node-dev --respawn atm-cluster.ts
+    volumes:
+      - ./ATMService:/app
+      - /app/node_modules
     environment:
       - MONITOR_HOST=atm-monitor 
     depends_on:
@@ -114,17 +81,21 @@ services:
   gateway:
     build: ./BancoApiGateway
     container_name: container_gateway
+    volumes:
+      - ./BancoApiGateway:/app
+      - /app/node_modules
+    command: npx ts-node-dev --respawn index.ts
     depends_on:
       - core-soap
       - rest-api
       - ws-service
       - rabbitmq
       - comprovantes-service
-      - atm-monitor 
+      - atm-monitor
     ports:
-      - "8000:3000" 
+      - "8000:3000"
     environment:
-      - SOAP_URL=http://core-soap:8081
+      - SOAP_URL=http://core-soap:8080
       - REST_URL=http://rest-api:8081
       - WS_URL=ws://ws-service:3000
       - RABBITMQ_URL=amqp://rabbitmq:5672
@@ -137,6 +108,10 @@ services:
   comprovantes-service:
     build: ./ComprovantesService
     container_name: container_comprovantes
+    volumes:
+      - ./ComprovantesService:/app
+      - /app/node_modules
+    command: npx ts-node-dev --respawn grpc-server.ts
     ports:
       - "50051:50051"
     networks:
