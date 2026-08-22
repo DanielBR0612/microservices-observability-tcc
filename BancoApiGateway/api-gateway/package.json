@@ -20,26 +20,29 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.10.1",
+    "@grpc/proto-loader": "^0.7.12",
     "@nestjs/axios": "^4.0.1",
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
-    "@nestjs/platform-express": "^11.0.1",
-    "@nestjs/platform-ws": "^11.1.9",
-    "@nestjs/websockets": "^11.0.0",
-    "@nestjs/swagger": "^11.2.3",
     "@nestjs/jwt": "^11.0.1",
     "@nestjs/passport": "^11.0.5",
+    "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/platform-ws": "^11.1.9",
+    "@nestjs/swagger": "^11.2.3",
+    "@nestjs/websockets": "^11.0.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.79.0",
+    "@opentelemetry/exporter-trace-otlp-grpc": "^0.221.0",
+    "@opentelemetry/sdk-node": "^0.221.0",
+    "amqplib": "^0.10.3",
+    "axios": "^1.13.2",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
-    "axios": "^1.13.2",
     "reflect-metadata": "0.2.2",
     "rxjs": "^7.8.1",
-    "uuid": "3.4.0",
     "strong-soap": "^5.0.4",
     "swagger-ui-express": "^5.0.1",
-    "amqplib": "^0.10.3",
-    "@grpc/grpc-js": "^1.10.1",
-    "@grpc/proto-loader": "^0.7.12"
+    "uuid": "3.4.0"
   },
   "overrides": {
     "uuid": "3.4.0"

@@ -1,3 +1,4 @@
+import './tracing';
 import net from 'net';
 import dgram from 'dgram';
 

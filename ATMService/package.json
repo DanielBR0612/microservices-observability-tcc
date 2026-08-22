@@ -5,12 +5,15 @@
   "main": "monitor-server.ts",
   "scripts": {
     "start": "ts-node monitor-server.ts",
-    "cluster": "ts-node atm-cluster.ts"
+    "cluster": "ts-node-dev --respawn atm-cluster.ts"
   },
   "dependencies": {
+    "@opentelemetry/auto-instrumentations-node": "^0.79.0",
+    "@opentelemetry/exporter-trace-otlp-grpc": "^0.221.0",
+    "@opentelemetry/sdk-node": "^0.221.0",
+    "@types/node": "^20.10.5",
     "ts-node": "^10.9.1",
-    "typescript": "^5.3.3",
-    "@types/node": "^20.10.5"
+    "typescript": "^5.3.3"
   },
   "author": "Daniel",
   "license": "ISC"

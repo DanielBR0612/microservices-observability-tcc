@@ -1,3 +1,6 @@
 grpcio==1.60.0
 grpcio-tools==1.60.0
 reportlab==4.0.9
+opentelemetry-distro
+opentelemetry-exporter-otlp
+opentelemetry-instrumentation-grpc

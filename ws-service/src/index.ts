@@ -1,3 +1,4 @@
+import './tracing';
 import http from 'http';
 import WebSocket, { WebSocketServer } from 'ws';
 import express from 'express';

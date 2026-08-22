@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:15-alpine
@@ -22,12 +20,13 @@ services:
     volumes:
       - ./ws-service:/app
       - /app/node_modules
-    command: npx ts-node-dev --respawn server.ts
+    command: sh -c "npm install && npm run start"
     ports:
       - "8083:8083"
     environment:
       - PORT=8083
       - RABBITMQ_URL=amqp://rabbitmq:5672
+      - OTEL_SERVICE_NAME=ws-service
     networks:
       - app-network
 
@@ -51,6 +50,8 @@ services:
   atm-monitor:
     build: ./ATMService
     container_name: atm-monitor
+    environment: 
+      - OTEL_SERVICE_NAME=atm-monitor 
     command: npx ts-node-dev --respawn monitor-server.ts
     volumes:
       - ./ATMService:/app
@@ -66,12 +67,13 @@ services:
   atm-cluster:
     build: ./ATMService
     container_name: atm-cluster
-    command: npx ts-node-dev --respawn atm-cluster.ts
+    command: sh -c "npm install && npm run cluster"
     volumes:
       - ./ATMService:/app
       - /app/node_modules
     environment:
       - MONITOR_HOST=atm-monitor 
+      - OTEL_SERVICE_NAME=atm-cluster
     depends_on:
       - atm-monitor
     networks:
@@ -82,12 +84,9 @@ services:
     build: ./BancoApiGateway
     container_name: container_gateway
     volumes:
-      - ./BancoApiGateway:/app
-      - /app/node_modules
-    command: npx ts-node-dev --respawn index.ts
+      - ./BancoApiGateway/api-gateway:/usr/src/app/api-gateway
+    command: sh -c "npm install && npm run start:dev"
     depends_on:
-      - core-soap
-      - rest-api
       - ws-service
       - rabbitmq
       - comprovantes-service
@@ -102,28 +101,31 @@ services:
       - GRPC_COMPROVANTES_URL=comprovantes-service:50051
       - PORT=3000
       - MONITOR_HOST=atm-monitor
+      - OTEL_SERVICE_NAME=api-gateway
     networks:
       - app-network
 
   comprovantes-service:
     build: ./ComprovantesService
     container_name: container_comprovantes
+    command: sh -c "pip install -r requirements.txt && python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. comprovante.proto && python server.py"
     volumes:
       - ./ComprovantesService:/app
       - /app/node_modules
-    command: npx ts-node-dev --respawn grpc-server.ts
     ports:
       - "50051:50051"
     networks:
       - app-network
   jaeger:
-    image: jaegertracing/all-in-one:latest
+    image: jaegertracing/jaeger:latest
     ports:
       - "16686:16686" 
       - "4317:4317"   
       - "4318:4318"   
     environment:
       - COLLECTOR_OTLP_ENABLED=true
+      - OTEL_SERVICE_NAME=comprovantes-service
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
     networks:
       - app-network
 
@@ -133,3 +135,4 @@ volumes:
 networks:
   app-network:
     driver: bridge
+  
