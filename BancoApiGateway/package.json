@@ -2,15 +2,16 @@
   "dependencies": {
     "@nestjs/jwt": "^11.0.1",
     "@nestjs/passport": "^11.0.5",
+    "@nestjs/platform-ws": "^11.1.9",
+    "@nestjs/swagger": "^12.0.2",
+    "http-proxy-middleware": "^0.2.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
-    "@nestjs/platform-ws": "^11.1.9",
-    "http-proxy-middleware": "^3.0.5",
     "ws": "^8.18.3"
   },
   "devDependencies": {
-    "@types/passport-jwt": "^4.0.1",
     "@types/http-proxy-middleware": "^0.19.3",
+    "@types/passport-jwt": "^4.0.1",
     "@types/ws": "^8.18.1"
   }
 }

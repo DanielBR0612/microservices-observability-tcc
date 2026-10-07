@@ -94,8 +94,8 @@ services:
     ports:
       - "8000:3000"
     environment:
-      - SOAP_URL=http://core-soap:8080
-      - REST_URL=http://rest-api:8081
+      - REST_URL=http://host.docker.internal:8081
+      - SOAP_URL=http://host.docker.internal:8080
       - WS_URL=ws://ws-service:3000
       - RABBITMQ_URL=amqp://rabbitmq:5672
       - GRPC_COMPROVANTES_URL=comprovantes-service:50051
@@ -128,6 +128,19 @@ services:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
     networks:
       - app-network
+  
+  k6:
+    image: grafana/k6:latest
+    container_name: k6-load-test
+    networks:
+      - app-network
+    volumes:
+      - ./script.js:/scripts/script.js
+      - ./ComprovantesService/comprovante.proto:/scripts/comprovante.proto
+    command: run /scripts/script.js
+    depends_on:
+      - gateway
+      - comprovantes-service
 
 volumes:
   pg_data:
