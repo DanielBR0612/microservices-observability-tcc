@@ -79,7 +79,7 @@ export class BancoRestController {
         };
     }
 
-    @Get('clientes/:id/chaves-pix')
+    @Get('clientes/:numeroConta/chaves-pix')
     @ApiOperation({ summary: 'Lista todas as chaves pix de um cliente' })
     @ApiParam({ name: 'numeroConta', example: 1 })
     async getChavesPix(@Param('numeroConta') numeroConta: string) {
