@@ -14,30 +14,30 @@ services:
     networks:
       - app-network
 
-    ws-service:
-      build: ./ws-service
-      container_name: container_ws
-      volumes:
-        - ./ws-service:/app
-        - /app/node_modules
-      command: sh -c "npm install && NODE_OPTIONS='--require @opentelemetry/auto-instrumentations-node/register' npm run start"
-      ports:
-        - "8083:8083"
-      depends_on:
-        - rabbitmq
-        - jaeger
-      environment:
-        - PORT=8083
-        - RABBITMQ_URL=amqp://rabbitmq:5672
-        - WS_JWT_SECRET=segredo-de-teste-123
-        - OTEL_SERVICE_NAME=ws-service
-        - OTEL_TRACES_EXPORTER=otlp
-        - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
-        - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318
-        - OTEL_METRICS_EXPORTER=none
-        - OTEL_LOGS_EXPORTER=none
-      networks:
-        - app-network
+  ws-service:
+    build: ./ws-service
+    container_name: container_ws
+    volumes:
+      - ./ws-service:/app
+      - /app/node_modules
+    command: sh -c "npm install && NODE_OPTIONS='--require @opentelemetry/auto-instrumentations-node/register' npm run start"
+    ports:
+      - "8083:8083"
+    depends_on:
+      - rabbitmq
+      - jaeger
+    environment:
+      - PORT=8083
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+      - WS_JWT_SECRET=segredo-de-teste-123
+      - OTEL_SERVICE_NAME=ws-service
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318
+      - OTEL_METRICS_EXPORTER=none
+      - OTEL_LOGS_EXPORTER=none
+    networks:
+      - app-network
 
   rabbitmq:
     image: rabbitmq:3.13-management
