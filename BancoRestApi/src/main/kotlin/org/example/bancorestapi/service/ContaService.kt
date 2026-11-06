@@ -77,9 +77,8 @@ class ContaService (
 
         transacaoRepository.saveAll(listOf(debito, credito))
 
-        val clienteIdDestino = contaDestino.cliente?.id ?: contaDestino.id
         notificationService.publishTransferenceNotification(
-            clienteIdDestino,
+            contaDestino.numeroConta,
             request.valor,
             "PIX"
         )

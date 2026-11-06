@@ -2,14 +2,12 @@ import { Controller, Get, Post, Body, Request, UseGuards } from '@nestjs/common'
 import { ApiTags, ApiOperation, ApiBody } from '@nestjs/swagger';
 import { BancoCoreSoapService } from '../banco-core-soap/banco-core-soap.service';
 import { AuthGuard } from '@nestjs/passport';
-import { NotificationsService } from '../notifications/notifications.service';
 
 @ApiTags('banco-soap')
 @Controller('banco/soap')
 export class BancoSoapController {
   constructor(
     private readonly soapService: BancoCoreSoapService,
-    private readonly notificationsService: NotificationsService,
   ) {}
 
     @UseGuards(AuthGuard('jwt'))
@@ -50,12 +48,7 @@ export class BancoSoapController {
     async realizarTED(@Body() body: any) {
       const dados = await this.soapService.chamarServico('realizarTransferenciaTED', body);
 
-      // Tentar notificar o destinatário; não deve quebrar a resposta principal
-      this.notificationsService.notificarTransacao({
-          conta: String(body.contaDestino),
-          valor: Number(body.valor),
-          tipo: 'TED'
-      });
+      // A notificacao ao destinatario e publicada no RabbitMQ pelo BancoCoreSOAP
 
       return {
         data: dados,

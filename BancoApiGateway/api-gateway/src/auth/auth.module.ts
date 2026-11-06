@@ -10,7 +10,8 @@ import { BancoCoreSoapModule } from '../banco-core-soap/banco-core-soap.module';
   imports: [
     PassportModule,
     JwtModule.register({
-      secret: 'secret', 
+      // Mesmo segredo do ws-service, para o token do login abrir o WebSocket
+      secret: process.env.JWT_SECRET || 'secret',
       signOptions: { expiresIn: '1h' }, 
     }),
     BancoCoreSoapModule

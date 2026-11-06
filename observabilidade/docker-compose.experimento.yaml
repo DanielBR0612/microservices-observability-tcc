@@ -1,0 +1,12 @@
+# Override usado apenas pelo experimento de overhead (observabilidade/experimento-overhead.sh).
+#
+# Roda os servicos Node sem modo watch/desenvolvimento, para que o recompilador e o
+# observador de arquivos nao entrem na medicao de CPU e latencia.
+#
+#   docker compose -f docker-compose.yaml -f observabilidade/docker-compose.experimento.yaml up -d
+services:
+  gateway:
+    command: sh -c "npm install && npm run build && node dist/main"
+
+  atm-monitor:
+    command: npx ts-node monitor-server.ts

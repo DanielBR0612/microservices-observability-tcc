@@ -1,6 +1,7 @@
 package com.example.BancoCoreSoap.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import com.example.BancoCoreSoap.service.NotificationService;
 
 import java.math.BigDecimal;
@@ -37,6 +38,9 @@ public class ContaService {
 
 	@Autowired
     private NotificationService notificationService;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Transactional
 	public CriarContaResponse create(CriarContaRequest request) {
@@ -127,7 +131,8 @@ public class ContaService {
             if (conta.getCliente() != null && conta.getCliente().getUsuario() != null) {
                 String senhaBanco = conta.getCliente().getUsuario().getPasswordHash();
 
-                if (senhaBanco.equals(senhaRecebida)) {
+                // A senha e gravada com BCrypt (Usuario.setPasswordHash), entao compara via encoder
+                if (senhaRecebida != null && passwordEncoder.matches(senhaRecebida, senhaBanco)) {
                     return conta.getCliente().getNome();
                 }
             }

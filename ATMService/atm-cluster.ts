@@ -46,7 +46,7 @@ class ATMClient {
             else if (comando.startsWith('CMD_REFILL:')) {
                 const novoValor = parseInt(comando.split(':')[1]);
                 this.dinheiro = this.dinheiro + novoValor;
-                console.log(`[${this.id}] CAIXA ABASTECIDO! Novo saldo: R$ ${novoValor}`);
+                console.log(`[${this.id}] CAIXA ABASTECIDO! +R$ ${novoValor}, novo saldo: R$ ${this.dinheiro}`);
             }
         });
 

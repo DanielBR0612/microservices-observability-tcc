@@ -225,7 +225,7 @@ Notificações por WebSocket autenticadas por JWT e integração com o API Gatew
    - Ferramenta de desenvolvimento para gerar tokens: `ws-service/tools/generateToken.js` (gera token com `sub = clienteId`).
    - Você pode colar o token em um input `id="wsToken"` na página ou definir `window.CLIENT_WS_TOKEN = '<token>'` no console antes de conectar.
    - Mantunção de apenas uma conexão WebSocket por cliente (fecha a anterior ao abrir nova).
-   - `NotificationsService` foi adicionado nos controladores de transferência (TED e PIX). O gateway faz POST para o `ws-service` `/notify` para solicitar envio de notificações quando houver transferência.
+   - As notificações de transferência são publicadas na fila `notificacoes.transferencias` apenas pelos backends (`BancoCoreSOAP` para TED, `BancoRestApi` para PIX), endereçadas pelo número da conta de destino. O `ws-service` consome a fila e entrega ao cliente conectado; o gateway não publica notificações. O endpoint `/notify` do `ws-service` continua disponível para uso manual.
 
 ### Como usar:
 

@@ -36,6 +36,9 @@ services:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318
       - OTEL_METRICS_EXPORTER=none
       - OTEL_LOGS_EXPORTER=none
+      - OTEL_SDK_DISABLED=${OTEL_SDK_DISABLED:-false}
+      - OTEL_TRACES_SAMPLER=${OTEL_TRACES_SAMPLER:-parentbased_always_on}
+      - OTEL_TRACES_SAMPLER_ARG=${OTEL_TRACES_SAMPLER_ARG:-1.0}
     networks:
       - app-network
 
@@ -59,8 +62,12 @@ services:
   atm-monitor:
     build: ./ATMService
     container_name: atm-monitor
-    environment: 
-      - OTEL_SERVICE_NAME=atm-monitor 
+    environment:
+      - OTEL_SERVICE_NAME=atm-monitor
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_SDK_DISABLED=${OTEL_SDK_DISABLED:-false}
+      - OTEL_TRACES_SAMPLER=${OTEL_TRACES_SAMPLER:-parentbased_always_on}
+      - OTEL_TRACES_SAMPLER_ARG=${OTEL_TRACES_SAMPLER_ARG:-1.0}
     command: npx ts-node-dev --respawn monitor-server.ts
     volumes:
       - ./ATMService:/app
@@ -83,6 +90,10 @@ services:
     environment:
       - MONITOR_HOST=atm-monitor 
       - OTEL_SERVICE_NAME=atm-cluster
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_SDK_DISABLED=${OTEL_SDK_DISABLED:-false}
+      - OTEL_TRACES_SAMPLER=${OTEL_TRACES_SAMPLER:-parentbased_always_on}
+      - OTEL_TRACES_SAMPLER_ARG=${OTEL_TRACES_SAMPLER_ARG:-1.0}
     depends_on:
       - atm-monitor
     networks:
@@ -112,20 +123,38 @@ services:
       - MONITOR_HOST=atm-monitor
       - OTEL_SERVICE_NAME=api-gateway
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - JWT_SECRET=segredo-de-teste-123
+      - OTEL_SDK_DISABLED=${OTEL_SDK_DISABLED:-false}
+      - OTEL_TRACES_SAMPLER=${OTEL_TRACES_SAMPLER:-parentbased_always_on}
+      - OTEL_TRACES_SAMPLER_ARG=${OTEL_TRACES_SAMPLER_ARG:-1.0}
     networks:
       - app-network
 
   comprovantes-service:
     build: ./ComprovantesService
     container_name: container_comprovantes
-    command: sh -c "pip install -r requirements.txt && python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. comprovante.proto && python server.py"
+    command: sh -c "pip install -r requirements.txt && python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. comprovante.proto && ${OTEL_PY_WRAPPER-opentelemetry-instrument} python server.py"
     volumes:
       - ./ComprovantesService:/app
       - /app/node_modules
     ports:
       - "50051:50051"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - OTEL_SERVICE_NAME=comprovantes-service
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_METRICS_EXPORTER=none
+      - OTEL_LOGS_EXPORTER=none
+      - OTEL_SDK_DISABLED=${OTEL_SDK_DISABLED:-false}
+      - OTEL_TRACES_SAMPLER=${OTEL_TRACES_SAMPLER:-parentbased_always_on}
+      - OTEL_TRACES_SAMPLER_ARG=${OTEL_TRACES_SAMPLER_ARG:-1.0}
+    depends_on:
+      - jaeger
     networks:
       - app-network
+
   jaeger:
     image: jaegertracing/jaeger:latest
     ports:
@@ -134,8 +163,6 @@ services:
       - "4318:4318"   
     environment:
       - COLLECTOR_OTLP_ENABLED=true
-      - OTEL_SERVICE_NAME=comprovantes-service
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
     networks:
       - app-network
   
@@ -147,6 +174,7 @@ services:
     volumes:
       - ./script.js:/scripts/script.js
       - ./ComprovantesService/comprovante.proto:/scripts/comprovante.proto
+      - ./resultados-k6:/out
     command: run /scripts/script.js
     depends_on:
       - gateway

@@ -1,0 +1,230 @@
+time="2026-11-05T21:54:31-03:00" level=warning msg="project has been loaded without an explicit name from a symlink. Using name \"projeto-dsd\""
+time="2026-11-05T21:54:31-03:00" level=warning msg="Found orphan containers (projeto-dsd-k6-run-8f40d3a8b8b6) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up."
+ Container atm-monitor Running 
+ Container projeto-dsd-jaeger-1 Running 
+ Container container_gateway Running 
+ Container container_comprovantes Running 
+ Container container_ws Running 
+ Container projeto-dsd-rabbitmq Running 
+ Container projeto-dsd-k6-run-14e44c7aab71 Creating 
+ Container projeto-dsd-k6-run-14e44c7aab71 Created 
+
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
+
+
+     execution: local
+        script: /scripts/script.js
+        output: json (/out/metricas.json.gz)
+
+     scenarios: (100.00%) 1 scenario, 5 max VUs, 1m0s max duration (incl. graceful stop):
+              * default: 5 looping VUs for 30s (gracefulStop: 30s)
+
+
+running (0m01.0s), 5/5 VUs, 0 complete and 0 interrupted iterations
+default   [   3% ] 5 VUs  01.0s/30s
+
+running (0m02.0s), 5/5 VUs, 0 complete and 0 interrupted iterations
+default   [   7% ] 5 VUs  02.0s/30s
+
+running (0m03.0s), 5/5 VUs, 0 complete and 0 interrupted iterations
+default   [  10% ] 5 VUs  03.0s/30s
+
+running (0m04.0s), 5/5 VUs, 0 complete and 0 interrupted iterations
+default   [  13% ] 5 VUs  04.0s/30s
+
+running (0m05.0s), 5/5 VUs, 5 complete and 0 interrupted iterations
+default   [  17% ] 5 VUs  05.0s/30s
+
+running (0m06.0s), 5/5 VUs, 5 complete and 0 interrupted iterations
+default   [  20% ] 5 VUs  06.0s/30s
+
+running (0m07.0s), 5/5 VUs, 5 complete and 0 interrupted iterations
+default   [  23% ] 5 VUs  07.0s/30s
+
+running (0m08.0s), 5/5 VUs, 5 complete and 0 interrupted iterations
+default   [  27% ] 5 VUs  08.0s/30s
+
+running (0m09.0s), 5/5 VUs, 10 complete and 0 interrupted iterations
+default   [  30% ] 5 VUs  09.0s/30s
+
+running (0m10.0s), 5/5 VUs, 10 complete and 0 interrupted iterations
+default   [  33% ] 5 VUs  10.0s/30s
+
+running (0m11.0s), 5/5 VUs, 10 complete and 0 interrupted iterations
+default   [  37% ] 5 VUs  11.0s/30s
+
+running (0m12.0s), 5/5 VUs, 10 complete and 0 interrupted iterations
+default   [  40% ] 5 VUs  12.0s/30s
+
+running (0m13.0s), 5/5 VUs, 15 complete and 0 interrupted iterations
+default   [  43% ] 5 VUs  13.0s/30s
+
+running (0m14.0s), 5/5 VUs, 15 complete and 0 interrupted iterations
+default   [  47% ] 5 VUs  14.0s/30s
+
+running (0m15.0s), 5/5 VUs, 15 complete and 0 interrupted iterations
+default   [  50% ] 5 VUs  15.0s/30s
+
+running (0m16.0s), 5/5 VUs, 15 complete and 0 interrupted iterations
+default   [  53% ] 5 VUs  16.0s/30s
+
+running (0m17.0s), 5/5 VUs, 20 complete and 0 interrupted iterations
+default   [  57% ] 5 VUs  17.0s/30s
+
+running (0m18.0s), 5/5 VUs, 20 complete and 0 interrupted iterations
+default   [  60% ] 5 VUs  18.0s/30s
+
+running (0m19.0s), 5/5 VUs, 20 complete and 0 interrupted iterations
+default   [  63% ] 5 VUs  19.0s/30s
+
+running (0m20.0s), 5/5 VUs, 20 complete and 0 interrupted iterations
+default   [  67% ] 5 VUs  20.0s/30s
+
+running (0m21.0s), 5/5 VUs, 25 complete and 0 interrupted iterations
+default   [  70% ] 5 VUs  21.0s/30s
+
+running (0m22.0s), 5/5 VUs, 25 complete and 0 interrupted iterations
+default   [  73% ] 5 VUs  22.0s/30s
+
+running (0m23.0s), 5/5 VUs, 25 complete and 0 interrupted iterations
+default   [  77% ] 5 VUs  23.0s/30s
+
+running (0m24.0s), 5/5 VUs, 25 complete and 0 interrupted iterations
+default   [  80% ] 5 VUs  24.0s/30s
+
+running (0m25.0s), 5/5 VUs, 30 complete and 0 interrupted iterations
+default   [  83% ] 5 VUs  25.0s/30s
+
+running (0m26.0s), 5/5 VUs, 30 complete and 0 interrupted iterations
+default   [  87% ] 5 VUs  26.0s/30s
+
+running (0m27.0s), 5/5 VUs, 30 complete and 0 interrupted iterations
+default   [  90% ] 5 VUs  27.0s/30s
+
+running (0m28.0s), 5/5 VUs, 30 complete and 0 interrupted iterations
+default   [  93% ] 5 VUs  28.0s/30s
+
+running (0m29.0s), 5/5 VUs, 32 complete and 0 interrupted iterations
+default   [  97% ] 5 VUs  29.0s/30s
+
+running (0m30.0s), 5/5 VUs, 35 complete and 0 interrupted iterations
+default   [ 100% ] 5 VUs  30.0s/30s
+
+running (0m31.0s), 5/5 VUs, 35 complete and 0 interrupted iterations
+default ↓ [ 100% ] 5 VUs  30s
+
+running (0m32.0s), 5/5 VUs, 35 complete and 0 interrupted iterations
+default ↓ [ 100% ] 5 VUs  30s
+
+running (0m33.0s), 5/5 VUs, 35 complete and 0 interrupted iterations
+default ↓ [ 100% ] 5 VUs  30s
+
+running (0m34.0s), 0/5 VUs, 40 complete and 0 interrupted iterations
+default ✓ [ 100% ] 5 VUs  30s
+
+running (0m35.0s), 0/5 VUs, 40 complete and 0 interrupted iterations
+default ✓ [ 100% ] 5 VUs  30s
+
+running (0m36.0s), 0/5 VUs, 40 complete and 0 interrupted iterations
+default ✓ [ 100% ] 5 VUs  30s
+
+running (0m37.0s), 0/5 VUs, 40 complete and 0 interrupted iterations
+default ✓ [ 100% ] 5 VUs  30s
+
+running (0m38.0s), 0/5 VUs, 40 complete and 0 interrupted iterations
+default ✓ [ 100% ] 5 VUs  30s
+time="2026-11-06T00:55:10Z" level=info msg="[Jaeger] servicos com traces: banco-soap, rest-api, ws-service, comprovantes-service, api-gateway" source=console
+
+
+  █ THRESHOLDS 
+
+    checks
+    ✓ 'rate==1.0' rate=100.00%
+
+    http_req_failed
+    ✓ 'rate==0' rate=0.00%
+
+    ws_notificacao_recebida
+    ✓ 'rate==1.0' rate=100.00%
+
+
+  █ TOTAL RESULTS 
+
+    checks_total.......: 1565    41.00733/s
+    checks_succeeded...: 100.00% 1565 out of 1565
+    checks_failed......: 0.00%   0 out of 1565
+
+    ✓ SOAP criarCliente 2xx
+    ✓ SOAP criarCliente retorna id
+    ✓ SOAP criarConta 2xx
+    ✓ SOAP criarConta numero correto
+    ✓ Auth login origem retorna token
+    ✓ Auth login destino retorna token
+    ✓ SOAP saldo (JWT) 200
+    ✓ SOAP saldo inicial correto
+    ✓ SOAP saldo sem token 401
+    ✓ SOAP alterarSenha 2xx
+    ✓ SOAP alterarSenha SUCESSO
+    ✓ Auth login com senha nova
+    ✓ Auth senha antiga rejeitada 401
+    ✓ REST criar chave Pix 2xx
+    ✓ REST listar chaves 200
+    ✓ REST listar chaves contem a nova
+    ✓ REST PIX 2xx
+    ✓ REST PIX credita conta destino
+    ✓ SOAP TED 2xx
+    ✓ SOAP TED SUCESSO
+    ✓ WS handshake 101
+    ✓ WS notificacao PIX recebida
+    ✓ WS notificacao PIX sem duplicata
+    ✓ WS notificacao TED recebida
+    ✓ WS notificacao TED sem duplicata
+    ✓ SOAP saldo final = inicial - PIX - TED
+    ✓ REST extrato 200
+    ✓ REST extrato contem o PIX
+    ✓ gRPC comprovante 2xx
+    ✓ gRPC comprovante e PDF
+    ✓ ATM listar 200
+    ✓ ATM listar contem ATMs via UDP
+    ✓ ATM abastecer enviado
+    ✓ ATM bloquear responde (offline)
+    ✓ RabbitMQ fila tem consumer (ws-service)
+    ✓ Jaeger traces do api-gateway
+    ✓ Jaeger traces do ws-service
+    ✓ Jaeger traces do banco-soap
+    ✓ Jaeger traces do rest-api
+    ✓ Jaeger traces do comprovantes-service
+
+    HTTP
+    http_req_duration..............: avg=73.99ms min=929.17µs med=77.66ms  max=238.18ms p(90)=157.43ms p(95)=180.23ms
+      { expected_response:true }...: avg=73.99ms min=929.17µs med=77.66ms  max=238.18ms p(90)=157.43ms p(95)=180.23ms
+    http_req_failed................: 0.00%   0 out of 881
+    http_reqs......................: 881     23.084637/s
+
+    EXECUTION
+    iteration_duration.............: avg=4.13s   min=4.04s    med=4.11s    max=4.39s    p(90)=4.31s    p(95)=4.38s   
+    iterations.....................: 40      1.048111/s
+    vus............................: 0       min=0        max=5
+    vus_max........................: 5       min=5        max=5
+
+    NETWORK
+    data_received..................: 854 kB  22 kB/s
+    data_sent......................: 184 kB  4.8 kB/s
+
+    WEBSOCKET
+    ws_connecting..................: avg=817.1µs min=615.94µs med=725.25µs max=1.95ms   p(90)=1.06ms   p(95)=1.46ms  
+    ws_msgs_received...............: 120     3.144332/s
+    ws_notificacao_latencia_ms.....: avg=98.23ms min=79ms     med=99.5ms   max=130ms    p(90)=113ms    p(95)=117.19ms
+    ws_notificacao_recebida........: 100.00% 80 out of 80
+    ws_session_duration............: avg=1.61s   min=1.6s     med=1.61s    max=1.63s    p(90)=1.62s    p(95)=1.63s   
+    ws_sessions....................: 40      1.048111/s
+
+
+
+
+running (0m38.2s), 0/5 VUs, 40 complete and 0 interrupted iterations
+default ✓ [ 100% ] 5 VUs  30s

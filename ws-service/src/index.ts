@@ -1,4 +1,5 @@
-import './tracing';
+// O OpenTelemetry e iniciado pelo NODE_OPTIONS (--require .../register) no docker-compose.
+// Importar ./tracing aqui criava um segundo SDK e instrumentava as bibliotecas duas vezes.
 import http from 'http';
 import WebSocket, { WebSocketServer } from 'ws';
 import express from 'express';

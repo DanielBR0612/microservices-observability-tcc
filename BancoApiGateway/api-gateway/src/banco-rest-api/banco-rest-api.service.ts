@@ -1,17 +1,21 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import axios from 'axios';
+import * as http from 'http';
 
 @Injectable()
 export class BancoRestApiService {
   private baseUrl: string;
 
+  // Keep-alive: evita abrir uma conexao TCP nova por chamada para host.docker.internal
+  private http = axios.create({ httpAgent: new http.Agent({ keepAlive: true, maxSockets: 50 }) });
+
   constructor() {
     this.baseUrl = (process.env.REST_URL || 'http://localhost:8081').replace(/\/$/, '');
   }
-  
+
   private async get(endpoint: string) {
     try {
-      const response = await axios.get(`${this.baseUrl}/${endpoint}`);
+      const response = await this.http.get(`${this.baseUrl}/${endpoint}`);
       return response.data;
     } catch (error) {
       this.tratarErro(error);
@@ -20,7 +24,7 @@ export class BancoRestApiService {
 
   private async post(endpoint: string, data: any) {
     try {
-      const response = await axios.post(`${this.baseUrl}/${endpoint}`, data);
+      const response = await this.http.post(`${this.baseUrl}/${endpoint}`, data);
       return response.data;
     } catch (error) {
       this.tratarErro(error);

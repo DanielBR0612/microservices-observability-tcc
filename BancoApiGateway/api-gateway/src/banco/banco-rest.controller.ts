@@ -1,14 +1,12 @@
 import { Controller, Get, Post, Body, Param, Query, BadRequestException } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBody, ApiParam, ApiQuery } from '@nestjs/swagger';
 import { BancoRestApiService } from '../banco-rest-api/banco-rest-api.service';
-import { NotificationsService } from '../notifications/notifications.service';
 
-@ApiTags('banco-rest') 
+@ApiTags('banco-rest')
 @Controller('banco/rest')
 export class BancoRestController {
     constructor(
         private readonly restService: BancoRestApiService,
-        private readonly notificationsService: NotificationsService,
     ) {}
 
     @Post('clientes/:id/chaves-pix') 
@@ -54,13 +52,7 @@ export class BancoRestController {
 
         console.log('DEBUG PIX RESPONSE:', dados);
 
-        // Notificar destinatário via NotificationsService (não bloqueante)
-        this.notificationsService.notificarTransacao({
-            contaDestino: String(dados.numeroContaDestino ?? body.chaveDestino ?? body.contaDestino ?? ''), 
-            valor: Number(body.valor), 
-            tipo: 'PIX',
-            timestamp: new Date().toISOString()
-        });
+        // A notificacao ao destinatario e publicada no RabbitMQ pelo BancoRestApi
 
         return {
             data: dados,
