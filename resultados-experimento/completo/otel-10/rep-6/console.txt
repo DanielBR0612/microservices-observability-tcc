@@ -1,0 +1,358 @@
+time="2026-11-07T19:46:17-03:00" level=warning msg="Found orphan containers (projeto-dsd-k6-run-8f40d3a8b8b6) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up."
+ Container container_ws Running 
+ Container container_comprovantes Running 
+ Container container_gateway Running 
+ Container atm-monitor Running 
+ Container projeto-dsd-jaeger-1 Running 
+ Container projeto-dsd-rabbitmq Running 
+ Container projeto-dsd-k6-run-fa001c54b618 Creating 
+ Container projeto-dsd-k6-run-fa001c54b618 Created 
+
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
+
+
+     execution: local
+        script: /scripts/script.js
+        output: json (/exp/metricas.json.gz)
+
+     scenarios: (100.00%) 1 scenario, 50 max VUs, 1m30s max duration (incl. graceful stop):
+              * principal: 2.00 iterations/s for 1m0s (maxVUs: 10-50, gracefulStop: 30s)
+
+
+running (0m01.0s), 02/10 VUs, 0 complete and 0 interrupted iterations
+principal   [   2% ] 02/10 VUs  0m01.0s/1m0s  2.00 iters/s
+
+running (0m02.0s), 04/10 VUs, 0 complete and 0 interrupted iterations
+principal   [   3% ] 04/10 VUs  0m02.0s/1m0s  2.00 iters/s
+
+running (0m03.0s), 06/10 VUs, 0 complete and 0 interrupted iterations
+principal   [   5% ] 06/10 VUs  0m03.0s/1m0s  2.00 iters/s
+
+running (0m04.0s), 06/10 VUs, 2 complete and 0 interrupted iterations
+principal   [   7% ] 06/10 VUs  0m04.0s/1m0s  2.00 iters/s
+
+running (0m05.0s), 06/10 VUs, 4 complete and 0 interrupted iterations
+principal   [   8% ] 06/10 VUs  0m05.0s/1m0s  2.00 iters/s
+
+running (0m06.0s), 06/10 VUs, 6 complete and 0 interrupted iterations
+principal   [  10% ] 06/10 VUs  0m06.0s/1m0s  2.00 iters/s
+
+running (0m07.0s), 06/10 VUs, 8 complete and 0 interrupted iterations
+principal   [  12% ] 06/10 VUs  0m07.0s/1m0s  2.00 iters/s
+
+running (0m08.0s), 06/10 VUs, 10 complete and 0 interrupted iterations
+principal   [  13% ] 06/10 VUs  0m08.0s/1m0s  2.00 iters/s
+
+running (0m09.0s), 06/10 VUs, 12 complete and 0 interrupted iterations
+principal   [  15% ] 06/10 VUs  0m09.0s/1m0s  2.00 iters/s
+
+running (0m10.0s), 06/10 VUs, 14 complete and 0 interrupted iterations
+principal   [  17% ] 06/10 VUs  0m10.0s/1m0s  2.00 iters/s
+
+running (0m11.0s), 06/10 VUs, 16 complete and 0 interrupted iterations
+principal   [  18% ] 06/10 VUs  0m11.0s/1m0s  2.00 iters/s
+
+running (0m12.0s), 06/10 VUs, 18 complete and 0 interrupted iterations
+principal   [  20% ] 06/10 VUs  0m12.0s/1m0s  2.00 iters/s
+
+running (0m13.0s), 06/10 VUs, 20 complete and 0 interrupted iterations
+principal   [  22% ] 06/10 VUs  0m13.0s/1m0s  2.00 iters/s
+
+running (0m14.0s), 06/10 VUs, 22 complete and 0 interrupted iterations
+principal   [  23% ] 06/10 VUs  0m14.0s/1m0s  2.00 iters/s
+
+running (0m15.0s), 06/10 VUs, 24 complete and 0 interrupted iterations
+principal   [  25% ] 06/10 VUs  0m15.0s/1m0s  2.00 iters/s
+
+running (0m16.0s), 06/10 VUs, 26 complete and 0 interrupted iterations
+principal   [  27% ] 06/10 VUs  0m16.0s/1m0s  2.00 iters/s
+
+running (0m17.0s), 06/10 VUs, 28 complete and 0 interrupted iterations
+principal   [  28% ] 06/10 VUs  0m17.0s/1m0s  2.00 iters/s
+
+running (0m18.0s), 06/10 VUs, 30 complete and 0 interrupted iterations
+principal   [  30% ] 06/10 VUs  0m18.0s/1m0s  2.00 iters/s
+
+running (0m19.0s), 05/10 VUs, 33 complete and 0 interrupted iterations
+principal   [  32% ] 05/10 VUs  0m19.0s/1m0s  2.00 iters/s
+
+running (0m20.0s), 06/10 VUs, 34 complete and 0 interrupted iterations
+principal   [  33% ] 06/10 VUs  0m20.0s/1m0s  2.00 iters/s
+
+running (0m21.0s), 06/10 VUs, 36 complete and 0 interrupted iterations
+principal   [  35% ] 06/10 VUs  0m21.0s/1m0s  2.00 iters/s
+
+running (0m22.0s), 06/10 VUs, 38 complete and 0 interrupted iterations
+principal   [  37% ] 06/10 VUs  0m22.0s/1m0s  2.00 iters/s
+
+running (0m23.0s), 06/10 VUs, 40 complete and 0 interrupted iterations
+principal   [  38% ] 06/10 VUs  0m23.0s/1m0s  2.00 iters/s
+
+running (0m24.0s), 06/10 VUs, 42 complete and 0 interrupted iterations
+principal   [  40% ] 06/10 VUs  0m24.0s/1m0s  2.00 iters/s
+
+running (0m25.0s), 06/10 VUs, 44 complete and 0 interrupted iterations
+principal   [  42% ] 06/10 VUs  0m25.0s/1m0s  2.00 iters/s
+
+running (0m26.0s), 06/10 VUs, 46 complete and 0 interrupted iterations
+principal   [  43% ] 06/10 VUs  0m26.0s/1m0s  2.00 iters/s
+
+running (0m27.0s), 06/10 VUs, 48 complete and 0 interrupted iterations
+principal   [  45% ] 06/10 VUs  0m27.0s/1m0s  2.00 iters/s
+
+running (0m28.0s), 06/10 VUs, 50 complete and 0 interrupted iterations
+principal   [  47% ] 06/10 VUs  0m28.0s/1m0s  2.00 iters/s
+
+running (0m29.0s), 06/10 VUs, 52 complete and 0 interrupted iterations
+principal   [  48% ] 06/10 VUs  0m29.0s/1m0s  2.00 iters/s
+
+running (0m30.0s), 06/10 VUs, 54 complete and 0 interrupted iterations
+principal   [  50% ] 06/10 VUs  0m30.0s/1m0s  2.00 iters/s
+
+running (0m31.0s), 06/10 VUs, 56 complete and 0 interrupted iterations
+principal   [  52% ] 06/10 VUs  0m31.0s/1m0s  2.00 iters/s
+
+running (0m32.0s), 06/10 VUs, 58 complete and 0 interrupted iterations
+principal   [  53% ] 06/10 VUs  0m32.0s/1m0s  2.00 iters/s
+
+running (0m33.0s), 06/10 VUs, 60 complete and 0 interrupted iterations
+principal   [  55% ] 06/10 VUs  0m33.0s/1m0s  2.00 iters/s
+
+running (0m34.0s), 06/10 VUs, 62 complete and 0 interrupted iterations
+principal   [  57% ] 06/10 VUs  0m34.0s/1m0s  2.00 iters/s
+
+running (0m35.0s), 06/10 VUs, 64 complete and 0 interrupted iterations
+principal   [  58% ] 06/10 VUs  0m35.0s/1m0s  2.00 iters/s
+
+running (0m36.0s), 06/10 VUs, 66 complete and 0 interrupted iterations
+principal   [  60% ] 06/10 VUs  0m36.0s/1m0s  2.00 iters/s
+
+running (0m37.0s), 06/10 VUs, 68 complete and 0 interrupted iterations
+principal   [  62% ] 06/10 VUs  0m37.0s/1m0s  2.00 iters/s
+
+running (0m38.0s), 06/10 VUs, 70 complete and 0 interrupted iterations
+principal   [  63% ] 06/10 VUs  0m38.0s/1m0s  2.00 iters/s
+
+running (0m39.0s), 06/10 VUs, 72 complete and 0 interrupted iterations
+principal   [  65% ] 06/10 VUs  0m39.0s/1m0s  2.00 iters/s
+
+running (0m40.0s), 06/10 VUs, 74 complete and 0 interrupted iterations
+principal   [  67% ] 06/10 VUs  0m40.0s/1m0s  2.00 iters/s
+
+running (0m41.0s), 06/10 VUs, 76 complete and 0 interrupted iterations
+principal   [  68% ] 06/10 VUs  0m41.0s/1m0s  2.00 iters/s
+
+running (0m42.0s), 06/10 VUs, 78 complete and 0 interrupted iterations
+principal   [  70% ] 06/10 VUs  0m42.0s/1m0s  2.00 iters/s
+
+running (0m43.0s), 06/10 VUs, 80 complete and 0 interrupted iterations
+principal   [  72% ] 06/10 VUs  0m43.0s/1m0s  2.00 iters/s
+
+running (0m44.0s), 06/10 VUs, 82 complete and 0 interrupted iterations
+principal   [  73% ] 06/10 VUs  0m44.0s/1m0s  2.00 iters/s
+
+running (0m45.0s), 06/10 VUs, 84 complete and 0 interrupted iterations
+principal   [  75% ] 06/10 VUs  0m45.0s/1m0s  2.00 iters/s
+
+running (0m46.0s), 06/10 VUs, 86 complete and 0 interrupted iterations
+principal   [  77% ] 06/10 VUs  0m46.0s/1m0s  2.00 iters/s
+
+running (0m47.0s), 06/10 VUs, 88 complete and 0 interrupted iterations
+principal   [  78% ] 06/10 VUs  0m47.0s/1m0s  2.00 iters/s
+
+running (0m48.0s), 06/10 VUs, 90 complete and 0 interrupted iterations
+principal   [  80% ] 06/10 VUs  0m48.0s/1m0s  2.00 iters/s
+
+running (0m49.0s), 06/10 VUs, 92 complete and 0 interrupted iterations
+principal   [  82% ] 06/10 VUs  0m49.0s/1m0s  2.00 iters/s
+
+running (0m50.0s), 05/10 VUs, 95 complete and 0 interrupted iterations
+principal   [  83% ] 05/10 VUs  0m50.0s/1m0s  2.00 iters/s
+
+running (0m51.0s), 06/10 VUs, 96 complete and 0 interrupted iterations
+principal   [  85% ] 06/10 VUs  0m51.0s/1m0s  2.00 iters/s
+
+running (0m52.0s), 06/10 VUs, 98 complete and 0 interrupted iterations
+principal   [  87% ] 06/10 VUs  0m52.0s/1m0s  2.00 iters/s
+
+running (0m53.0s), 06/10 VUs, 100 complete and 0 interrupted iterations
+principal   [  88% ] 06/10 VUs  0m53.0s/1m0s  2.00 iters/s
+
+running (0m54.0s), 06/10 VUs, 102 complete and 0 interrupted iterations
+principal   [  90% ] 06/10 VUs  0m54.0s/1m0s  2.00 iters/s
+
+running (0m55.0s), 06/10 VUs, 104 complete and 0 interrupted iterations
+principal   [  92% ] 06/10 VUs  0m55.0s/1m0s  2.00 iters/s
+
+running (0m56.0s), 06/10 VUs, 106 complete and 0 interrupted iterations
+principal   [  93% ] 06/10 VUs  0m56.0s/1m0s  2.00 iters/s
+
+running (0m57.0s), 05/10 VUs, 109 complete and 0 interrupted iterations
+principal   [  95% ] 05/10 VUs  0m57.0s/1m0s  2.00 iters/s
+
+running (0m58.0s), 05/10 VUs, 111 complete and 0 interrupted iterations
+principal   [  97% ] 05/10 VUs  0m58.0s/1m0s  2.00 iters/s
+
+running (0m59.0s), 06/10 VUs, 112 complete and 0 interrupted iterations
+principal   [  98% ] 06/10 VUs  0m59.0s/1m0s  2.00 iters/s
+
+running (1m00.0s), 06/10 VUs, 114 complete and 0 interrupted iterations
+principal   [ 100% ] 06/10 VUs  1m00.0s/1m0s  2.00 iters/s
+
+running (1m01.0s), 04/10 VUs, 117 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 05/10 VUs  1m0s  2.00 iters/s
+
+running (1m02.0s), 03/10 VUs, 118 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 05/10 VUs  1m0s  2.00 iters/s
+
+running (1m03.0s), 01/10 VUs, 120 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 05/10 VUs  1m0s  2.00 iters/s
+
+
+  █ THRESHOLDS 
+
+    checks
+    ✓ 'rate==1.0' rate=100.00%
+
+    http_req_duration{protocolo:gRPC}
+    ✓ 'max>=0' max=9.58ms
+
+    http_req_duration{protocolo:REST}
+    ✓ 'max>=0' max=129.73ms
+
+    http_req_duration{protocolo:SOAP}
+    ✓ 'max>=0' max=287.65ms
+
+    http_req_duration{protocolo:TCP}
+    ✓ 'max>=0' max=6.89ms
+
+    http_req_failed
+    ✓ 'rate==0' rate=0.00%
+
+      {protocolo:gRPC}
+      ✓ 'rate>=0' rate=0.00%
+
+      {protocolo:REST}
+      ✓ 'rate>=0' rate=0.00%
+
+      {protocolo:SOAP}
+      ✓ 'rate>=0' rate=0.00%
+
+      {protocolo:TCP}
+      ✓ 'rate>=0' rate=0.00%
+
+    http_reqs{protocolo:gRPC}
+    ✓ 'count>=0' count=121
+
+    http_reqs{protocolo:REST}
+    ✓ 'count>=0' count=484
+
+    http_reqs{protocolo:SOAP}
+    ✓ 'count>=0' count=1573
+
+    http_reqs{protocolo:TCP}
+    ✓ 'count>=0' count=363
+
+    ws_connecting{protocolo:WebSocket}
+    ✓ 'max>=0' max=1.18ms
+
+    ws_notificacao_latencia_ms{tipo:PIX}
+    ✓ 'max>=0' max=122ms
+
+    ws_notificacao_latencia_ms{tipo:TED}
+    ✓ 'max>=0' max=96ms
+
+    ws_notificacao_recebida
+    ✓ 'rate==1.0' rate=100.00%
+
+
+  █ TOTAL RESULTS 
+
+    checks_total.......: 4719    74.897379/s
+    checks_succeeded...: 100.00% 4719 out of 4719
+    checks_failed......: 0.00%   0 out of 4719
+
+    ✓ SOAP criarCliente 2xx
+    ✓ SOAP criarCliente retorna id
+    ✓ SOAP criarConta 2xx
+    ✓ SOAP criarConta numero correto
+    ✓ Auth login origem retorna token
+    ✓ Auth login destino retorna token
+    ✓ SOAP saldo (JWT) 200
+    ✓ SOAP saldo inicial correto
+    ✓ SOAP saldo sem token 401
+    ✓ SOAP alterarSenha 2xx
+    ✓ SOAP alterarSenha SUCESSO
+    ✓ Auth login com senha nova
+    ✓ Auth senha antiga rejeitada 401
+    ✓ REST criar chave Pix 2xx
+    ✓ REST listar chaves 200
+    ✓ REST listar chaves contem a nova
+    ✓ REST PIX 2xx
+    ✓ REST PIX credita conta destino
+    ✓ SOAP TED 2xx
+    ✓ SOAP TED SUCESSO
+    ✓ WS handshake 101
+    ✓ WS notificacao PIX recebida
+    ✓ WS notificacao PIX sem duplicata
+    ✓ WS notificacao TED recebida
+    ✓ WS notificacao TED sem duplicata
+    ✓ SOAP saldo final = inicial - PIX - TED
+    ✓ REST extrato 200
+    ✓ REST extrato contem o PIX
+    ✓ gRPC comprovante 2xx
+    ✓ gRPC comprovante e PDF
+    ✓ ATM listar 200
+    ✓ ATM listar contem ATMs via UDP
+    ✓ ATM abastecer enviado
+    ✓ ATM bloquear responde (offline)
+    ✓ RabbitMQ fila tem consumer (ws-service)
+
+    HTTP
+    http_req_duration..............: avg=69.14ms  min=996.64µs med=73.7ms   p(90)=144.61ms p(95)=164.07ms p(99)=209.53ms max=287.65ms count=2662
+      { expected_response:true }...: avg=69.14ms  min=996.64µs med=73.7ms   p(90)=144.61ms p(95)=164.07ms p(99)=209.53ms max=287.65ms count=2662
+      { protocolo:gRPC }...........: avg=5.83ms   min=4.69ms   med=5.62ms   p(90)=7.05ms   p(95)=7.61ms   p(99)=9.24ms   max=9.58ms   count=121 
+      { protocolo:REST }...........: avg=14.53ms  min=8.05ms   med=12.4ms   p(90)=21.71ms  p(95)=24.69ms  p(99)=28.01ms  max=129.73ms count=484 
+      { protocolo:SOAP }...........: avg=111.37ms min=996.64µs med=135.53ms p(90)=151.16ms p(95)=201.77ms p(99)=213.68ms max=287.65ms count=1573
+      { protocolo:TCP }............: avg=2.67ms   min=1.7ms    med=2.35ms   p(90)=4.1ms    p(95)=4.56ms   p(99)=6.28ms   max=6.89ms   count=363 
+    http_req_failed................: 0.00%   0 out of 2662
+      { protocolo:gRPC }...........: 0.00%   0 out of 121
+      { protocolo:REST }...........: 0.00%   0 out of 484
+      { protocolo:SOAP }...........: 0.00%   0 out of 1573
+      { protocolo:TCP }............: 0.00%   0 out of 363
+    http_reqs......................: 2662    42.249804/s
+      { protocolo:gRPC }...........: 121     1.920446/s
+      { protocolo:REST }...........: 484     7.681783/s
+      { protocolo:SOAP }...........: 1573    24.965793/s
+      { protocolo:TCP }............: 363     5.761337/s
+
+    EXECUTION
+    iteration_duration.............: avg=3.02s    min=2.97s    med=3.01s    p(90)=3.05s    p(95)=3.08s    p(99)=3.29s    max=3.42s    count=121 
+    iterations.....................: 121     1.920446/s
+    vus............................: 1       min=1          max=6 
+    vus_max........................: 10      min=10         max=10
+
+    NETWORK
+    data_received..................: 2.6 MB  41 kB/s
+    data_sent......................: 557 kB  8.8 kB/s
+
+    WEBSOCKET
+    ws_connecting..................: avg=644.11µs min=549.22µs med=620.32µs p(90)=747.93µs p(95)=800.53µs p(99)=917.38µs max=1.18ms   count=121 
+      { protocolo:WebSocket }......: avg=644.11µs min=549.22µs med=620.32µs p(90)=747.93µs p(95)=800.53µs p(99)=917.38µs max=1.18ms   count=121 
+    ws_msgs_received...............: 363     5.761337/s
+    ws_notificacao_latencia_ms.....: avg=93.04ms  min=78ms     med=97ms     p(90)=108ms    p(95)=111.94ms p(99)=118.18ms max=122ms    count=242 
+      { tipo:PIX }.................: avg=104.21ms min=98ms     med=102ms    p(90)=112ms    p(95)=114ms    p(99)=121.4ms  max=122ms    count=121 
+      { tipo:TED }.................: avg=81.87ms  min=78ms     med=81ms     p(90)=86ms     p(95)=88ms     p(99)=93.4ms   max=96ms     count=121 
+    ws_notificacao_recebida........: 100.00% 242 out of 242
+    ws_session_duration............: avg=1.6s     min=1.6s     med=1.6s     p(90)=1.61s    p(95)=1.61s    p(99)=1.62s    max=1.62s    count=121 
+    ws_sessions....................: 121     1.920446/s
+
+
+
+
+running (1m03.0s), 00/10 VUs, 121 complete and 0 interrupted iterations
+principal ✓ [ 100% ] 00/10 VUs  1m0s  2.00 iters/s

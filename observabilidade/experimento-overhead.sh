@@ -64,6 +64,8 @@ if ! mkdir "$TRAVA" 2>/dev/null; then
 fi
 trap 'rmdir "$TRAVA" 2>/dev/null' EXIT
 mkdir -p "$SAIDA"
+# Caminho absoluto: o docker -v trata um caminho relativo como nome de volume e o k6 nao sobe
+SAIDA="$(cd "$SAIDA" && pwd)"
 
 # ------------------------------------------------------------------ configuracao de instrumentacao
 aplicar_config() {

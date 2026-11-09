@@ -1,0 +1,34 @@
+
+Cobertura de traces  2026-11-07T22:35:43.190Z .. 2026-11-07T22:36:48.780Z  (295 traces)
+
+| Protocolo | Fluxos | Traces | Completos | Cobertura | Spans/trace |
+|---|---:|---:|---:|---:|---:|
+| SOAP | 7 | 171 | 154 | 90.1% | 20.3 |
+| REST | 4 | 60 | 44 | 73.3% | 18.0 |
+| gRPC | 1 | 13 | 13 | 100.0% | 18.0 |
+| TCP | 3 | 26 | 0 | 0.0% | 18.0 |
+| AMQP (backend -> ws-service) | 2 | 33 | 0 | 0.0% | - |
+
+| Protocolo | Fluxo | Traces | Cobertura | Ausentes | Spans | Prof. | Raiz p50 | Raiz p95 | Destino p50 |
+|---|---|---:|---:|---|---:|---:|---:|---:|---:|
+| SOAP | POST /auth/login | 44 | 100.0% | - | 20.0 | 9.0 | 142.8 | 154.1 | 138.3 (banco-soap) |
+| SOAP | POST /banco/soap/criarCliente | 27 | 100.0% | - | 20.0 | 9.0 | 140.6 | 155.1 | 136.5 (banco-soap) |
+| SOAP | POST /banco/soap/criarConta | 29 | 100.0% | - | 20.0 | 9.0 | 76.1 | 84.3 | 72.0 (banco-soap) |
+| SOAP | GET /banco/soap/saldo | 29 | 100.0% | - | 20.0 | 9.0 | 79.1 | 103.6 | 74.6 (banco-soap) |
+| SOAP | GET /banco/soap/saldo [401] | 13 | 100.0% | - | 15.0 | 5.0 | 1.1 | 1.3 | - |
+| SOAP | POST /banco/soap/alterarSenha | 12 | 100.0% | - | 21.0 | 9.0 | 208.8 | 236.9 | 203.1 (banco-soap) |
+| SOAP | POST /banco/soap/TED | 17 | 0.0% | ws-service (AMQP) 100% | 26.0 | 9.0 | 84.5 | 93.6 | 80.8 (banco-soap) |
+| REST | POST /banco/rest/pix | 16 | 0.0% | ws-service (AMQP) 100% | 18.0 | 8.0 | 26.6 | 34.0 | 22.8 (rest-api) |
+| REST | POST /banco/rest/clientes/:id/chaves-pix | 18 | 100.0% | - | 18.0 | 8.0 | 14.3 | 123.1 | 10.7 (rest-api) |
+| REST | GET /banco/rest/clientes/:numeroConta/chaves-pix | 13 | 100.0% | - | 18.0 | 8.0 | 13.0 | 57.9 | 10.0 (rest-api) |
+| REST | GET /banco/rest/extrato | 13 | 100.0% | - | 18.0 | 8.0 | 10.9 | 13.2 | 7.4 (rest-api) |
+| gRPC | POST /comprovantes/gerar | 13 | 100.0% | - | 18.0 | 8.0 | 5.8 | 6.8 | 2.0 (comprovantes-service) |
+| TCP | GET /atms | 7 | 0.0% | atm-monitor 100% | 18.0 | 7.0 | 2.4 | 4.2 | - (atm-monitor) |
+| TCP | POST /atms/refill | 10 | 0.0% | atm-monitor 100%, atm-cluster 100% | 18.0 | 7.0 | 2.2 | 3.5 | - (atm-monitor) |
+| TCP | POST /atms/block | 9 | 0.0% | atm-monitor 100% | 18.0 | 7.0 | 2.1 | 2.8 | - (atm-monitor) |
+
+Traces orfaos (iniciam fora do gateway): 25
+  25  ws-service: notificacoes.transferencias process
+Traces de fundo (heartbeats dos ATMs, ignorados): 0
+
+Arquivos gravados em C:/Users/pichau/Documents/faculdade/projeto-DSD/resultados-experimento/completo/otel-10/rep-1

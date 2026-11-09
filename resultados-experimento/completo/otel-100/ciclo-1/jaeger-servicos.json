@@ -1,0 +1,1 @@
+{"services":["comprovantes-service","api-gateway","banco-soap","rest-api","ws-service","atm-cluster"]}

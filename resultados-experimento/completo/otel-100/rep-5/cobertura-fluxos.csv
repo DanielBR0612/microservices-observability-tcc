@@ -1,0 +1,16 @@
+protocolo,fluxo,esperado,traces,completos,cobertura_pct,ausentes,spans_por_trace,profundidade,raiz_p50_ms,raiz_p95_ms,destino,destino_p50_ms
+"SOAP","POST /auth/login","api-gateway + banco-soap",484.000,484.000,100.000,"",20.008,9.000,140.579,150.200,"banco-soap",136.176
+"SOAP","POST /banco/soap/criarCliente","api-gateway + banco-soap",242.000,242.000,100.000,"",20.050,9.000,139.733,150.672,"banco-soap",135.932
+"SOAP","POST /banco/soap/criarConta","api-gateway + banco-soap",242.000,242.000,100.000,"",20.000,9.000,74.774,82.442,"banco-soap",71.338
+"SOAP","GET /banco/soap/saldo","api-gateway + banco-soap",242.000,242.000,100.000,"",20.050,9.000,76.045,84.112,"banco-soap",71.526
+"SOAP","GET /banco/soap/saldo [401]","api-gateway",121.000,121.000,100.000,"",15.000,5.000,1.052,1.431,"",""
+"SOAP","POST /banco/soap/alterarSenha","api-gateway + banco-soap",121.000,121.000,100.000,"",21.000,9.000,203.908,214.466,"banco-soap",200.053
+"SOAP","POST /banco/soap/TED","api-gateway + banco-soap + ws-service",121.000,0.000,0.000,"ws-service (AMQP) 100%",26.000,9.000,82.176,91.588,"banco-soap",78.734
+"REST","POST /banco/rest/pix","api-gateway + rest-api + ws-service",121.000,0.000,0.000,"ws-service (AMQP) 100%",18.000,8.000,22.585,28.016,"rest-api",19.284
+"REST","POST /banco/rest/clientes/:id/chaves-pix","api-gateway + rest-api",121.000,121.000,100.000,"",18.000,8.000,13.020,16.775,"rest-api",9.845
+"REST","GET /banco/rest/clientes/:numeroConta/chaves-pix","api-gateway + rest-api",121.000,121.000,100.000,"",18.000,8.000,11.529,14.067,"rest-api",8.672
+"REST","GET /banco/rest/extrato","api-gateway + rest-api",121.000,121.000,100.000,"",18.083,8.000,9.703,14.509,"rest-api",6.587
+"gRPC","POST /comprovantes/gerar","api-gateway + comprovantes-service",121.000,121.000,100.000,"",18.000,8.000,5.312,7.059,"comprovantes-service",1.951
+"TCP","GET /atms","api-gateway + atm-monitor",121.000,0.000,0.000,"atm-monitor 100%",18.000,7.000,2.110,5.138,"atm-monitor",""
+"TCP","POST /atms/refill","api-gateway + atm-monitor + atm-cluster",121.000,0.000,0.000,"atm-monitor 100%, atm-cluster 100%",18.000,7.000,2.256,7.042,"atm-monitor",""
+"TCP","POST /atms/block","api-gateway + atm-monitor",121.000,0.000,0.000,"atm-monitor 100%",18.000,7.000,2.019,3.282,"atm-monitor",""

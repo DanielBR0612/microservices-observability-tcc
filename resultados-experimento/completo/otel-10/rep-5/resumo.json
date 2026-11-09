@@ -1,0 +1,668 @@
+{
+    "root_group": {
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {
+            "SOAP cadastro": {
+                "groups": {},
+                "checks": {
+                        "SOAP criarCliente 2xx": {
+                            "id": "c91d6f1b16519a294fcf2485da77146c",
+                            "passes": 240,
+                            "fails": 0,
+                            "name": "SOAP criarCliente 2xx",
+                            "path": "::SOAP cadastro::SOAP criarCliente 2xx"
+                        },
+                        "SOAP criarCliente retorna id": {
+                            "name": "SOAP criarCliente retorna id",
+                            "path": "::SOAP cadastro::SOAP criarCliente retorna id",
+                            "id": "7f3a3d4079c83a857873d26c14578241",
+                            "passes": 240,
+                            "fails": 0
+                        },
+                        "SOAP criarConta 2xx": {
+                            "path": "::SOAP cadastro::SOAP criarConta 2xx",
+                            "id": "37c4cffdf91e1bc7ace90d65aeafda85",
+                            "passes": 240,
+                            "fails": 0,
+                            "name": "SOAP criarConta 2xx"
+                        },
+                        "SOAP criarConta numero correto": {
+                            "name": "SOAP criarConta numero correto",
+                            "path": "::SOAP cadastro::SOAP criarConta numero correto",
+                            "id": "ccc908d1e1809ea7f866654ae4478a7e",
+                            "passes": 240,
+                            "fails": 0
+                        }
+                    },
+                "name": "SOAP cadastro",
+                "path": "::SOAP cadastro",
+                "id": "37efc82f2957d4e98b911bcc44ee1c15"
+            },
+            "Auth e saldo": {
+                "groups": {},
+                "checks": {
+                        "Auth login origem retorna token": {
+                            "name": "Auth login origem retorna token",
+                            "path": "::Auth e saldo::Auth login origem retorna token",
+                            "id": "312c785a2690bad0efb49d3522f704a8",
+                            "passes": 120,
+                            "fails": 0
+                        },
+                        "Auth login destino retorna token": {
+                            "name": "Auth login destino retorna token",
+                            "path": "::Auth e saldo::Auth login destino retorna token",
+                            "id": "d5219aa0d82535934ca16d1eeba22218",
+                            "passes": 120,
+                            "fails": 0
+                        },
+                        "SOAP saldo (JWT) 200": {
+                            "id": "f5f0b7cebabb55cd38538df25a0ecaf9",
+                            "passes": 120,
+                            "fails": 0,
+                            "name": "SOAP saldo (JWT) 200",
+                            "path": "::Auth e saldo::SOAP saldo (JWT) 200"
+                        },
+                        "SOAP saldo inicial correto": {
+                            "id": "4dbb489f4e9106d049d0a1a8fc7203bf",
+                            "passes": 120,
+                            "fails": 0,
+                            "name": "SOAP saldo inicial correto",
+                            "path": "::Auth e saldo::SOAP saldo inicial correto"
+                        },
+                        "SOAP saldo sem token 401": {
+                            "fails": 0,
+                            "name": "SOAP saldo sem token 401",
+                            "path": "::Auth e saldo::SOAP saldo sem token 401",
+                            "id": "d4cf46da280f67c0ae06119f405ad8d2",
+                            "passes": 120
+                        }
+                    },
+                "name": "Auth e saldo",
+                "path": "::Auth e saldo",
+                "id": "9d95928a33ec3fe21441c1cd515c9757"
+            },
+            "SOAP alterar senha": {
+                "groups": {},
+                "checks": {
+                        "SOAP alterarSenha 2xx": {
+                            "path": "::SOAP alterar senha::SOAP alterarSenha 2xx",
+                            "id": "8bdbbe5ddd05cb202ced9ce169e76b73",
+                            "passes": 120,
+                            "fails": 0,
+                            "name": "SOAP alterarSenha 2xx"
+                        },
+                        "SOAP alterarSenha SUCESSO": {
+                            "path": "::SOAP alterar senha::SOAP alterarSenha SUCESSO",
+                            "id": "5642f5eadbe1725d0dce01124aa46d7c",
+                            "passes": 120,
+                            "fails": 0,
+                            "name": "SOAP alterarSenha SUCESSO"
+                        },
+                        "Auth login com senha nova": {
+                            "name": "Auth login com senha nova",
+                            "path": "::SOAP alterar senha::Auth login com senha nova",
+                            "id": "bd8481e292da14bcc681b8d0775335ff",
+                            "passes": 120,
+                            "fails": 0
+                        },
+                        "Auth senha antiga rejeitada 401": {
+                            "name": "Auth senha antiga rejeitada 401",
+                            "path": "::SOAP alterar senha::Auth senha antiga rejeitada 401",
+                            "id": "8e5f0a7e5e1ae5cb742da96e8464ec77",
+                            "passes": 120,
+                            "fails": 0
+                        }
+                    },
+                "name": "SOAP alterar senha",
+                "path": "::SOAP alterar senha",
+                "id": "bcb079e593aff70f027e589a21797b4e"
+            },
+            "REST chave Pix": {
+                "name": "REST chave Pix",
+                "path": "::REST chave Pix",
+                "id": "c7ad77113f6df68a468367f20054346d",
+                "groups": {},
+                "checks": {
+                        "REST criar chave Pix 2xx": {
+                            "passes": 120,
+                            "fails": 0,
+                            "name": "REST criar chave Pix 2xx",
+                            "path": "::REST chave Pix::REST criar chave Pix 2xx",
+                            "id": "d064c0ed84abcb66e69912dbf86ac6d5"
+                        },
+                        "REST listar chaves 200": {
+                            "name": "REST listar chaves 200",
+                            "path": "::REST chave Pix::REST listar chaves 200",
+                            "id": "c418329375f8e23dc3d5cbcc04e9ddd2",
+                            "passes": 120,
+                            "fails": 0
+                        },
+                        "REST listar chaves contem a nova": {
+                            "name": "REST listar chaves contem a nova",
+                            "path": "::REST chave Pix::REST listar chaves contem a nova",
+                            "id": "2839302357a762d5d347186e4db88672",
+                            "passes": 120,
+                            "fails": 0
+                        }
+                    }
+            },
+            "Transferencias + notificacao WebSocket": {
+                "name": "Transferencias + notificacao WebSocket",
+                "path": "::Transferencias + notificacao WebSocket",
+                "id": "56866fde0532c2b1097e3abe266afb14",
+                "groups": {},
+                "checks": {
+                        "REST PIX 2xx": {
+                            "name": "REST PIX 2xx",
+                            "path": "::Transferencias + notificacao WebSocket::REST PIX 2xx",
+                            "id": "c53cb99ad43124bc0c4dfc4703ab4b0c",
+                            "passes": 120,
+                            "fails": 0
+                        },
+                        "REST PIX credita conta destino": {
+                            "id": "8b47a32dac7a1abb6d3cdbe95d394e2a",
+                            "passes": 120,
+                            "fails": 0,
+                            "name": "REST PIX credita conta destino",
+                            "path": "::Transferencias + notificacao WebSocket::REST PIX credita conta destino"
+                        },
+                        "SOAP TED 2xx": {
+                            "name": "SOAP TED 2xx",
+                            "path": "::Transferencias + notificacao WebSocket::SOAP TED 2xx",
+                            "id": "8598e4daa3d42c8090360a6ebddce9bd",
+                            "passes": 120,
+                            "fails": 0
+                        },
+                        "SOAP TED SUCESSO": {
+                            "id": "a07ad16a9336b47defee726d2183a9af",
+                            "passes": 120,
+                            "fails": 0,
+                            "name": "SOAP TED SUCESSO",
+                            "path": "::Transferencias + notificacao WebSocket::SOAP TED SUCESSO"
+                        },
+                        "WS handshake 101": {
+                            "passes": 120,
+                            "fails": 0,
+                            "name": "WS handshake 101",
+                            "path": "::Transferencias + notificacao WebSocket::WS handshake 101",
+                            "id": "2308a6400a07c1f30ff13475eab12682"
+                        },
+                        "WS notificacao PIX recebida": {
+                            "path": "::Transferencias + notificacao WebSocket::WS notificacao PIX recebida",
+                            "id": "21a97bb795bafcf70edfb98e3b26bbd7",
+                            "passes": 120,
+                            "fails": 0,
+                            "name": "WS notificacao PIX recebida"
+                        },
+                        "WS notificacao PIX sem duplicata": {
+                            "name": "WS notificacao PIX sem duplicata",
+                            "path": "::Transferencias + notificacao WebSocket::WS notificacao PIX sem duplicata",
+                            "id": "375e5d3a594cadaf6da84aff0bbe9ed0",
+                            "passes": 120,
+                            "fails": 0
+                        },
+                        "WS notificacao TED recebida": {
+                            "name": "WS notificacao TED recebida",
+                            "path": "::Transferencias + notificacao WebSocket::WS notificacao TED recebida",
+                            "id": "1b2a9aa8254ac1e8cf4724dfa12672ef",
+                            "passes": 120,
+                            "fails": 0
+                        },
+                        "WS notificacao TED sem duplicata": {
+                            "passes": 120,
+                            "fails": 0,
+                            "name": "WS notificacao TED sem duplicata",
+                            "path": "::Transferencias + notificacao WebSocket::WS notificacao TED sem duplicata",
+                            "id": "4fe81a122cd483172544fcccf8f71326"
+                        }
+                    }
+            },
+            "Conferencia": {
+                "id": "d771dbd35d428e0646b91d23d3d76712",
+                "groups": {},
+                "checks": {
+                        "SOAP saldo final = inicial - PIX - TED": {
+                            "fails": 0,
+                            "name": "SOAP saldo final = inicial - PIX - TED",
+                            "path": "::Conferencia::SOAP saldo final = inicial - PIX - TED",
+                            "id": "1de3a997e1c54181531ad956644dc4c5",
+                            "passes": 120
+                        },
+                        "REST extrato 200": {
+                            "name": "REST extrato 200",
+                            "path": "::Conferencia::REST extrato 200",
+                            "id": "0da797f49a3103c307e44d22067992bd",
+                            "passes": 120,
+                            "fails": 0
+                        },
+                        "REST extrato contem o PIX": {
+                            "name": "REST extrato contem o PIX",
+                            "path": "::Conferencia::REST extrato contem o PIX",
+                            "id": "c23edc470938e410a99dd73a5111567e",
+                            "passes": 120,
+                            "fails": 0
+                        }
+                    },
+                "name": "Conferencia",
+                "path": "::Conferencia"
+            },
+            "gRPC comprovante": {
+                "name": "gRPC comprovante",
+                "path": "::gRPC comprovante",
+                "id": "5743878f5b9667b83d7b99a8faf863d8",
+                "groups": {},
+                "checks": {
+                        "gRPC comprovante 2xx": {
+                            "id": "2183986274282cec72eedf7258d4a7dd",
+                            "passes": 120,
+                            "fails": 0,
+                            "name": "gRPC comprovante 2xx",
+                            "path": "::gRPC comprovante::gRPC comprovante 2xx"
+                        },
+                        "gRPC comprovante e PDF": {
+                            "name": "gRPC comprovante e PDF",
+                            "path": "::gRPC comprovante::gRPC comprovante e PDF",
+                            "id": "139e5e9bf20fa7a9e1738365134e32ee",
+                            "passes": 120,
+                            "fails": 0
+                        }
+                    }
+            },
+            "ATM monitor": {
+                "path": "::ATM monitor",
+                "id": "4b66b74334f18b2dbdb844bec317a72d",
+                "groups": {},
+                "checks": {
+                        "ATM listar 200": {
+                            "fails": 0,
+                            "name": "ATM listar 200",
+                            "path": "::ATM monitor::ATM listar 200",
+                            "id": "7286f28e4ba82f2c0b64f308e9d75ecf",
+                            "passes": 120
+                        },
+                        "ATM listar contem ATMs via UDP": {
+                            "name": "ATM listar contem ATMs via UDP",
+                            "path": "::ATM monitor::ATM listar contem ATMs via UDP",
+                            "id": "3a70d97ff7f2ca3ac0806c039059b541",
+                            "passes": 120,
+                            "fails": 0
+                        },
+                        "ATM abastecer enviado": {
+                            "id": "9a299251f5770df2da1474ef7c28c529",
+                            "passes": 120,
+                            "fails": 0,
+                            "name": "ATM abastecer enviado",
+                            "path": "::ATM monitor::ATM abastecer enviado"
+                        },
+                        "ATM bloquear responde (offline)": {
+                            "fails": 0,
+                            "name": "ATM bloquear responde (offline)",
+                            "path": "::ATM monitor::ATM bloquear responde (offline)",
+                            "id": "5d57ca44cebe699f09c30fd7712abc5a",
+                            "passes": 120
+                        }
+                    },
+                "name": "ATM monitor"
+            },
+            "RabbitMQ": {
+                "name": "RabbitMQ",
+                "path": "::RabbitMQ",
+                "id": "12618a66c759ca03dd2109c3cd75992d",
+                "groups": {},
+                "checks": {
+                        "RabbitMQ fila tem consumer (ws-service)": {
+                            "passes": 120,
+                            "fails": 0,
+                            "name": "RabbitMQ fila tem consumer (ws-service)",
+                            "path": "::RabbitMQ::RabbitMQ fila tem consumer (ws-service)",
+                            "id": "f5a388826d9d68b20daff9f582f9d568"
+                        }
+                    }
+            }
+        },
+        "checks": {},
+        "name": "",
+        "path": ""
+    },
+    "metrics": {
+        "http_req_waiting": {
+            "max": 261.016287,
+            "count": 2640,
+            "avg": 69.45836694962134,
+            "min": 0.84633,
+            "med": 74.055183,
+            "p(90)": 144.98108159999998,
+            "p(95)": 169.66104569999942,
+            "p(99)": 210.99248968000006
+        },
+        "ws_session_duration": {
+            "count": 120,
+            "avg": 1610.2754143916673,
+            "min": 1602.089518,
+            "med": 1607.5117535,
+            "p(90)": 1617.1993164,
+            "p(95)": 1623.1850641,
+            "p(99)": 1647.68259678,
+            "max": 1714.030804
+        },
+        "ws_notificacao_latencia_ms{tipo:TED}": {
+            "min": 79,
+            "med": 81,
+            "p(90)": 88,
+            "p(95)": 93,
+            "p(99)": 118.25000000000006,
+            "max": 178,
+            "count": 120,
+            "avg": 84.05,
+            "thresholds": {
+                "max>=0": false
+            }
+        },
+        "http_reqs{protocolo:SOAP}": {
+            "count": 1560,
+            "rate": 24.957516631657608,
+            "thresholds": {
+                "count>=0": false
+            }
+        },
+        "http_req_blocked": {
+            "avg": 0.010798968560606035,
+            "min": 0.0021,
+            "med": 0.0041,
+            "p(90)": 0.0058,
+            "p(95)": 0.0069,
+            "p(99)": 0.24283261000000003,
+            "max": 1.31016,
+            "count": 2640
+        },
+        "http_req_duration{protocolo:REST}": {
+            "count": 480,
+            "avg": 15.412022597916673,
+            "min": 8.741575,
+            "med": 12.9853305,
+            "p(90)": 23.150273400000003,
+            "p(95)": 25.411595149999986,
+            "p(99)": 30.66336648999997,
+            "max": 102.963389,
+            "thresholds": {
+                "max>=0": false
+            }
+        },
+        "http_reqs": {
+            "count": 2640,
+            "rate": 42.235797376651334
+        },
+        "http_req_duration": {
+            "count": 2640,
+            "avg": 69.58371331477278,
+            "min": 0.928333,
+            "med": 74.17908750000001,
+            "p(90)": 145.1274177,
+            "p(95)": 169.81130864999943,
+            "p(99)": 211.14423151000008,
+            "max": 261.130992
+        },
+        "http_req_failed{protocolo:TCP}": {
+            "passes": 0,
+            "fails": 360,
+            "thresholds": {
+                "rate>=0": false
+            },
+            "value": 0
+        },
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 2640,
+            "thresholds": {
+                "rate==0": false
+            },
+            "value": 0
+        },
+        "vus_max": {
+            "value": 10,
+            "min": 10,
+            "max": 10
+        },
+        "ws_notificacao_latencia_ms": {
+            "avg": 95.76666666666667,
+            "min": 79,
+            "med": 99.5,
+            "p(90)": 110,
+            "p(95)": 115.04999999999998,
+            "p(99)": 140.97999999999973,
+            "max": 210,
+            "count": 240
+        },
+        "vus": {
+            "value": 2,
+            "min": 2,
+            "max": 6
+        },
+        "iterations": {
+            "count": 120,
+            "rate": 1.9198089716659699
+        },
+        "http_req_duration{protocolo:TCP}": {
+            "min": 1.697679,
+            "med": 2.309402,
+            "p(90)": 3.736271,
+            "p(95)": 4.721935300000001,
+            "p(99)": 6.469912550000028,
+            "max": 8.801802,
+            "count": 360,
+            "avg": 2.603961594444444,
+            "thresholds": {
+                "max>=0": false
+            }
+        },
+        "checks": {
+            "passes": 4680,
+            "fails": 0,
+            "thresholds": {
+                "rate==1.0": false
+            },
+            "value": 1
+        },
+        "http_req_receiving": {
+            "med": 0.10075500000000001,
+            "p(90)": 0.1252158,
+            "p(95)": 0.13650505,
+            "p(99)": 0.1585346100000001,
+            "max": 0.489122,
+            "count": 2640,
+            "avg": 0.09931869280303013,
+            "min": 0.029401
+        },
+        "http_reqs{protocolo:REST}": {
+            "count": 480,
+            "rate": 7.6792358866638795,
+            "thresholds": {
+                "count>=0": false
+            }
+        },
+        "ws_connecting": {
+            "max": 1.724579,
+            "count": 120,
+            "avg": 0.6795794583333332,
+            "min": 0.561129,
+            "med": 0.6310285,
+            "p(90)": 0.7600334000000003,
+            "p(95)": 0.8612347499999999,
+            "p(99)": 1.6306891000000006
+        },
+        "iteration_duration": {
+            "p(90)": 3078.6602540000004,
+            "p(95)": 3104.237713,
+            "p(99)": 3379.45447149,
+            "max": 3458.824805,
+            "count": 120,
+            "avg": 3038.362390933333,
+            "min": 2984.811826,
+            "med": 3022.9753094999996
+        },
+        "http_req_duration{expected_response:true}": {
+            "avg": 69.58371331477278,
+            "min": 0.928333,
+            "med": 74.17908750000001,
+            "p(90)": 145.1274177,
+            "p(95)": 169.81130864999943,
+            "p(99)": 211.14423151000008,
+            "max": 261.130992,
+            "count": 2640
+        },
+        "http_reqs{protocolo:TCP}": {
+            "count": 360,
+            "rate": 5.75942691499791,
+            "thresholds": {
+                "count>=0": false
+            }
+        },
+        "ws_sessions": {
+            "count": 120,
+            "rate": 1.9198089716659699
+        },
+        "group_duration": {
+            "p(99)": 1617.61857375,
+            "max": 1714.204111,
+            "count": 1080,
+            "avg": 337.5768278787035,
+            "min": 1.206854,
+            "med": 88.757757,
+            "p(90)": 1603.7341482000002,
+            "p(95)": 1608.0291646
+        },
+        "http_req_duration{protocolo:SOAP}": {
+            "min": 0.928333,
+            "med": 135.86993999999999,
+            "p(90)": 150.54636870000004,
+            "p(95)": 202.5614635,
+            "p(99)": 214.77788254000006,
+            "max": 261.130992,
+            "count": 1560,
+            "avg": 111.85761232820508,
+            "thresholds": {
+                "max>=0": false
+            }
+        },
+        "http_req_failed{protocolo:REST}": {
+            "passes": 0,
+            "fails": 480,
+            "thresholds": {
+                "rate>=0": false
+            },
+            "value": 0
+        },
+        "http_req_connecting": {
+            "min": 0,
+            "med": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "p(99)": 0.15297800000000014,
+            "max": 0.372217,
+            "count": 2640,
+            "avg": 0.0037649810606060615
+        },
+        "http_req_failed{protocolo:SOAP}": {
+            "passes": 0,
+            "fails": 1560,
+            "thresholds": {
+                "rate>=0": false
+            },
+            "value": 0
+        },
+        "ws_notificacao_latencia_ms{tipo:PIX}": {
+            "min": 99,
+            "med": 105,
+            "p(90)": 114,
+            "p(95)": 120,
+            "p(99)": 144.58000000000004,
+            "max": 210,
+            "count": 120,
+            "avg": 107.48333333333333,
+            "thresholds": {
+                "max>=0": false
+            }
+        },
+        "http_reqs{protocolo:gRPC}": {
+            "count": 120,
+            "rate": 1.9198089716659699,
+            "thresholds": {
+                "count>=0": false
+            }
+        },
+        "ws_notificacao_recebida": {
+            "passes": 240,
+            "fails": 0,
+            "thresholds": {
+                "rate==1.0": false
+            },
+            "value": 1
+        },
+        "ws_connecting{protocolo:WebSocket}": {
+            "med": 0.6310285,
+            "p(90)": 0.7600334000000003,
+            "p(95)": 0.8612347499999999,
+            "p(99)": 1.6306891000000006,
+            "max": 1.724579,
+            "count": 120,
+            "avg": 0.6795794583333332,
+            "min": 0.561129,
+            "thresholds": {
+                "max>=0": false
+            }
+        },
+        "http_req_failed{protocolo:gRPC}": {
+            "passes": 0,
+            "fails": 120,
+            "thresholds": {
+                "rate>=0": false
+            },
+            "value": 0
+        },
+        "http_req_sending": {
+            "p(99)": 0.06021300000000013,
+            "max": 0.335911,
+            "count": 2640,
+            "avg": 0.026027672348484878,
+            "min": 0.0055,
+            "med": 0.030501,
+            "p(90)": 0.039702,
+            "p(95)": 0.043901050000000004
+        },
+        "ws_msgs_received": {
+            "count": 360,
+            "rate": 5.75942691499791
+        },
+        "http_req_tls_handshaking": {
+            "p(95)": 0,
+            "p(99)": 0,
+            "max": 0,
+            "count": 2640,
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "p(90)": 0
+        },
+        "http_req_duration{protocolo:gRPC}": {
+            "min": 4.581212,
+            "med": 5.596204999999999,
+            "p(90)": 6.9191460000000005,
+            "p(95)": 7.897994999999999,
+            "p(99)": 10.06767694,
+            "max": 11.828539,
+            "count": 120,
+            "avg": 5.899309700000001,
+            "thresholds": {
+                "max>=0": false
+            }
+        },
+        "data_sent": {
+            "rate": 8839.216464160652,
+            "count": 552506
+        },
+        "data_received": {
+            "count": 2559210,
+            "rate": 40943.285986477225
+        }
+    }
+}

@@ -49,3 +49,7 @@ coverage/**/*
 
 # Ignore generated TS build info
 **/*.tsbuildinfo
+
+# Logs dos servicos gravados pelo experimento (dezenas de MB por configuracao)
+resultados-experimento/**/*.log
+resultados-experimento/**/*.err
