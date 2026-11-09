@@ -55,7 +55,11 @@ Artigo: *Estudo Comparativo de Desempenho e Observabilidade em Microsserviços: 
   4. `ws-service` iniciando o SDK duas vezes (instrumentação duplicada).
 
   *Afirmação para o artigo:* um painel com "todos os serviços aparecendo" não prova instrumentação correta. A cobertura precisa ser **medida** (traces completos e órfãos), não presumida.
-- **D9. Propagadores: o projeto só usa W3C Trace Context.** O artigo cita B3; ou se testa a incompatibilidade (teste T4, pendente), ou se remove a menção.
+- **D9. Propagadores: o projeto usa W3C Trace Context.** O B3, citado no artigo, foi testado como fonte de incompatibilidade (T4, D24–D27).
+- **D24. A incompatibilidade de formato é silenciosa.** Em todos os cenários quebrados do T4, o k6 teve 100% dos checks e nenhum serviço registrou erro. Quem recebe um formato desconhecido inicia um trace novo, sem avisar (REST 100% → 0% com um único serviço em B3; até 781 órfãos com a borda em B3).
+- **D25. Um serviço divergente quebra os dois lados dele.** O `rest-api` em B3 perdeu o contexto do gateway **e** contaminou o salto AMQP seguinte, porque escreveu B3 nos headers que o `ws-service` só lê em W3C.
+- **D26. Os padrões das bibliotecas são assimétricos.** Com a borda em B3, os SDKs do OpenTelemetry (Java, Python, Node) quebraram, porque só leem W3C, enquanto o Micrometer do Spring Boot sobreviveu, porque lê W3C, B3 e B3 multi por padrão. Reforça D5: em sistemas poliglotas, as diferenças entre bibliotecas pesam tanto quanto as entre protocolos. Um propagador composto (B3+W3C) restaura 100% e serve de caminho de migração.
+- **D27. O trace revelou uma perda real de dados.** Com a propagação TCP ativa, 1 de 60 abastecimentos ficou sem o span do `atm-cluster`; o cluster processou 59 comandos para 60 requisições. Dois comandos chegaram no mesmo segmento TCP e o protocolo, sem delimitação, descartou um. O k6 não detectou (só verifica a resposta do monitor). *Afirmação para o artigo:* a propagação de contexto não só observa a comunicação: ela expôs um defeito de enquadramento do protocolo que existia antes e era invisível.
 
 ### OE3: segurança na camada de telemetria
 
@@ -87,6 +91,8 @@ Teste T2 feito em 2026-11-09 (METODOLOGIA 9.7; evidências em `resultados-experi
 10. **Monitore spans ausentes, não só spans com erro**: em fluxos assíncronos, a falha aparece como um salto que deveria existir e não existe (D19).
 11. **Instrumente a semântica de negócio**: resultados como "offline", "recusado" ou "sem saldo" dentro de respostas 200 precisam virar atributos ou status de erro, porque o protocolo não os conhece (D20).
 12. **Limite as reentregas e use dead-letter**: retry infinito polui traces antigos e infla o armazenamento (D23).
+13. **Padronize o formato de propagação e, em migrações, use propagador composto** (ler e escrever W3C + B3); não confie no padrão de cada biblioteca, porque eles diferem (D24–D26).
+14. **Trate traces incompletos como alerta**: um span esperado que falta pode ser perda real de mensagem, não só falha de instrumentação (D27).
 
 ---
 
@@ -163,7 +169,7 @@ Rubrica (detecção / localização / causa, 0–2): **F1 SOAP 2/2/1 · F2 REST 
 2. Há um `\documentclass` e um `\begin{document}` **dentro** da seção de Resultados, e o LaTeX não compila assim.
 3. O título cita "REST, gRPC e Mensageria", mas o estudo cobre também SOAP, WebSocket e TCP/UDP.
 4. O resumo diz "análise qualitativa", mas há resultados quantitativos com teste estatístico.
-5. B3 é citado e não é usado (D9).
+5. B3: agora tem resultado (T4), então a menção na metodologia do artigo se sustenta, desde que se explique que foi usado como cenário de incompatibilidade, não como formato do sistema.
 6. Os placeholders de Trabalhos Relacionados e de Materiais e Métodos ainda vêm do modelo (clínica médica, COVID).
 
 ---
@@ -184,7 +190,8 @@ Rubrica (detecção / localização / causa, 0–2): **F1 SOAP 2/2/1 · F2 REST 
 | T3 | Injeção de falhas F1–F5 | OE1 (eficácia) | feito (avaliação não cega; F6 inviável no WSL2) | `resultados-experimento/falhas/`, seção 9.8 |
 | T3b | Avaliação cega da rubrica por outra pessoa, usando as janelas gravadas | OE1 | pendente, recomendado | `resultados-experimento/falhas/*/janela.txt` |
 | T3c | F6 com proxy de falhas (Toxiproxy) entre o gateway e um backend | OE1 | pendente, opcional | — |
-| T4 | Incompatibilidade de propagadores W3C × B3 | OE2, OE4 | pendente | — |
+| T4 | Incompatibilidade de propagadores W3C × B3 (4 cenários) | OE2, OE4 | feito | `resultados-experimento/propagadores/`, seção 9.9 |
+| — | Corrigir o enquadramento TCP (delimitador) e medir de novo | OE1 | pendente, opcional (D27) | — |
 | T5 | Tabela de esforço de instrumentação por serviço e linguagem | OE2 | parcial (seção 2 deste arquivo) | — |
 | — | UDP (heartbeat dos ATMs) | OE1 | não tratado | — |
 | — | WebSocket (contexto nos frames) | OE1 | não tratado | — |
@@ -200,4 +207,6 @@ Rubrica (detecção / localização / causa, 0–2): **F1 SOAP 2/2/1 · F2 REST 
 - "O rastreamento indicou onde o tempo foi gasto, mas não por quê, quando a causa estava na camada de transporte."
 - "As auto-instrumentações não capturaram corpos nem cabeçalhos, mas trataram a URL como metadado inofensivo: o número da conta, presente na rota da API, foi exportado em 488 de 25.526 spans."
 - "Nas falhas injetadas em protocolos síncronos, o rastreamento permitiu detectar, localizar e, em dois de três casos, explicar a causa; nas falhas após saltos assíncronos ou de protocolo próprio, as requisições apareceram como bem-sucedidas, e a falha só foi perceptível pela ausência de um span esperado, sinal que existe apenas quando o contexto é propagado."
+- "Bastou um serviço adotar o formato B3 para que a cobertura do seu protocolo caísse de 100% para 0% e o salto assíncrono seguinte também se rompesse, sem nenhum erro registrado e com todas as verificações funcionais aprovadas."
+- "A propagação de contexto no protocolo TCP revelou uma perda de mensagem preexistente: um trace incompleto correspondia a um comando efetivamente descartado por falta de delimitação no protocolo."
 - "Com o amostrador baseado no pai, a decisão de rastrear pertence a quem chama: um cliente externo conseguiu suprimir do rastreamento as próprias tentativas de login, mesmo com amostragem de 100%, e forçar a gravação de todas as suas requisições com amostragem de 0%."

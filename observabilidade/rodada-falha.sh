@@ -8,7 +8,7 @@ set -uo pipefail
 RAIZ="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$RAIZ"
 NOME="$1"; DURACAO="${2:-30s}"
-DIR="resultados-experimento/falhas/$NOME"; mkdir -p "$DIR"
+DIR="${DIR_BASE:-resultados-experimento/falhas}/$NOME"; mkdir -p "$DIR"
 
 # fila limpa: mensagens antigas reentregues gerariam traces de outra janela
 curl -s -o /dev/null -u guest:guest -X DELETE "localhost:15672/api/queues/%2F/notificacoes.transferencias/contents"

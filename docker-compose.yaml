@@ -122,6 +122,8 @@ services:
       - PORT=3000
       - MONITOR_HOST=atm-monitor
       - OTEL_SERVICE_NAME=api-gateway
+      # Formato de propagacao de contexto (padrao do SDK); usado no teste W3C x B3 (METODOLOGIA 9.9)
+      - OTEL_PROPAGATORS=${OTEL_PROPAGATORS:-tracecontext,baggage}
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
       - JWT_SECRET=segredo-de-teste-123
       - OTEL_SDK_DISABLED=${OTEL_SDK_DISABLED:-false}

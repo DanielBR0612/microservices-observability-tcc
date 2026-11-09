@@ -494,6 +494,29 @@ Execução do eixo 3 (seção 6), já com a propagação AMQP e TCP. Relatório 
 
 **Limitações:** avaliação não cega (a rubrica foi aplicada por quem injetou); uma rodada de 30 s por falha; F6 não executada; os 401 propositais do k6 aparecem como spans de erro em todas as janelas.
 
+### 9.9 Incompatibilidade de formatos de propagação: W3C × B3 (2026-11-09)
+
+Detalhes em `resultados-experimento/propagadores/README.md`. Uma rodada de 30 s por cenário; só variáveis de ambiente foram alteradas (o compose do gateway passou a repassar `OTEL_PROPAGATORS`, com o padrão do SDK, `tracecontext,baggage`).
+
+| Protocolo | A: todos W3C | B: `rest-api` em B3 | C: `rest-api` em B3+W3C | D: gateway em B3 |
+|---|---:|---:|---:|---:|
+| SOAP | 100% | 100% | 100% | 7,7% |
+| REST | 100% | **0%** | 100% | 100% |
+| gRPC | 100% | 100% | 100% | **0%** |
+| TCP | 99,4% | 100% | 100% | **0%** |
+| AMQP | 100% | **50%** | 100% | **50%** |
+| Órfãos | 0 | 305 | 0 | 781 |
+| Checks do k6 | 100% | 100% | 100% | 100% |
+
+**Achados:**
+
+1. **A quebra é silenciosa.** Nenhum erro e nenhum check do k6 falhou em nenhum cenário. Quem recebe um formato desconhecido inicia um trace novo, sem avisar.
+2. **Um serviço divergente quebra a entrada e a saída dele.** No cenário B, o `rest-api` em B3 perdeu o contexto que vinha do gateway **e** contaminou o salto AMQP seguinte (escreveu B3, que o `ws-service` não lê).
+3. **Os padrões das bibliotecas são assimétricos.** Com a borda em B3, os SDKs do OpenTelemetry (Java, Python, Node) quebraram, porque só leem W3C. O Micrometer do Spring Boot sobreviveu, porque lê W3C, B3 e B3 multi por padrão. O mesmo erro de configuração tem efeitos diferentes conforme a stack.
+4. **O propagador composto é a mitigação** (cenário C: tudo em 100%) e o caminho de migração entre formatos.
+
+**Achado colateral:** no cenário A, 1 abastecimento de 60 ficou sem o span do `atm-cluster`. O cluster processou **59 comandos para 60 requisições**: dois comandos chegaram no mesmo segmento TCP, e o protocolo, sem delimitação, perdeu um (limitação já registrada na 9.6). O k6 não detectou; **o trace incompleto revelou uma perda real de dados**, o que só foi possível com a propagação TCP.
+
 ---
 
 ## 10. Reprodução
