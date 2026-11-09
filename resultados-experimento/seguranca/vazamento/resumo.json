@@ -1,0 +1,178 @@
+{
+  "inicio": "2026-11-09T08:58:29.407Z",
+  "fim": "2026-11-09T08:59:09.519Z",
+  "spans": 25526,
+  "chaves_por_servico": {
+    "atm-monitor": [
+      "@jaeger@warnings",
+      "atm.comando",
+      "atm.id",
+      "atm.resultado",
+      "network.transport",
+      "server.port"
+    ],
+    "api-gateway": [
+      "atm.comando",
+      "client.address",
+      "component",
+      "express.name",
+      "express.type",
+      "http.request.method",
+      "http.response.status_code",
+      "http.route",
+      "nestjs.callback",
+      "nestjs.controller",
+      "nestjs.type",
+      "nestjs.version",
+      "network.local.address",
+      "network.local.port",
+      "network.peer.address",
+      "network.peer.port",
+      "network.protocol.version",
+      "network.transport",
+      "peer.ipv4",
+      "router.name",
+      "router.type",
+      "router.version",
+      "rpc.grpc.status_code",
+      "rpc.method",
+      "rpc.service",
+      "rpc.system",
+      "server.address",
+      "server.port",
+      "url.full",
+      "url.path",
+      "url.query",
+      "url.scheme",
+      "user_agent.original"
+    ],
+    "rest-api": [
+      "@jaeger@warnings",
+      "exception",
+      "http.url",
+      "method",
+      "outcome",
+      "peer.service",
+      "spring.rabbit.template.name",
+      "status",
+      "uri"
+    ],
+    "atm-cluster": [
+      "@jaeger@warnings",
+      "atm.comando",
+      "atm.id",
+      "network.transport"
+    ],
+    "banco-soap": [
+      "@jaeger@warnings",
+      "client.address",
+      "db.connection_string",
+      "db.name",
+      "db.operation",
+      "db.sql.table",
+      "db.statement",
+      "db.system",
+      "http.request.method",
+      "http.response.status_code",
+      "messaging.destination.name",
+      "messaging.operation.type",
+      "messaging.system",
+      "network.peer.address",
+      "network.peer.port",
+      "network.protocol.version",
+      "server.address",
+      "server.port",
+      "url.path",
+      "url.scheme",
+      "user_agent.original"
+    ],
+    "ws-service": [
+      "@jaeger@warnings",
+      "messaging.destination",
+      "messaging.destination_kind",
+      "messaging.operation",
+      "messaging.protocol",
+      "messaging.protocol_version",
+      "messaging.rabbitmq.routing_key",
+      "messaging.system",
+      "messaging.url",
+      "server.address",
+      "server.port"
+    ],
+    "comprovantes-service": [
+      "@jaeger@warnings",
+      "net.peer.ip",
+      "net.peer.port",
+      "rpc.grpc.status_code",
+      "rpc.method",
+      "rpc.service",
+      "rpc.system",
+      "rpc.user_agent"
+    ]
+  },
+  "achados": [
+    {
+      "categoria": "CPF",
+      "servico": "banco-soap",
+      "origem": "span",
+      "chave": "db.statement",
+      "spans": 793,
+      "exemplo_span": "SELECT banco_dsd",
+      "exemplo_valor": "select c1_0.id,c1_0.cpf,c1_0.nome,u1_0.i..."
+    },
+    {
+      "categoria": "Numero de conta em URL/rota",
+      "servico": "api-gateway",
+      "origem": "span",
+      "chave": "url.full",
+      "spans": 244,
+      "exemplo_span": "BancoRestController.getChavesPix",
+      "exemplo_valor": "/banco/rest/clientes/474************/cha..."
+    },
+    {
+      "categoria": "Numero de conta em URL/rota",
+      "servico": "rest-api",
+      "origem": "span",
+      "chave": "http.url",
+      "spans": 122,
+      "exemplo_span": "http get /clientes/{numeroConta}/chaves-pix",
+      "exemplo_valor": "/clientes/474************/chaves-pix"
+    },
+    {
+      "categoria": "Numero de conta em URL/rota",
+      "servico": "api-gateway",
+      "origem": "span",
+      "chave": "url.path",
+      "spans": 61,
+      "exemplo_span": "GET /banco/rest/clientes/:numeroConta/chaves-pix",
+      "exemplo_valor": "/banco/rest/clientes/474************/cha..."
+    },
+    {
+      "categoria": "Numero de conta em URL/rota",
+      "servico": "api-gateway",
+      "origem": "span",
+      "chave": "url.query",
+      "spans": 61,
+      "exemplo_span": "GET /banco/rest/extrato",
+      "exemplo_valor": "conta=474************"
+    },
+    {
+      "categoria": "Query string em URL",
+      "servico": "api-gateway",
+      "origem": "span",
+      "chave": "url.full",
+      "spans": 61,
+      "exemplo_span": "BancoRestController.getExtrato",
+      "exemplo_valor": "/banco/rest/extrato?conta=474***********..."
+    },
+    {
+      "categoria": "SQL (texto da consulta)",
+      "servico": "banco-soap",
+      "origem": "span",
+      "chave": "db.statement",
+      "spans": 1891,
+      "exemplo_span": "SELECT banco_dsd.contas",
+      "exemplo_valor": "select c1_0.id,c1_0.cliente_id,c1_0.nume..."
+    }
+  ]
+}

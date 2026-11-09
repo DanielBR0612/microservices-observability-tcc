@@ -423,6 +423,49 @@ Com as seções 9.5 e 9.6, **todos os protocolos rastreados do sistema chegaram 
 
 **Pendente:** medir o overhead da propagação TCP no experimento completo, junto com o do AMQP.
 
+### 9.7 Segurança da telemetria (2026-11-09)
+
+Duas perguntas: **(a)** que dados sensíveis chegam ao backend de traces? **(b)** o contexto de trace vindo de fora é uma fronteira de confiança?
+
+#### (a) Vazamento de dados nos spans
+
+**Ferramenta:** `observabilidade/auditoria-telemetria.js`. Ela baixa do Jaeger todos os spans de uma janela, de todos os serviços, e procura em atributos, eventos e atributos de recurso: JWT, `Authorization`, senhas (chaves e os valores usados pelo k6), CPF, número de conta em URL ou rota, e-mail (chave Pix), valores monetários, SQL com literais e query strings. Os valores são mascarados na saída.
+
+**Amostra:** uma rodada de 30 s do k6 com OTel 100% e propagação AMQP e TCP ativa: **25.526 spans**. Resultados em `resultados-experimento/seguranca/vazamento/`.
+
+| Categoria | Onde | Atributos | Spans | Avaliação |
+|---|---|---|---:|---|
+| **Número de conta** (dado pessoal/bancário) | `api-gateway`, `rest-api` | `url.full`, `url.path`, `url.query`, `http.url` | 488 | **vaza**: a conta faz parte da rota (`/clientes/{numeroConta}/chaves-pix`) ou da query (`/extrato?conta=`) |
+| Esquema do banco | `banco-soap` | `db.statement` | 1.891 | SQL **parametrizado** (`?`): nenhum valor vaza, mas o texto expõe tabelas e colunas (`clientes.cpf`, `usuario.password_hash`) |
+| Endereços de rede e agente | `api-gateway`, `banco-soap`, `comprovantes` | `client.address`, `network.peer.address`, `user_agent.original` | — | IP e user agent do cliente: dado pessoal pela LGPD |
+| Informação de infraestrutura | recurso dos Spring | `host.name`, `os.*`, `process.command_line`, `process.executable.path`, versões de runtime | todos | reconhecimento do ambiente; `process.command_line` exporia segredos passados por argumento (hoje não há nenhum) |
+
+**O que não vazou, e por quê:**
+
+| Dado | Resultado | Motivo |
+|---|---|---|
+| Senha (login, `alterarSenha`) | não encontrada | as auto-instrumentações não capturam corpo de requisição |
+| JWT no `Authorization` | não encontrado | cabeçalhos não são capturados por padrão |
+| JWT na URL do WebSocket (`/ws?token=...`) | não encontrado | **por acaso**: o handshake WebSocket (HTTP Upgrade) não gera span no `ws-service`. Se fosse instrumentado, o token iria para `url.full`/`url.query`, como a conta foi |
+| CPF, valores, chave Pix | não encontrados | ficam no corpo (JSON/SOAP) ou em parâmetros SQL sanitizados |
+| Credenciais de RabbitMQ e PostgreSQL | não encontradas | `messaging.url` e `db.connection_string` saem sem usuário e senha |
+
+**Leitura:** os padrões das auto-instrumentações são conservadores no corpo e nos cabeçalhos, mas **a URL é tratada como metadado inofensivo**, e qualquer dado sensível que o design da API coloque no caminho ou na query vai para a telemetria. O risco depende mais do desenho da API (o que vai na URL) do que da ferramenta de tracing.
+
+#### (b) Fronteira de confiança: `traceparent` forjado por um cliente externo
+
+Detalhes em `resultados-experimento/seguranca/fronteira-confianca.md`.
+
+| Teste | Resultado |
+|---|---|
+| Trace id escolhido pelo cliente, flag `01` | **adotado**: a raiz do gateway aponta como pai um span inventado, e o id chega ao `atm-monitor` |
+| 5 logins com senha errada e flag `00`, amostragem do sistema em 100% | **0 traces gravados** (o controle sem cabeçalho foi gravado) |
+| Amostragem do gateway em 0%, 20 requisições com flag `01` forjada | **20 de 20 gravadas**, contra 0 de 20 sem o cabeçalho |
+
+**Leitura:** com o amostrador `parentbased` (o padrão recomendado para manter traces completos), **quem chama decide**. Um cliente externo pode (1) escolher o trace id de requisições internas, (2) apagar do rastreamento as próprias ações, mesmo com 100% de amostragem, e (3) forçar a gravação para inflar o custo do backend. O mesmo mecanismo que garante traces completos *dentro* do sistema vira um vetor de controle na *borda*.
+
+**Mitigações:** descartar o contexto externo no gateway (ou registrá-lo só como *span link*); usar na borda um amostrador que ignore a flag remota; filtrar `baggage`; mover dados sensíveis da URL para o corpo ou mascarar `url.*` com um processador de atributos no coletor.
+
 ---
 
 ## 10. Reprodução

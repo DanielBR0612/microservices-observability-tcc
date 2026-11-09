@@ -1,0 +1,13 @@
+Auditoria de telemetria  2026-11-09T08:58:29.407Z .. 2026-11-09T08:59:09.519Z  (25526 spans)
+
+| Categoria | Servico | Origem | Atributo | Spans | Exemplo de span | Valor (mascarado) |
+|---|---|---|---|---:|---|---|
+| CPF | banco-soap | span | `db.statement` | 793 | SELECT banco_dsd | `select c1_0.id,c1_0.cpf,c1_0.nome,u1_0.i...` |
+| Numero de conta em URL/rota | api-gateway | span | `url.full` | 244 | BancoRestController.getChavesPix | `/banco/rest/clientes/474************/cha...` |
+| Numero de conta em URL/rota | rest-api | span | `http.url` | 122 | http get /clientes/{numeroConta}/chaves-pix | `/clientes/474************/chaves-pix` |
+| Numero de conta em URL/rota | api-gateway | span | `url.path` | 61 | GET /banco/rest/clientes/:numeroConta/chaves-pix | `/banco/rest/clientes/474************/cha...` |
+| Numero de conta em URL/rota | api-gateway | span | `url.query` | 61 | GET /banco/rest/extrato | `conta=474************` |
+| Query string em URL | api-gateway | span | `url.full` | 61 | BancoRestController.getExtrato | `/banco/rest/extrato?conta=474***********...` |
+| SQL (texto da consulta) | banco-soap | span | `db.statement` | 1891 | SELECT banco_dsd.contas | `select c1_0.id,c1_0.cliente_id,c1_0.nume...` |
+
+Arquivos gravados em resultados-experimento/seguranca/vazamento

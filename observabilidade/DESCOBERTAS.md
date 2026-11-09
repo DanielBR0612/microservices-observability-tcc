@@ -59,12 +59,19 @@ Artigo: *Estudo Comparativo de Desempenho e Observabilidade em Microsserviços: 
 
 ### OE3: segurança na camada de telemetria
 
-**Ainda sem dados**; é o objetivo mais descoberto do artigo. Candidatos concretos já identificados para o teste T2:
-- a rota `GET /banco/rest/clientes/:numeroConta/chaves-pix` coloca o número da conta na URL, e URLs costumam ir para os atributos do span;
-- o login trafega `conta` e `senha` no corpo: verificar se algum span captura o corpo ou parâmetros;
-- SQL com parâmetros nos spans de banco (Hibernate/JDBC);
-- **fronteira de confiança:** o gateway aceita um `traceparent` vindo do cliente externo? Se aceitar, um cliente pode forçar a amostragem (custo) ou ligar requisições internas a um trace que ele controla;
-- a linha de metadados criada no TCP (D6) é mais uma superfície: o receptor passa a interpretar dados de contexto vindos da rede.
+Teste T2 feito em 2026-11-09 (METODOLOGIA 9.7; evidências em `resultados-experimento/seguranca/`).
+
+- **D14. A URL é o canal de vazamento.** Em 25.526 spans, o número da conta aparece em 488 (`url.full`, `url.path`, `url.query`, `http.url`), porque a API o coloca na rota (`/clientes/{numeroConta}/chaves-pix`) e na query (`/extrato?conta=`). Corpo e cabeçalhos não são capturados por padrão, então **senha, JWT do `Authorization`, CPF, valores e chave Pix não vazaram**. *Afirmação para o artigo:* o risco depende mais do desenho da API (o que vai na URL) do que da ferramenta de tracing.
+- **D15. O JWT do WebSocket escapou por acaso.** O token vai na URL do handshake (`/ws?token=...`), mas o handshake não gera span no `ws-service`. A falta de instrumentação (uma limitação no OE1) evitou um vazamento no OE3: se o WebSocket fosse rastreado, o token iria para `url.query` como a conta foi. Instrumentar mais aumenta a superfície de exposição.
+- **D16. O SQL vem sanitizado, mas expõe o esquema.** O `db.statement` usa `?` no lugar dos valores, porém revela tabelas e colunas (`clientes.cpf`, `usuario.password_hash`). As credenciais de banco e broker não aparecem (`postgresql://localhost:5433`, `amqp://rabbitmq:5672`).
+- **D17. Metadados de infraestrutura e dados pessoais indiretos:** IP do cliente (`client.address`) e user agent em todos os spans de servidor HTTP; `host.name`, SO, caminhos e a linha de comando completa do processo (`process.command_line`) nos recursos Java. Hoje não há segredos na linha de comando, mas qualquer `--senha=...` passado por argumento iria para a telemetria.
+- **D18. O `traceparent` externo é uma fronteira de confiança aberta.** Com o amostrador `parentbased`, **quem chama decide**:
+  1. o cliente escolhe o trace id de requisições internas (adotado com um pai inexistente, e chega até o `atm-monitor`);
+  2. o cliente **apaga do rastreamento** as próprias ações: 5 logins com senha errada e flag `00` geraram **0 traces**, com o sistema em 100% de amostragem;
+  3. o cliente **força a gravação**: com o gateway em 0% de amostragem, 20 de 20 requisições com flag `01` forjada foram gravadas (contra 0 de 20 sem o cabeçalho). Isso permite inflar o custo do backend de traces (memória do Jaeger ~10× entre 10% e 100%).
+
+  *Afirmação para o artigo:* o mesmo mecanismo que garante traces completos *dentro* do sistema (respeitar a decisão do pai) vira um vetor de controle na *borda*. Na borda, o contexto externo deve ser descartado ou virar *span link*.
+- **Não testado:** propagação de `baggage` do cliente para os serviços internos (o propagador está ativo por padrão no gateway).
 
 ### OE4: diretrizes (rascunho, a partir das descobertas)
 
@@ -74,6 +81,9 @@ Artigo: *Estudo Comparativo de Desempenho e Observabilidade em Microsserviços: 
 4. **Prefira protocolos com cabeçalhos**. Ao usar TCP cru, desenhe o enquadramento com espaço para metadados desde o início (D6).
 5. **Use amostragem**: ela reduz o custo de cauda, de CPU e de armazenamento sem afetar a cobertura (seção 3).
 6. **O tracing mostra onde, não por quê**, em falhas de transporte (D12): combine-o com métricas de rede.
+7. **Não coloque dados sensíveis na URL** ou mascare `url.*` no coletor: a URL vai inteira para a telemetria (D14, D15).
+8. **Trate o contexto de trace externo como entrada não confiável**: no gateway, descarte `traceparent`/`baggage` de clientes ou use *span link*; amostre na borda com um amostrador que ignore a flag remota (D18).
+9. **Antes de instrumentar algo novo, audite o que ele vai exportar**: mais cobertura significa mais superfície de exposição (D15).
 
 ---
 
@@ -148,9 +158,12 @@ Desenho: `sem-otel` × `otel-10` × `otel-100`; 2 ciclos com ordem alternada × 
 | — | Matriz de cobertura por protocolo | OE1 | feito | seções 9.2 e 9.4 |
 | — | Overhead sem-otel × otel-10 × otel-100 | custo | feito | `resultados-experimento/completo/`, seção 9.4 |
 | T1a | Propagação manual AMQP (antes/depois) | OE1, OE2 | feito: 0% → 100%, órfãos → 0 | commit `e5cfe0c`, seção 9.5 |
-| T1b | Propagação manual TCP (antes/depois) | OE1, OE2 | feito: 0% → 100% | seção 9.6 (ainda sem commit) |
+| T1b | Propagação manual TCP (antes/depois) | OE1, OE2 | feito: 0% → 100% | commit `8e60fe8`, seção 9.6 |
 | T1c | Overhead da propagação AMQP + TCP | custo | **pendente** | `CONFIGS="sem-otel otel-100" SAIDA=resultados-experimento/propagacao` |
-| T2 | Auditoria de dados sensíveis + `traceparent` forjado | OE3 | **pendente**, prioridade alta | — |
+| T2a | Auditoria de dados sensíveis nos spans | OE3 | feito: conta na URL vaza; senha/JWT/CPF não | `observabilidade/auditoria-telemetria.js`, `resultados-experimento/seguranca/vazamento/`, seção 9.7 |
+| T2b | `traceparent` forjado (adoção, supressão, amplificação) | OE3 | feito: os três confirmados | `resultados-experimento/seguranca/fronteira-confianca.md`, seção 9.7 |
+| T2c | Baggage do cliente chegando aos serviços internos | OE3 | pendente | — |
+| T2d | Mitigação na borda (descartar contexto externo) e novo teste | OE3, OE4 | pendente, opcional | — |
 | T3 | Injeção de falhas F1–F6 (antes/depois da propagação) | OE1 (eficácia) | pendente | protocolo na seção 6 da METODOLOGIA |
 | T4 | Incompatibilidade de propagadores W3C × B3 | OE2, OE4 | pendente | — |
 | T5 | Tabela de esforço de instrumentação por serviço e linguagem | OE2 | parcial (seção 2 deste arquivo) | — |
@@ -166,3 +179,5 @@ Desenho: `sem-otel` × `otel-10` × `otel-100`; 2 ciclos com ordem alternada × 
 - "O mesmo salto AMQP exigiu desde uma linha de configuração até cerca de trinta linhas de código, conforme a biblioteca de rastreamento do serviço produtor, o que indica que, em sistemas poliglotas, a heterogeneidade das ferramentas é um fator tão relevante quanto a dos protocolos."
 - "Em protocolos sem cabeçalhos, como TCP cru, tornar a comunicação observável exigiu alterar o formato das mensagens, transformando a observabilidade em parte do contrato entre os serviços."
 - "O rastreamento indicou onde o tempo foi gasto, mas não por quê, quando a causa estava na camada de transporte."
+- "As auto-instrumentações não capturaram corpos nem cabeçalhos, mas trataram a URL como metadado inofensivo: o número da conta, presente na rota da API, foi exportado em 488 de 25.526 spans."
+- "Com o amostrador baseado no pai, a decisão de rastrear pertence a quem chama: um cliente externo conseguiu suprimir do rastreamento as próprias tentativas de login, mesmo com amostragem de 100%, e forçar a gravação de todas as suas requisições com amostragem de 0%."
