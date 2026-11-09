@@ -2,7 +2,7 @@
 
 Este documento descreve como o projeto avalia o rastreamento distribuído (OpenTelemetry + Jaeger) nos protocolos usados pelo sistema bancário: SOAP, REST, gRPC, AMQP, WebSocket e TCP/UDP. Ele descreve as perguntas, as métricas, o procedimento experimental, as ferramentas e as ameaças à validade.
 
-> Estado: a cobertura (eixo 1) e o overhead (eixo 2) são automatizados. O diagnóstico (eixo 3) tem um protocolo definido aqui, mas é executado manualmente. Os números citados na seção 9 são de rodadas exploratórias e não substituem o experimento completo.
+> Estado: a cobertura (eixo 1) e o overhead (eixo 2) são automatizados, e o experimento completo dos dois foi executado em 2026-11-07 (seção 9.4). O diagnóstico (eixo 3) tem um protocolo definido aqui, mas é executado manualmente e ainda não foi feito. As seções 9.1 a 9.3 trazem achados de rodadas exploratórias.
 
 ---
 
@@ -265,6 +265,8 @@ Antes da coleta, foram encontradas e corrigidas quatro falhas. Nenhuma delas ger
 
 Volume: cerca de 18 a 26 spans por trace no gateway, inclusive em operações triviais de ~4 ms (ATM), porque a auto-instrumentação do NestJS gera spans de middleware e handler.
 
+A matriz foi confirmada no experimento completo (seção 9.4), com resultado idêntico em todas as repetições. Os 92,3% (SOAP) e 75% (REST) agregados por protocolo não são falhas parciais desses protocolos: todos os fluxos síncronos têm 100%, e só a TED e o PIX caem para 0%, porque esperam o `ws-service` depois de um salto AMQP.
+
 ### 9.3 Caso real de falha invisível ao tracing (tipo F6)
 
 Em rodadas do k6, algumas requisições ficavam paradas exatamente cerca de 63 s, o tempo das retransmissões de SYN do TCP (1+2+4+8+16+32 s). A causa foi encontrada pelos contadores do kernel (`TCPSynRetrans` em `/proc/net/netstat`) e pelo `netstat` no Windows (414 conexões em TIME_WAIT na porta do SOAP), não pelo Jaeger:
@@ -273,6 +275,94 @@ Em rodadas do k6, algumas requisições ficavam paradas exatamente cerca de 63 s
 - portas de origem reutilizadas colidiam com conexões em TIME_WAIT, e o SYN era descartado.
 
 A correção foi reutilizar o client SOAP e usar keep-alive. No trace, a requisição aparecia apenas como um span longo no gateway, sem nenhum filho: o tracing mostra *onde* o tempo foi gasto, mas não *por quê*, quando o problema está na camada de transporte.
+
+### 9.4 Experimento completo de overhead e cobertura (2026-11-07)
+
+**Execução:** `sem-otel`, `otel-10` e `otel-100`; 2 ciclos com ordem alternada × 3 repetições = **6 repetições por configuração**; 60 s por rodada, 2 iterações/s, aquecimento de 20 s. Resultados em `resultados-experimento/completo/`.
+
+**Validade da execução:** as 36 repetições terminaram com k6 `exit=0`, 100% dos checks, 0% de erros HTTP e `dropped_iterations` = 0. A vazão foi idêntica nas três configurações (~42,3 req/s), então a carga oferecida foi a mesma. No controle, o Jaeger ficou vazio em `sem-otel` nos dois ciclos. Com n = 6 por grupo, o menor p possível é 0,002.
+
+#### Latência (mediana entre repetições; Δ em relação a `sem-otel`)
+
+| Protocolo | base p50 | Δ p50 otel-10 | Δ p50 otel-100 | base p99 | Δ p99 otel-10 | Δ p99 otel-100 |
+|---|---:|---:|---:|---:|---:|---:|
+| SOAP | 135,4 ms | +0,8 ms (+0,6%) n.s. | +0,5 ms (+0,4%) n.s. | 212,7 ms | n.s. | n.s. |
+| REST | 12,4 ms | +0,7 ms (+5,2%) n.s. | +0,6 ms (+5,1%) n.s. | 32,2 ms | n.s. | n.s. |
+| gRPC | 5,22 ms | +0,41 ms (+7,8%) p=0,002 | +0,48 ms (+9,1%) p=0,002 | 7,96 ms | +1,3 ms (+17%) p=0,009 | +5,4 ms (+68%) p=0,002 |
+| TCP | 2,11 ms | +0,28 ms (+13%) p=0,002 | +0,31 ms (+15%) p=0,002 | 4,67 ms | +1,7 ms (+36%) p=0,004 | +5,7 ms (+122%) p=0,002 |
+| WebSocket (handshake) | 0,63 ms | n.s. | n.s. | 1,09 ms | n.s. | n.s. |
+| AMQP notificação PIX | 105 ms | +1 ms (+1%) n.s. | +1 ms (+1%) n.s. | 128 ms | n.s. | n.s. |
+| AMQP notificação TED | 81,5 ms | +1 ms (+1,2%) n.s. | +1,5 ms (+1,8%) n.s. | 97,7 ms | n.s. | n.s. |
+
+n.s. = p > 0,05. No TCP p99, os grupos não se sobrepõem: a maior p99 de `sem-otel` foi 5,6 ms e a menor de `otel-100`, 8,1 ms.
+
+#### Recursos (só os efeitos com p ≤ 0,05)
+
+| Serviço | Métrica | sem-otel | otel-10 | otel-100 |
+|---|---|---:|---:|---:|
+| api-gateway | CPU (núcleos) | 0,13 | 0,16 (+21%) | 0,17 (+33%) |
+| comprovantes (Python) | CPU / memória | 0,01 / 34 MB | +15% / +21% | +19% / +28% |
+| atm-monitor | CPU | < 0,01 | +77% | +81% (valor absoluto desprezível) |
+| ws-service | memória | 130 MB | +10% | +10% |
+| banco-soap | memória | 444 MB | n.s. | +6,6% |
+| Jaeger | memória | 27 MB | 74 MB (+171%) | 265 MB (+877%) |
+
+A CPU dos serviços Java não mudou de forma mensurável: o BCrypt consome ~2,5 núcleos no `banco-soap` e domina qualquer custo da instrumentação.
+
+#### Cobertura
+
+Idêntica à da seção 9.2 e estável entre repetições: SOAP, REST e gRPC com 100% nos fluxos síncronos; AMQP e TCP com 0%; exatamente um trace órfão por mensagem AMQP (241 por rodada em `otel-100`). Em `otel-10`, o número de traces cai para ~1/10 e a cobertura se mantém (92% / 74%), ou seja, a decisão de amostragem tomada no gateway é respeitada a jusante.
+
+#### Conclusões
+
+1. **O custo absoluto da instrumentação é parecido entre os protocolos (menos de 1 ms na mediana), mas o peso relativo dele depende da latência base.** Ele só é estatisticamente detectável nos protocolos rápidos (gRPC, TCP). Em SOAP, REST e AMQP, fica abaixo da variação natural de operações de 12 a 135 ms.
+2. **O custo está na cauda.** Na mediana, o overhead quase não muda entre 10% e 100% de amostragem; na p99, a amostragem reduz o overhead em 3 a 4 vezes. Uma explicação plausível, que estes dados não demonstram: os hooks da auto-instrumentação e a propagação de contexto rodam em toda requisição, amostrada ou não, e só a gravação e a exportação dos spans (batch, GC) dependem da amostragem e geram picos esporádicos.
+3. **Protocolos sem propagação pagam o custo sem receber observabilidade.** O TCP tem o maior overhead relativo e 0% de cobertura: o custo vem dos spans do gateway, não do salto rastreado.
+4. **O custo de recursos se concentra no gateway (CPU) e no backend de traces (memória).** O backend é o custo que mais cresce com o volume, e é o principal argumento a favor da amostragem.
+5. **As rodadas de validação superestimaram o overhead.** Nelas o p50 subia de 1 a 3 ms, contra 0,3 a 0,6 ms aqui. A diferença provavelmente vem do Node em modo produção e dos logs do Spring em WARN, o que confirma que esses cuidados eram necessários.
+
+#### Limitações observadas nesta execução
+
+- **Aquecimento curto para o REST:** em todas as configurações, o p50 do REST cai a cada repetição de um mesmo bloco (ex.: 14,4 → 13,0 → 12,5 ms), sinal de que 20 s de aquecimento não bastam para a JVM do `rest-api`. Isso afeta igualmente as três configurações e não enviesa a comparação, mas aumenta a variância e pode esconder um efeito pequeno no REST. Numa próxima execução, use `AQUECIMENTO=60s`.
+- **Deriva entre ciclos:** pequena (~0,2 ms no gRPC do `sem-otel` do ciclo 2). Ela deixa a linha de base mais lenta, ou seja, joga contra a hipótese de overhead e não explica o efeito encontrado.
+- **Tudo na mesma máquina:** os valores absolutos valem para este hardware; o que se generaliza é a comparação relativa entre os protocolos e entre as taxas de amostragem.
+
+### 9.5 Propagação manual de contexto no AMQP: antes e depois (2026-11-09)
+
+**Diagnóstico.** A quebra estava no **produtor**, não no consumidor. A auto-instrumentação do `amqplib` no `ws-service` já criava o span de consumo (`notificacoes.transferencias process`) e tentava extrair o contexto dos headers da mensagem, mas os dois produtores Spring publicavam pelo `RabbitTemplate` sem injetar `traceparent`. Resultado: um trace órfão por mensagem.
+
+**Correção.** Cada produtor usa uma stack de tracing diferente, e cada uma pediu uma solução de natureza diferente:
+
+| Produtor | Stack de tracing | Solução | Esforço |
+|---|---|---|---|
+| `rest-api` (Kotlin) | Micrometer Tracing + bridge OTel | Ativar a observação do Spring AMQP: `spring.rabbitmq.template.observation-enabled=true`. O `RabbitTemplate` passa a criar um span PRODUCER e a injetar o `traceparent`. | **1 linha de configuração**, nenhum código |
+| `banco-soap` (Java) | `opentelemetry-spring-boot-starter` 2.30 | O starter não instrumenta o `RabbitTemplate`. Código manual em `NotificationService`: criar um span PRODUCER com atributos `messaging.*` e injetar o contexto nos headers AMQP com o `TextMapPropagator`, por meio de um `MessagePostProcessor`. | **~31 linhas de código** (6 imports), acoplamento à API do OpenTelemetry no serviço de negócio |
+| `ws-service` (Node, consumidor) | auto-instrumentação Node | Nenhuma: a extração já era automática | 0 |
+
+**Resultado** (carga k6 de 30 s, 2 iterações/s, OTel 100%; checks 100%, 0% de erros HTTP):
+
+| Métrica | Antes (seção 9.4) | Depois |
+|---|---:|---:|
+| Cobertura AMQP (TED e PIX até o `ws-service`) | 0% | **100%** |
+| Cobertura agregada do fluxo SOAP / REST | 92,3% / 75,0% | **100% / 100%** |
+| Traces órfãos por rodada | 1 por mensagem | **0** |
+| Spans por trace: TED / PIX | 26 / 18 | 28 / 20 (+ PRODUCER, + CONSUMER ligado) |
+
+A árvore de spans ficou contínua, com o consumo como filho direto da publicação:
+
+```
+TED: api-gateway SERVER → banco-soap SERVER → banco-soap PRODUCER (manual)    → ws-service CONSUMER
+PIX: api-gateway SERVER → rest-api SERVER  → rest-api PRODUCER (Micrometer)  → ws-service CONSUMER
+```
+
+**Achados para o artigo:**
+
+1. **A limitação era da instrumentação, não do protocolo.** O AMQP tem onde carregar o contexto (headers da mensagem); faltava alguém escrevê-lo. Depois da correção, o AMQP ficou tão rastreável quanto HTTP e gRPC.
+2. **O esforço depende da stack, não do protocolo.** O mesmo salto AMQP custou 1 linha de configuração em um serviço e ~31 linhas de código no outro, só porque os dois usam bibliotecas de tracing diferentes. Em um sistema poliglota, a heterogeneidade das ferramentas pesa tanto quanto a dos protocolos.
+3. **A quebra era silenciosa e assimétrica.** O consumidor estava instrumentado e gerava spans, o que dava a impressão de que o AMQP estava rastreado. Só a medição de cobertura (órfãos) mostrou a ruptura, o mesmo padrão das falhas da seção 9.1.
+4. **Basta um lado ser omisso para quebrar.** A propagação exige injeção no produtor **e** extração no consumidor. A auto-instrumentação de um lado não compensa a ausência do outro.
+
+**Pendente:** medir o overhead da propagação com o experimento completo (`CONFIGS="sem-otel otel-100"`), comparando com a seção 9.4, em especial a métrica `AMQP notificacao PIX/TED`.
 
 ---
 
