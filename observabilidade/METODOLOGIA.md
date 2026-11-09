@@ -364,6 +364,65 @@ PIX: api-gateway SERVER → rest-api SERVER  → rest-api PRODUCER (Micrometer) 
 
 **Pendente:** medir o overhead da propagação com o experimento completo (`CONFIGS="sem-otel otel-100"`), comparando com a seção 9.4, em especial a métrica `AMQP notificacao PIX/TED`.
 
+### 9.6 Propagação manual de contexto no TCP: antes e depois (2026-11-09)
+
+**Diagnóstico.** O fluxo dos ATMs tem dois saltos TCP: gateway → `atm-monitor` (porta 6002, uma conexão por comando, com resposta) e `atm-monitor` → `atm-cluster` (porta 6001, conexão persistente, comandos de mão única). Diferente do AMQP, aqui faltava tudo:
+
+- **não havia portador:** o protocolo é texto puro (`GET_ALL`, `BLOCK:id`, `ABASTECER:id:valor`), sem cabeçalhos nem metadados;
+- **não havia spans no destino:** a auto-instrumentação do módulo `net` só cria spans de *conexão de saída* (`tcp.connect`). Um servidor TCP cru não gera span nenhum, e por isso o `atm-monitor` nunca apareceu no Jaeger, mesmo com o SDK iniciado.
+
+**Correção.** Foi preciso **estender o protocolo da aplicação**: o contexto viaja numa linha de metadados antes do comando, codificada como query string (análogo a um cabeçalho HTTP):
+
+```
+traceparent=00-<trace-id>-<span-id>-01
+ABASTECER:ATM-CENTRO-01:500
+```
+
+Sem OpenTelemetry, o carrier sai vazio e o comando é enviado exatamente como antes. O receptor aceita os dois formatos, o que mantém a compatibilidade e deixa a linha de base do experimento inalterada.
+
+| Ponto | O que foi feito | Linhas efetivas |
+|---|---|---:|
+| `api-gateway` (`atm.service.ts`) | span CLIENT manual + injeção do contexto no quadro | 28 |
+| `ATMService/contexto-tcp.ts` (novo) | enquadramento: `anexarContexto` / `extrairContexto` com o propagador W3C | 13 |
+| `atm-monitor` (`monitor-server.ts`) | extração + span SERVER por comando + span PRODUCER ao repassar ao ATM | 26 |
+| `atm-cluster` (`atm-cluster.ts`) | extração + span CONSUMER ao receber o comando | 11 |
+| **Total** | 3 serviços, 4 arquivos, mudança no formato do protocolo | **~78** |
+
+**Resultado** (carga k6 de 30 s, 2 iterações/s, OTel 100%; checks 100%, 0% de erros HTTP):
+
+| Fluxo | Antes | Depois | Spans/trace (antes → depois) |
+|---|---:|---:|---:|
+| `GET /atms` | 0% | **100%** | 18 → 20 |
+| `POST /atms/refill` | 0% | **100%** | 18 → 22 |
+| `POST /atms/block` | 0% | **100%** | 18 → 20 |
+
+Árvore do abastecimento, contínua pelos dois saltos:
+
+```
+api-gateway SERVER → api-gateway CLIENT (tcp ABASTECER) → atm-monitor SERVER → atm-monitor PRODUCER → atm-cluster CONSUMER
+```
+
+Com as seções 9.5 e 9.6, **todos os protocolos rastreados do sistema chegaram a 100% de cobertura e zero órfãos.**
+
+#### Comparação do esforço: AMQP × TCP
+
+| | AMQP (9.5) | TCP (9.6) |
+|---|---|---|
+| Portador de contexto | já existe (headers da mensagem) | **não existe**; foi preciso criá-lo no payload |
+| Spans no destino | automáticos (auto-instrumentação do `amqplib`) | **manuais** (servidor TCP cru não é instrumentado) |
+| Lado receptor | nenhuma mudança | extração manual em 2 serviços |
+| Esforço | 1 linha de configuração (Micrometer) a ~31 linhas (starter OTel), só no produtor | ~78 linhas em 3 serviços + um novo módulo |
+| Mudança de contrato | nenhuma | **o formato do protocolo mudou**: os dois lados precisam conhecer o enquadramento |
+
+**Achados para o artigo:**
+
+1. **Escala de esforço por protocolo.** HTTP/SOAP/gRPC: zero (automático). AMQP: o portador existe, falta só usá-lo (configuração ou poucas linhas). TCP: falta o portador e a instrumentação, então é preciso desenhar um enquadramento e instrumentar os dois lados. O esforço cresce com o quanto o protocolo se afasta de um modelo com cabeçalhos.
+2. **Em TCP cru, a observabilidade vira parte do contrato da aplicação.** Não dá para "ligar" o tracing sem mudar o formato das mensagens. Cliente e servidor precisam evoluir juntos, e qualquer outro cliente do protocolo (por exemplo, um ATM legado) teria de ser compatível com a linha de metadados. É um acoplamento que não existe nos protocolos com cabeçalhos.
+3. **A ausência de spans engana.** O `atm-monitor` tinha o SDK do OpenTelemetry inicializado ("OpenTelemetry inicializado" no log) e mesmo assim não exportava nada. Ter o SDK carregado não garante instrumentação: depende de existir instrumentação para a biblioteca de transporte usada.
+4. **Limitação do enquadramento:** o protocolo não tinha delimitação de mensagens, e a linha de metadados herda isso. Se dois comandos chegarem no mesmo pacote TCP na conexão persistente, o parse falha, como já falharia antes. Em produção, o protocolo precisaria de um delimitador ou de um prefixo de tamanho.
+
+**Pendente:** medir o overhead da propagação TCP no experimento completo, junto com o do AMQP.
+
 ---
 
 ## 10. Reprodução

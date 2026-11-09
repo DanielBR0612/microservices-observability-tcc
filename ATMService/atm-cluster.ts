@@ -1,6 +1,10 @@
 import './tracing';
 import net from 'net';
 import dgram from 'dgram';
+import { context, trace, SpanKind } from '@opentelemetry/api';
+import { extrairContexto } from './contexto-tcp';
+
+const tracer = trace.getTracer('atm-cluster');
 
 const MONITOR_HOST = process.env.MONITOR_HOST || 'localhost';
 const PORTA_UDP = 6000; 
@@ -38,16 +42,24 @@ class ATMClient {
         });
 
         this.tcpClient.on('data', (data) => {
-            const comando = data.toString();
-            
-            if (comando === 'CMD_LOCK') {
-                this.bloquearMaquina();
-            }
-            else if (comando.startsWith('CMD_REFILL:')) {
-                const novoValor = parseInt(comando.split(':')[1]);
-                this.dinheiro = this.dinheiro + novoValor;
-                console.log(`[${this.id}] CAIXA ABASTECIDO! +R$ ${novoValor}, novo saldo: R$ ${this.dinheiro}`);
-            }
+            // O comando chega com o contexto de trace do monitor na linha de metadados (contexto-tcp.ts)
+            const { ctx, comando } = extrairContexto(data.toString());
+            const span = tracer.startSpan(`tcp ${comando.split(':')[0]} process`, {
+                kind: SpanKind.CONSUMER,
+                attributes: { 'network.transport': 'tcp', 'atm.id': this.id, 'atm.comando': comando.split(':')[0] },
+            }, ctx);
+
+            context.with(trace.setSpan(ctx, span), () => {
+                if (comando === 'CMD_LOCK') {
+                    this.bloquearMaquina();
+                }
+                else if (comando.startsWith('CMD_REFILL:')) {
+                    const novoValor = parseInt(comando.split(':')[1]);
+                    this.dinheiro = this.dinheiro + novoValor;
+                    console.log(`[${this.id}] CAIXA ABASTECIDO! +R$ ${novoValor}, novo saldo: R$ ${this.dinheiro}`);
+                }
+            });
+            span.end();
         });
 
         this.tcpClient.on('error', (err) => {
