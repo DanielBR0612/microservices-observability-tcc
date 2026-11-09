@@ -1,0 +1,3 @@
+{"nome":"depois-delimitado-1000","requisicoes":1000,"paralelismo":200,"http_2xx":1000,
+ "comandos_processados_no_atm":1000,"perdidos":0,
+ "cobertura_refill(traces,completos,pct)":"1000.000,1000.000,100.000"}

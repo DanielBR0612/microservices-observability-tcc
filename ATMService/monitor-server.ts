@@ -2,7 +2,7 @@ import './tracing';
 import net from 'net';
 import dgram from 'dgram';
 import { context, trace, SpanKind } from '@opentelemetry/api';
-import { anexarContexto, extrairContexto } from './contexto-tcp';
+import { anexarContexto, extrairContexto, criarLeitorDeLinhas, FIM_DE_MENSAGEM } from './contexto-tcp';
 
 // Um servidor TCP cru nao e coberto pela auto-instrumentacao (ela so cria spans de conexao
 // de saida): os spans abaixo sao manuais, com o contexto lido do quadro (contexto-tcp.ts).
@@ -23,14 +23,13 @@ udpServer.on('message', (msg, rinfo) => {
 udpServer.bind(6000, () => console.log(' Monitor UDP rodando na porta 6000'));
 
 const tcpServerATM = net.createServer((socket) => {
-    socket.on('data', (data) => {
-        const msg = data.toString();
+    socket.on('data', criarLeitorDeLinhas((msg) => {
         if (msg.startsWith('REGISTER:')) {
             const id = msg.split(':')[1];
             atmSockets[id] = socket;
             console.log(` ATM ${id} conectado via TCP pronto para comandos.`);
         }
-    });
+    }));
 });
 tcpServerATM.listen(6001, () => console.log('🔌 TCP (ATMs) rodando na porta 6001'));
 
@@ -45,8 +44,12 @@ function enviarAoAtm(id: string, comando: string) {
 }
 
 const tcpServerGateway = net.createServer((socket) => {
-    socket.on('data', (data) => {
-        const { ctx, comando: command } = extrairContexto(data.toString());
+    // Cada resposta tambem e uma linha: o gateway le ate o '\n' (respostas grandes podem
+    // chegar em varios segmentos)
+    const responder = (obj: unknown) => socket.write(JSON.stringify(obj) + FIM_DE_MENSAGEM);
+
+    socket.on('data', criarLeitorDeLinhas((linha) => {
+        const { ctx, comando: command } = extrairContexto(linha);
         const nome = command.split(':')[0];
         const span = tracer.startSpan(`tcp ${nome}`, {
             kind: SpanKind.SERVER,
@@ -55,7 +58,7 @@ const tcpServerGateway = net.createServer((socket) => {
 
         context.with(trace.setSpan(ctx, span), () => {
             if (command === 'GET_ALL') {
-                socket.write(JSON.stringify(atms));
+                responder(atms);
             }
             else if (command.startsWith('BLOCK:')) {
                 const id = command.split(':')[1];
@@ -70,10 +73,10 @@ const tcpServerGateway = net.createServer((socket) => {
                         console.log(`[MONITOR] Status do ${id} forçado para BLOCKED manualmente.`);
                     }
 
-                    socket.write(JSON.stringify({ status: 'Bloqueio enviado' }));
+                    responder({ status: 'Bloqueio enviado' });
                 } else {
                     span.setAttribute('atm.resultado', 'offline');
-                    socket.write(JSON.stringify({ status: 'ATM Offline' }));
+                    responder({ status: 'ATM Offline' });
                 }
             }
             else if (command.startsWith('ABASTECER:')) {
@@ -84,14 +87,14 @@ const tcpServerGateway = net.createServer((socket) => {
 
                 if (atmSockets[id] && !atmSockets[id].destroyed) {
                     enviarAoAtm(id, `CMD_REFILL:${valor}`);
-                    socket.write(JSON.stringify({ status: 'Abastecimento enviado' }));
+                    responder({ status: 'Abastecimento enviado' });
                 } else {
                     span.setAttribute('atm.resultado', 'offline');
-                    socket.write(JSON.stringify({ status: 'ATM Offline' }));
+                    responder({ status: 'ATM Offline' });
                 }
             }
         });
         span.end();
-    });
+    }));
 });
 tcpServerGateway.listen(6002, () => console.log('TCP (Gateway) rodando na porta 6002'));

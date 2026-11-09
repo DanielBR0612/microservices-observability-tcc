@@ -1,0 +1,15 @@
+
+Cobertura de traces  2026-11-09T10:13:44.027Z .. 2026-11-09T10:14:01.443Z  (300 traces)
+
+| Protocolo | Fluxos | Traces | Completos | Cobertura | Spans/trace |
+|---|---:|---:|---:|---:|---:|
+| TCP | 1 | 300 | 300 | 100.0% | 22.0 |
+
+| Protocolo | Fluxo | Traces | Cobertura | Ausentes | Spans | Prof. | Raiz p50 | Raiz p95 | Destino p50 |
+|---|---|---:|---:|---|---:|---:|---:|---:|---:|
+| TCP | POST /atms/refill | 300 | 100.0% | - | 22.0 | 10.0 | 3.3 | 5.5 | 0.2 (atm-monitor) |
+
+Traces orfaos (iniciam fora do gateway): 0
+Traces de fundo (heartbeats dos ATMs, ignorados): 0
+
+Arquivos gravados em resultados-experimento/enquadramento-tcp/depois-delimitado

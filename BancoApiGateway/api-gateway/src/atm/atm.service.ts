@@ -3,8 +3,10 @@ import * as net from 'net';
 import { context, propagation, trace, SpanKind, SpanStatusCode } from '@opentelemetry/api';
 
 // TCP cru nao tem cabecalhos nem instrumentacao de protocolo: o span CLIENT e manual e o
-// contexto vai numa linha de metadados antes do comando (mesmo formato de
-// ATMService/contexto-tcp.ts):  traceparent=00-...-01\nGET_ALL
+// contexto vai no inicio da linha do comando (mesmo formato de ATMService/contexto-tcp.ts):
+//   traceparent=00-...-01 GET_ALL\n
+// Cada mensagem (comando e resposta) e uma linha terminada em '\n', porque TCP e um fluxo
+// de bytes: uma resposta pode chegar em varios segmentos.
 const tracer = trace.getTracer('api-gateway.atm');
 
 @Injectable()
@@ -39,9 +41,8 @@ export class AtmService {
 
     const carrier: Record<string, string> = {};
     propagation.inject(ctx, carrier);
-    const quadro = Object.keys(carrier).length
-      ? `${new URLSearchParams(carrier).toString()}\n${comando}`
-      : comando;
+    const meta = Object.keys(carrier).length ? `${new URLSearchParams(carrier).toString()} ` : '';
+    const quadro = `${meta}${comando}\n`;
 
     const finalizar = (erro?: string) => {
       if (erro) span.setStatus({ code: SpanStatusCode.ERROR, message: erro });
@@ -55,11 +56,16 @@ export class AtmService {
         client.write(quadro);
       });
 
+      let recebido = '';
       client.on('data', (data) => {
+        recebido += data.toString();
+        const fim = recebido.indexOf('\n');
+        if (fim < 0) return; // resposta ainda incompleta
+        const linha = recebido.slice(0, fim);
         try {
-            resolve(JSON.parse(data.toString()));
+            resolve(JSON.parse(linha));
         } catch {
-            resolve({ message: data.toString() });
+            resolve({ message: linha });
         }
         finalizar();
         client.destroy();

@@ -60,6 +60,7 @@ Artigo: *Estudo Comparativo de Desempenho e Observabilidade em Microsserviços: 
 - **D25. Um serviço divergente quebra os dois lados dele.** O `rest-api` em B3 perdeu o contexto do gateway **e** contaminou o salto AMQP seguinte, porque escreveu B3 nos headers que o `ws-service` só lê em W3C.
 - **D26. Os padrões das bibliotecas são assimétricos.** Com a borda em B3, os SDKs do OpenTelemetry (Java, Python, Node) quebraram, porque só leem W3C, enquanto o Micrometer do Spring Boot sobreviveu, porque lê W3C, B3 e B3 multi por padrão. Reforça D5: em sistemas poliglotas, as diferenças entre bibliotecas pesam tanto quanto as entre protocolos. Um propagador composto (B3+W3C) restaura 100% e serve de caminho de migração.
 - **D27. O trace revelou uma perda real de dados.** Com a propagação TCP ativa, 1 de 60 abastecimentos ficou sem o span do `atm-cluster`; o cluster processou 59 comandos para 60 requisições. Dois comandos chegaram no mesmo segmento TCP e o protocolo, sem delimitação, descartou um. O k6 não detectou (só verifica a resposta do monitor). *Afirmação para o artigo:* a propagação de contexto não só observa a comunicação: ela expôs um defeito de enquadramento do protocolo que existia antes e era invisível.
+- **D28. Corrigido o enquadramento, as perdas sumiram, e o trace se mostrou um detector confiável.** Com uma mensagem por linha (`\n`) e um leitor acumulador, o teste determinístico passou de 1/3 (coalescência) e 0/3 (fragmentação) para 3/3, e as rajadas no sistema real deram 0 perdas (300/300, 1000/1000, k6 61/61). No código antigo, as perdas foram raras (0 a 1 por rodada), e **cada uma coincidiu com exatamente um trace incompleto**. A correção foi, de novo, uma mudança de contrato: com o gateway ainda antigo, `GET /atms` deu timeout. (METODOLOGIA 9.10, `resultados-experimento/enquadramento-tcp/`.)
 
 ### OE3: segurança na camada de telemetria
 
@@ -150,6 +151,8 @@ Rubrica (detecção / localização / causa, 0–2): **F1 SOAP 2/2/1 · F2 REST 
 | `docker compose run k6` religa as dependências do k6 | desfez a falha F3 (container parado) 0,6 s depois do início da janela, e o resultado parecia "falha invisível" | `--no-deps` no `rodada-falha.sh` |
 | Parar o `ws-service` derruba também o WebSocket | o k6 deixa de executar TED/PIX e não há o que diagnosticar | F4 refeita como partição consumidor–broker (`iptables`) |
 | Kernel do Docker Desktop/WSL2 sem `netem` | F6 (`tc netem`) impossível | usar um proxy de falhas (Toxiproxy) |
+| `nest --watch` não detecta mudanças em bind mount do Windows | o gateway seguiu com o código antigo e deu timeout no novo protocolo TCP | reiniciar o container do gateway depois de alterar o código |
+| Defeito raro e não determinístico (perda de mensagem TCP) | rajadas maiores não aumentaram as perdas (0 em 1000) | provar o mecanismo com um teste determinístico e usar as rodadas reais como evidência de efeito |
 | Mensagens sem ack voltam à fila ao reiniciar o consumidor | ciclo de reentrega a cada 5 s, poluindo as janelas seguintes | parar o consumidor, esvaziar a fila e religar |
 | `MSYS_NO_PATHCONV=1` quebra o `mvnw` | o Maven não iniciava | não exportar a variável ao compilar |
 
@@ -191,7 +194,7 @@ Rubrica (detecção / localização / causa, 0–2): **F1 SOAP 2/2/1 · F2 REST 
 | T3b | Avaliação cega da rubrica por outra pessoa, usando as janelas gravadas | OE1 | pendente, recomendado | `resultados-experimento/falhas/*/janela.txt` |
 | T3c | F6 com proxy de falhas (Toxiproxy) entre o gateway e um backend | OE1 | pendente, opcional | — |
 | T4 | Incompatibilidade de propagadores W3C × B3 (4 cenários) | OE2, OE4 | feito | `resultados-experimento/propagadores/`, seção 9.9 |
-| — | Corrigir o enquadramento TCP (delimitador) e medir de novo | OE1 | pendente, opcional (D27) | — |
+| — | Correção do enquadramento TCP (delimitador) + teste determinístico + rajadas | OE1 | feito: perdas → 0 | `resultados-experimento/enquadramento-tcp/`, seção 9.10 |
 | T5 | Tabela de esforço de instrumentação por serviço e linguagem | OE2 | parcial (seção 2 deste arquivo) | — |
 | — | UDP (heartbeat dos ATMs) | OE1 | não tratado | — |
 | — | WebSocket (contexto nos frames) | OE1 | não tratado | — |

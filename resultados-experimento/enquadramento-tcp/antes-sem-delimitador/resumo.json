@@ -1,0 +1,3 @@
+{"nome":"antes-sem-delimitador","requisicoes":300,"paralelismo":50,"http_2xx":300,
+ "comandos_processados_no_atm":299,"perdidos":1,
+ "cobertura_refill(traces,completos,pct)":"300.000,299.000,99.667"}

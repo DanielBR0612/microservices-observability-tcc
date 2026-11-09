@@ -1,0 +1,36 @@
+{
+  "janela": {
+    "inicio": "2026-11-09T10:18:22.167Z",
+    "fim": "2026-11-09T10:19:01.475Z"
+  },
+  "totalTraces": 1000,
+  "protocolos": {
+    "TCP": {
+      "fluxos": 1,
+      "traces": 1000,
+      "completos": 1000,
+      "cobertura_pct": 100
+    }
+  },
+  "amqp": null,
+  "fluxos": [
+    {
+      "protocolo": "TCP",
+      "fluxo": "POST /atms/refill",
+      "esperado": "api-gateway + atm-monitor + atm-cluster",
+      "traces": 1000,
+      "completos": 1000,
+      "cobertura_pct": 100,
+      "ausentes": "",
+      "spans_por_trace": 22,
+      "profundidade": 10,
+      "raiz_p50_ms": 2.915807,
+      "raiz_p95_ms": 4.413443,
+      "destino": "atm-monitor",
+      "destino_p50_ms": 0.203413
+    }
+  ],
+  "orfaos": {},
+  "fundo": 0,
+  "naoMapeados": {}
+}

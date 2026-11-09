@@ -1,0 +1,2 @@
+protocolo,fluxo,esperado,traces,completos,cobertura_pct,ausentes,spans_por_trace,profundidade,raiz_p50_ms,raiz_p95_ms,destino,destino_p50_ms
+"TCP","POST /atms/refill","api-gateway + atm-monitor + atm-cluster",300.000,299.000,99.667,"atm-cluster 0%",21.997,9.997,3.301,9.970,"atm-monitor",0.226

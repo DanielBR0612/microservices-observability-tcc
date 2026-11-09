@@ -419,7 +419,7 @@ Com as seções 9.5 e 9.6, **todos os protocolos rastreados do sistema chegaram 
 1. **Escala de esforço por protocolo.** HTTP/SOAP/gRPC: zero (automático). AMQP: o portador existe, falta só usá-lo (configuração ou poucas linhas). TCP: falta o portador e a instrumentação, então é preciso desenhar um enquadramento e instrumentar os dois lados. O esforço cresce com o quanto o protocolo se afasta de um modelo com cabeçalhos.
 2. **Em TCP cru, a observabilidade vira parte do contrato da aplicação.** Não dá para "ligar" o tracing sem mudar o formato das mensagens. Cliente e servidor precisam evoluir juntos, e qualquer outro cliente do protocolo (por exemplo, um ATM legado) teria de ser compatível com a linha de metadados. É um acoplamento que não existe nos protocolos com cabeçalhos.
 3. **A ausência de spans engana.** O `atm-monitor` tinha o SDK do OpenTelemetry inicializado ("OpenTelemetry inicializado" no log) e mesmo assim não exportava nada. Ter o SDK carregado não garante instrumentação: depende de existir instrumentação para a biblioteca de transporte usada.
-4. **Limitação do enquadramento:** o protocolo não tinha delimitação de mensagens, e a linha de metadados herda isso. Se dois comandos chegarem no mesmo pacote TCP na conexão persistente, o parse falha, como já falharia antes. Em produção, o protocolo precisaria de um delimitador ou de um prefixo de tamanho.
+4. **Limitação do enquadramento:** o protocolo não tinha delimitação de mensagens, e a linha de metadados herda isso. Se dois comandos chegarem no mesmo pacote TCP na conexão persistente, o parse falha, como já falharia antes. *Atualização:* o defeito se manifestou no T4 (seção 9.9) e foi corrigido na seção 9.10. O formato atual é uma linha por mensagem: `traceparent=00-...-01 ABASTECER:ATM-CENTRO-01:500\n`.
 
 **Pendente:** medir o overhead da propagação TCP no experimento completo, junto com o do AMQP.
 
@@ -515,7 +515,7 @@ Detalhes em `resultados-experimento/propagadores/README.md`. Uma rodada de 30 s 
 3. **Os padrões das bibliotecas são assimétricos.** Com a borda em B3, os SDKs do OpenTelemetry (Java, Python, Node) quebraram, porque só leem W3C. O Micrometer do Spring Boot sobreviveu, porque lê W3C, B3 e B3 multi por padrão. O mesmo erro de configuração tem efeitos diferentes conforme a stack.
 4. **O propagador composto é a mitigação** (cenário C: tudo em 100%) e o caminho de migração entre formatos.
 
-**Achado colateral:** no cenário A, 1 abastecimento de 60 ficou sem o span do `atm-cluster`. O cluster processou **59 comandos para 60 requisições**: dois comandos chegaram no mesmo segmento TCP, e o protocolo, sem delimitação, perdeu um (limitação já registrada na 9.6). O k6 não detectou; **o trace incompleto revelou uma perda real de dados**, o que só foi possível com a propagação TCP.
+**Achado colateral** (corrigido na seção 9.10): no cenário A, 1 abastecimento de 60 ficou sem o span do `atm-cluster`. O cluster processou **59 comandos para 60 requisições**: dois comandos chegaram no mesmo segmento TCP, e o protocolo, sem delimitação, perdeu um (limitação já registrada na 9.6). O k6 não detectou; **o trace incompleto revelou uma perda real de dados**, o que só foi possível com a propagação TCP.
 
 ---
 
@@ -554,3 +554,25 @@ Interface do Jaeger: http://localhost:16686. Escolha o serviço `api-gateway`, a
 | `observabilidade/agregar-experimento.js` | eixo 2: CSVs, overhead e Mann-Whitney |
 | `observabilidade/docker-compose.experimento.yaml` | serviços Node em modo produção durante o experimento |
 | `docker-compose.yaml` | variáveis `OTEL_SDK_DISABLED`, `OTEL_TRACES_SAMPLER(_ARG)` e `OTEL_PY_WRAPPER` |
+
+### 9.10 Correção do enquadramento TCP (2026-11-09)
+
+Detalhes em `resultados-experimento/enquadramento-tcp/README.md`.
+
+**Problema** (achado na seção 9.9): o protocolo dos ATMs tratava cada evento `data` do socket como uma mensagem, mas TCP entrega um fluxo de bytes. Duas mensagens no mesmo segmento faziam o ATM processar só a primeira; uma mensagem fragmentada não era processada.
+
+**Correção:** uma mensagem por linha (`\n`), nos dois sentidos e nos dois canais, com um leitor que acumula bytes e só processa linhas completas (`criarLeitorDeLinhas`). O contexto de trace foi para o início da linha: `traceparent=00-...-01 CMD_REFILL:500\n`. A resposta do monitor ao gateway também passou a ser delimitada.
+
+| Evidência | Código antigo | Código novo |
+|---|---|---|
+| Teste determinístico, 3 mensagens no mesmo segmento | 1/3 processadas | 3/3 |
+| Teste determinístico, mensagens fragmentadas (7 bytes / 1 byte) | 0/3 | 3/3 |
+| k6 (60 abastecimentos) | 59 processados, cobertura 98,3% | 61/61, cobertura 100% |
+| Rajada de 300 (paralelismo 50) | 299 processados, cobertura 99,7% | 300/300, 100% |
+| Rajada de 1000 (paralelismo 200) | 1000/1000, 100% | 1000/1000, 100% |
+
+**Achados:**
+
+1. **O defeito é raro e não determinístico** (perdas de 0 a 1 por rodada), por isso a prova do mecanismo é o teste determinístico. Mesmo assim, **cada perda real coincidiu com exatamente um trace incompleto**: a propagação de contexto funcionou como detector de perda de mensagens, algo que nenhum check funcional fazia.
+2. **Corrigir o enquadramento foi outra mudança de contrato.** Com o monitor e o cluster atualizados e o gateway ainda antigo, `GET /atms` deu timeout (o monitor esperava o `\n`). Reforça a seção 9.6: em TCP cru, protocolo, enquadramento e observabilidade evoluem juntos.
+3. **Lição de ambiente:** o `nest --watch` do gateway não detecta alterações em arquivos montados do Windows (bind mount), então o código antigo continua rodando até o container ser reiniciado.

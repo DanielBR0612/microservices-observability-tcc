@@ -1,25 +1,46 @@
-// Propagacao de contexto de trace sobre o protocolo TCP de texto dos ATMs.
+// Enquadramento e propagacao de contexto de trace no protocolo TCP de texto dos ATMs.
 //
-// TCP cru nao tem cabecalhos: o contexto (traceparent/tracestate do W3C Trace Context)
-// viaja numa linha de metadados antes do comando, codificada como query string:
+// TCP entrega um fluxo de bytes, nao mensagens: um evento 'data' pode trazer meia mensagem
+// ou varias juntas. Por isso cada mensagem e UMA LINHA terminada em '\n', e quem le acumula
+// os bytes e so processa linhas completas (criarLeitorDeLinhas).
 //
-//   traceparent=00-<trace-id>-<span-id>-01\n
-//   ABASTECER:ATM-CENTRO-01:500
+// TCP cru tambem nao tem cabecalhos: o contexto (traceparent/tracestate do W3C Trace Context)
+// vai no inicio da linha, codificado como query string e separado do comando por um espaco:
 //
-// Sem OpenTelemetry (ou fora de um trace) o carrier fica vazio e o comando sai exatamente
-// como antes, sem a linha de metadados; quem recebe aceita os dois formatos.
+//   traceparent=00-<trace-id>-<span-id>-01 ABASTECER:ATM-CENTRO-01:500\n
+//
+// Sem OpenTelemetry (ou fora de um trace) o carrier fica vazio e a linha e so o comando.
+// Comandos nao tem espacos e a query string codifica espaco como '+', entao o primeiro espaco
+// separa sem ambiguidade os metadados do comando.
 import { context, propagation, Context } from '@opentelemetry/api';
+
+export const FIM_DE_MENSAGEM = '\n';
 
 export function anexarContexto(comando: string, ctx: Context = context.active()): string {
   const carrier: Record<string, string> = {};
   propagation.inject(ctx, carrier);
-  if (Object.keys(carrier).length === 0) return comando;
-  return `${new URLSearchParams(carrier).toString()}\n${comando}`;
+  const meta = Object.keys(carrier).length ? `${new URLSearchParams(carrier).toString()} ` : '';
+  return `${meta}${comando}${FIM_DE_MENSAGEM}`;
 }
 
-export function extrairContexto(mensagem: string): { ctx: Context; comando: string } {
-  const quebra = mensagem.indexOf('\n');
-  if (quebra < 0) return { ctx: context.active(), comando: mensagem };
-  const carrier = Object.fromEntries(new URLSearchParams(mensagem.slice(0, quebra)));
-  return { ctx: propagation.extract(context.active(), carrier), comando: mensagem.slice(quebra + 1) };
+export function extrairContexto(linha: string): { ctx: Context; comando: string } {
+  const espaco = linha.indexOf(' ');
+  if (espaco < 0) return { ctx: context.active(), comando: linha };
+  const carrier = Object.fromEntries(new URLSearchParams(linha.slice(0, espaco)));
+  return { ctx: propagation.extract(context.active(), carrier), comando: linha.slice(espaco + 1) };
+}
+
+// Devolve um handler para socket.on('data') que acumula os bytes e chama onLinha uma vez
+// por mensagem completa, na ordem em que chegaram.
+export function criarLeitorDeLinhas(onLinha: (linha: string) => void): (dados: Buffer) => void {
+  let pendente = '';
+  return (dados: Buffer) => {
+    pendente += dados.toString();
+    let fim: number;
+    while ((fim = pendente.indexOf(FIM_DE_MENSAGEM)) >= 0) {
+      const linha = pendente.slice(0, fim);
+      pendente = pendente.slice(fim + FIM_DE_MENSAGEM.length);
+      if (linha.length) onLinha(linha);
+    }
+  };
 }

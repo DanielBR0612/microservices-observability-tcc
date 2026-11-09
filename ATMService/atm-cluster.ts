@@ -2,7 +2,7 @@ import './tracing';
 import net from 'net';
 import dgram from 'dgram';
 import { context, trace, SpanKind } from '@opentelemetry/api';
-import { extrairContexto } from './contexto-tcp';
+import { extrairContexto, criarLeitorDeLinhas, FIM_DE_MENSAGEM } from './contexto-tcp';
 
 const tracer = trace.getTracer('atm-cluster');
 
@@ -38,12 +38,14 @@ class ATMClient {
     private conectarTCP() {
         this.tcpClient.connect(PORTA_TCP, MONITOR_HOST, () => {
             console.log(`[${this.id}] 🔌 Conectado ao servidor via TCP.`);
-            this.tcpClient.write(`REGISTER:${this.id}`);
+            this.tcpClient.write(`REGISTER:${this.id}${FIM_DE_MENSAGEM}`);
         });
 
-        this.tcpClient.on('data', (data) => {
-            // O comando chega com o contexto de trace do monitor na linha de metadados (contexto-tcp.ts)
-            const { ctx, comando } = extrairContexto(data.toString());
+        // Le linha a linha: dois comandos no mesmo segmento TCP eram lidos como um so, e o
+        // segundo se perdia (achado pelo trace incompleto, METODOLOGIA 9.9)
+        this.tcpClient.on('data', criarLeitorDeLinhas((linha) => {
+            // O comando chega com o contexto de trace do monitor no inicio da linha (contexto-tcp.ts)
+            const { ctx, comando } = extrairContexto(linha);
             const span = tracer.startSpan(`tcp ${comando.split(':')[0]} process`, {
                 kind: SpanKind.CONSUMER,
                 attributes: { 'network.transport': 'tcp', 'atm.id': this.id, 'atm.comando': comando.split(':')[0] },
@@ -60,7 +62,7 @@ class ATMClient {
                 }
             });
             span.end();
-        });
+        }));
 
         this.tcpClient.on('error', (err) => {
             console.error(`[${this.id}]  Erro TCP (Servidor offline?): ${err.message}`);
