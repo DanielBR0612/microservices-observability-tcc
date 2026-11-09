@@ -1,0 +1,395 @@
+{
+  "base": [
+    "2026-11-09T09:26:19.817Z",
+    "2026-11-09T09:27:03.253Z"
+  ],
+  "falha": [
+    "2026-11-09T09:35:37.388Z",
+    "2026-11-09T09:36:19.674Z"
+  ],
+  "fluxos": [
+    {
+      "fluxo": "POST /banco/soap/TED",
+      "traces_base": 60,
+      "traces_falha": 110,
+      "erro_pct": 45.45454545454545,
+      "raiz_p50_base": 91.01824,
+      "raiz_p50_falha": 83.314176,
+      "raiz_p95_base": 114.378752,
+      "raiz_p95_falha": 96.9664,
+      "culpados": [
+        {
+          "span": "ws-service | CONSUMER | notificacoes.transferencias process | status: nack called on message with requeue",
+          "traces": 50
+        }
+      ],
+      "maior_aumento_self": [
+        {
+          "span": "ws-service | CONSUMER | notificacoes.transferencias process",
+          "base_ms": 0.355072,
+          "falha_ms": 5001.137664,
+          "delta_ms": 5000.782592
+        },
+        {
+          "span": "api-gateway | INTERNAL | middleware - <anonymous>",
+          "base_ms": 0.023552,
+          "falha_ms": 0.020736,
+          "delta_ms": -0.002815999999999999
+        }
+      ],
+      "servicos_ausentes": []
+    },
+    {
+      "fluxo": "POST /banco/rest/pix",
+      "traces_base": 60,
+      "traces_falha": 110,
+      "erro_pct": 45.45454545454545,
+      "raiz_p50_base": 31.481344,
+      "raiz_p50_falha": 23.707136,
+      "raiz_p95_base": 47.51488,
+      "raiz_p95_falha": 34.786304,
+      "culpados": [
+        {
+          "span": "ws-service | CONSUMER | notificacoes.transferencias process | status: nack called on message with requeue",
+          "traces": 50
+        }
+      ],
+      "maior_aumento_self": [
+        {
+          "span": "ws-service | CONSUMER | notificacoes.transferencias process",
+          "base_ms": 0.348928,
+          "falha_ms": 5001.115904,
+          "delta_ms": 5000.766976
+        },
+        {
+          "span": "api-gateway | INTERNAL | tcp.connect",
+          "falha_ms": 4.561664,
+          "delta_ms": 4.561664
+        }
+      ],
+      "servicos_ausentes": []
+    },
+    {
+      "fluxo": "GET /banco/soap/saldo",
+      "traces_base": 180,
+      "traces_falha": 180,
+      "erro_pct": 33.333333333333336,
+      "raiz_p50_base": 77.574656,
+      "raiz_p50_falha": 74.92096,
+      "raiz_p95_base": 103.06816,
+      "raiz_p95_falha": 83.3024,
+      "culpados": [
+        {
+          "span": "api-gateway | INTERNAL | BancoSoapController.getSaldo | status: Unauthorized | exception: UnauthorizedException: Unauthorized",
+          "traces": 60
+        }
+      ],
+      "maior_aumento_self": [
+        {
+          "span": "api-gateway | INTERNAL | middleware - corsMiddleware",
+          "base_ms": 0.027648,
+          "falha_ms": 0.025344,
+          "delta_ms": -0.0023040000000000005
+        },
+        {
+          "span": "api-gateway | INTERNAL | middleware - urlencodedParser",
+          "base_ms": 0.014592,
+          "falha_ms": 0.011776,
+          "delta_ms": -0.002816000000000001
+        }
+      ],
+      "servicos_ausentes": []
+    },
+    {
+      "fluxo": "POST /auth/login",
+      "traces_base": 240,
+      "traces_falha": 240,
+      "erro_pct": 25,
+      "raiz_p50_base": 147.269376,
+      "raiz_p50_falha": 140.17408,
+      "raiz_p95_base": 170.378752,
+      "raiz_p95_falha": 149.5296,
+      "culpados": [
+        {
+          "span": "api-gateway | INTERNAL | login | status: Conta ou senha inválidos. | exception: UnauthorizedException: Conta ou senha inválidos.",
+          "traces": 60
+        }
+      ],
+      "maior_aumento_self": [
+        {
+          "span": "api-gateway | INTERNAL | middleware - <anonymous>",
+          "base_ms": 0.023808,
+          "falha_ms": 0.020992,
+          "delta_ms": -0.002815999999999999
+        },
+        {
+          "span": "api-gateway | INTERNAL | middleware - corsMiddleware",
+          "base_ms": 0.027648,
+          "falha_ms": 0.024576,
+          "delta_ms": -0.0030719999999999983
+        }
+      ],
+      "servicos_ausentes": []
+    },
+    {
+      "fluxo": "GET /atms",
+      "traces_base": 60,
+      "traces_falha": 60,
+      "erro_pct": 0,
+      "raiz_p50_base": 2.94656,
+      "raiz_p50_falha": 2.448384,
+      "raiz_p95_base": 17.042432,
+      "raiz_p95_falha": 4.020224,
+      "culpados": [],
+      "maior_aumento_self": [
+        {
+          "span": "api-gateway | SERVER | GET /atms",
+          "base_ms": 0.1646080000000003,
+          "falha_ms": 0.17177599999999993,
+          "delta_ms": 0.007167999999999619
+        },
+        {
+          "span": "api-gateway | CLIENT | tcp GET_ALL",
+          "base_ms": 0,
+          "falha_ms": 0,
+          "delta_ms": 0
+        }
+      ],
+      "servicos_ausentes": []
+    },
+    {
+      "fluxo": "POST /atms/refill",
+      "traces_base": 60,
+      "traces_falha": 60,
+      "erro_pct": 0,
+      "raiz_p50_base": 3.252224,
+      "raiz_p50_falha": 2.694912,
+      "raiz_p95_base": 32.517888,
+      "raiz_p95_falha": 7.226368,
+      "culpados": [],
+      "maior_aumento_self": [
+        {
+          "span": "atm-cluster | CONSUMER | tcp CMD_REFILL process",
+          "base_ms": 0.113408,
+          "falha_ms": 0.119296,
+          "delta_ms": 0.005888000000000004
+        },
+        {
+          "span": "api-gateway | SERVER | POST /atms/refill",
+          "base_ms": 0.17049599999999998,
+          "falha_ms": 0.1748479999999999,
+          "delta_ms": 0.0043519999999999115
+        }
+      ],
+      "servicos_ausentes": []
+    },
+    {
+      "fluxo": "POST /atms/block",
+      "traces_base": 60,
+      "traces_falha": 60,
+      "erro_pct": 0,
+      "raiz_p50_base": 3.117312,
+      "raiz_p50_falha": 2.538752,
+      "raiz_p95_base": 10.004992,
+      "raiz_p95_falha": 9.123584,
+      "culpados": [],
+      "maior_aumento_self": [
+        {
+          "span": "api-gateway | SERVER | POST /atms/block",
+          "base_ms": 0.1896960000000001,
+          "falha_ms": 0.1966079999999999,
+          "delta_ms": 0.006911999999999807
+        },
+        {
+          "span": "api-gateway | CLIENT | tcp BLOCK",
+          "base_ms": 0,
+          "falha_ms": 0,
+          "delta_ms": 0
+        }
+      ],
+      "servicos_ausentes": []
+    },
+    {
+      "fluxo": "POST /comprovantes/gerar",
+      "traces_base": 60,
+      "traces_falha": 60,
+      "erro_pct": 0,
+      "raiz_p50_base": 6.843136,
+      "raiz_p50_falha": 5.764608,
+      "raiz_p95_base": 39.943936,
+      "raiz_p95_falha": 10.098944,
+      "culpados": [],
+      "maior_aumento_self": [
+        {
+          "span": "api-gateway | INTERNAL | middleware - corsMiddleware",
+          "base_ms": 0.026368,
+          "falha_ms": 0.02432,
+          "delta_ms": -0.0020479999999999977
+        },
+        {
+          "span": "api-gateway | INTERNAL | middleware - <anonymous>",
+          "base_ms": 0.022528,
+          "falha_ms": 0.020224,
+          "delta_ms": -0.0023040000000000005
+        }
+      ],
+      "servicos_ausentes": []
+    },
+    {
+      "fluxo": "GET /banco/rest/clientes/:numeroConta/chaves-pix",
+      "traces_base": 60,
+      "traces_falha": 60,
+      "erro_pct": 0,
+      "raiz_p50_base": 14.349824,
+      "raiz_p50_falha": 11.534336,
+      "raiz_p95_base": 28.20736,
+      "raiz_p95_falha": 18.067712,
+      "culpados": [],
+      "maior_aumento_self": [
+        {
+          "span": "api-gateway | SERVER | GET /banco/rest/clientes/:numeroConta/chaves-pix",
+          "base_ms": 0.18892800000000065,
+          "falha_ms": 0.20992000000000033,
+          "delta_ms": 0.020991999999999678
+        },
+        {
+          "span": "api-gateway | INTERNAL | middleware - <anonymous>",
+          "base_ms": 0.022016,
+          "falha_ms": 0.021248,
+          "delta_ms": -0.0007680000000000013
+        }
+      ],
+      "servicos_ausentes": []
+    },
+    {
+      "fluxo": "GET /banco/rest/extrato",
+      "traces_base": 60,
+      "traces_falha": 60,
+      "erro_pct": 0,
+      "raiz_p50_base": 12.778496,
+      "raiz_p50_falha": 9.806336,
+      "raiz_p95_base": 23.99744,
+      "raiz_p95_falha": 12.914432,
+      "culpados": [],
+      "maior_aumento_self": [
+        {
+          "span": "api-gateway | INTERNAL | middleware - <anonymous>",
+          "base_ms": 0.022528,
+          "falha_ms": 0.020224,
+          "delta_ms": -0.0023040000000000005
+        },
+        {
+          "span": "api-gateway | INTERNAL | middleware - urlencodedParser",
+          "base_ms": 0.015104,
+          "falha_ms": 0.011264,
+          "delta_ms": -0.0038399999999999997
+        }
+      ],
+      "servicos_ausentes": []
+    },
+    {
+      "fluxo": "POST /banco/rest/clientes/:id/chaves-pix",
+      "traces_base": 60,
+      "traces_falha": 60,
+      "erro_pct": 0,
+      "raiz_p50_base": 15.840256,
+      "raiz_p50_falha": 12.130304,
+      "raiz_p95_base": 58.749952,
+      "raiz_p95_falha": 16.61952,
+      "culpados": [],
+      "maior_aumento_self": [
+        {
+          "span": "api-gateway | INTERNAL | middleware - <anonymous>",
+          "base_ms": 0.023552,
+          "falha_ms": 0.022016,
+          "delta_ms": -0.0015359999999999992
+        },
+        {
+          "span": "api-gateway | INTERNAL | middleware - corsMiddleware",
+          "base_ms": 0.028672,
+          "falha_ms": 0.026368,
+          "delta_ms": -0.0023040000000000005
+        }
+      ],
+      "servicos_ausentes": []
+    },
+    {
+      "fluxo": "POST /banco/soap/criarConta",
+      "traces_base": 120,
+      "traces_falha": 120,
+      "erro_pct": 0,
+      "raiz_p50_base": 81.273344,
+      "raiz_p50_falha": 75.415552,
+      "raiz_p95_base": 101.29024,
+      "raiz_p95_falha": 82.856448,
+      "culpados": [],
+      "maior_aumento_self": [
+        {
+          "span": "api-gateway | INTERNAL | middleware - <anonymous>",
+          "base_ms": 0.025344,
+          "falha_ms": 0.020992,
+          "delta_ms": -0.004351999999999998
+        },
+        {
+          "span": "api-gateway | INTERNAL | middleware - corsMiddleware",
+          "base_ms": 0.029696,
+          "falha_ms": 0.02432,
+          "delta_ms": -0.005375999999999999
+        }
+      ],
+      "servicos_ausentes": []
+    },
+    {
+      "fluxo": "POST /banco/soap/alterarSenha",
+      "traces_base": 60,
+      "traces_falha": 60,
+      "erro_pct": 0,
+      "raiz_p50_base": 215.28064,
+      "raiz_p50_falha": 207.72736,
+      "raiz_p95_base": 257.436928,
+      "raiz_p95_falha": 219.2576,
+      "culpados": [],
+      "maior_aumento_self": [
+        {
+          "span": "api-gateway | INTERNAL | middleware - <anonymous>",
+          "base_ms": 0.022784,
+          "falha_ms": 0.02048,
+          "delta_ms": -0.002303999999999997
+        },
+        {
+          "span": "api-gateway | INTERNAL | middleware - corsMiddleware",
+          "base_ms": 0.027392,
+          "falha_ms": 0.024064,
+          "delta_ms": -0.003328000000000001
+        }
+      ],
+      "servicos_ausentes": []
+    },
+    {
+      "fluxo": "POST /banco/soap/criarCliente",
+      "traces_base": 120,
+      "traces_falha": 120,
+      "erro_pct": 0,
+      "raiz_p50_base": 148.296448,
+      "raiz_p50_falha": 140.683264,
+      "raiz_p95_base": 180.875264,
+      "raiz_p95_falha": 148.590848,
+      "culpados": [],
+      "maior_aumento_self": [
+        {
+          "span": "api-gateway | INTERNAL | middleware - corsMiddleware",
+          "base_ms": 0.028928,
+          "falha_ms": 0.0256,
+          "delta_ms": -0.0033279999999999976
+        },
+        {
+          "span": "api-gateway | INTERNAL | middleware - <anonymous>",
+          "base_ms": 0.0256,
+          "falha_ms": 0.022016,
+          "delta_ms": -0.0035840000000000004
+        }
+      ],
+      "servicos_ausentes": []
+    }
+  ]
+}

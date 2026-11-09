@@ -1,0 +1,53 @@
+{
+  "base": [
+    "2026-11-09T09:26:19.817Z",
+    "2026-11-09T09:27:03.253Z"
+  ],
+  "falha": [
+    "2026-11-09T09:30:22.724Z",
+    "2026-11-09T09:31:05.546Z"
+  ],
+  "fluxos": [
+    {
+      "fluxo": "POST /comprovantes/gerar",
+      "traces_base": 60,
+      "traces_falha": 61,
+      "erro_pct": 100,
+      "raiz_p50_base": 6.843136,
+      "raiz_p50_falha": 4.911616,
+      "raiz_p95_base": 39.943936,
+      "raiz_p95_falha": 9.747968,
+      "culpados": [
+        {
+          "span": "api-gateway | CLIENT | grpc.comprovante.ComprovanteService/GerarComprovante | rpc.grpc.status_code=14",
+          "traces": 58
+        },
+        {
+          "span": "api-gateway | CLIENT | dns.lookup | status: getaddrinfo ENOTFOUND comprovantes-service",
+          "traces": 2
+        },
+        {
+          "span": "api-gateway | INTERNAL | tcp.connect | status: connect ECONNREFUSED 172.18.0.6:50051",
+          "traces": 1
+        }
+      ],
+      "maior_aumento_self": [
+        {
+          "span": "api-gateway | CLIENT | dns.lookup",
+          "base_ms": 9.485568,
+          "falha_ms": 1262.1824,
+          "delta_ms": 1252.6968319999999
+        },
+        {
+          "span": "api-gateway | CLIENT | grpc.comprovante.ComprovanteService/GerarComprovante",
+          "base_ms": 2.541056,
+          "falha_ms": 3.139584,
+          "delta_ms": 0.598528
+        }
+      ],
+      "servicos_ausentes": [
+        "comprovantes-service"
+      ]
+    }
+  ]
+}

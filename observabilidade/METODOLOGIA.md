@@ -466,6 +466,34 @@ Detalhes em `resultados-experimento/seguranca/fronteira-confianca.md`.
 
 **Mitigações:** descartar o contexto externo no gateway (ou registrá-lo só como *span link*); usar na borda um amostrador que ignore a flag remota; filtrar `baggage`; mover dados sensíveis da URL para o corpo ou mascarar `url.*` com um processador de atributos no coletor.
 
+### 9.8 Diagnóstico com injeção de falhas (2026-11-09)
+
+Execução do eixo 3 (seção 6), já com a propagação AMQP e TCP. Relatório completo, janelas e diagnósticos em `resultados-experimento/falhas/`; ferramentas: `observabilidade/rodada-falha.sh` (carga numa janela) e `observabilidade/diagnostico-falhas.js` (janela com falha × base).
+
+**Adaptações ao sistema real:** F1 e F2 foram injetadas **no banco**, por triggers na tabela `transacao` (consulta lenta na TED; exceção em ~10% dos INSERTs de PIX), sem alterar o código. F4 virou uma **partição entre consumidor e broker** (`iptables` no namespace do `ws-service`), porque parar o container também derruba o WebSocket e o k6 deixa de fazer TED/PIX. F6 (`tc netem`) não foi executável: o kernel do Docker Desktop/WSL2 não tem o módulo `netem`.
+
+| # | Protocolo | Falha | Detecção | Localização | Causa | Sem propagação manual |
+|---|---|---|:-:|:-:|:-:|:-:|
+| F1 | SOAP | consulta lenta | 2 | 2 | 1 | — |
+| F2 | REST | erro intermitente | 2 | 2 | 2 | — |
+| F3 | gRPC | serviço indisponível | 2 | 2 | 2 | — |
+| F4 | AMQP | consumidor isolado | 1 | 1 | 0 | 0 / 0 / 0 |
+| F5 | TCP | ATMs desconectados | 1 | 2 | 1 | 0 / 0 / 0 |
+
+**Hipótese da seção 6:** confirmada, com uma nuance. F1–F3 (protocolos síncronos com propagação automática) foram diagnosticáveis. F4 e F5 apareceram como **requisições bem-sucedidas** no gateway (0% de erro, latência normal). Com a propagação manual, deixaram de ser invisíveis: viraram detectáveis **pela ausência** de um span esperado, o que exige conhecer a topologia esperada de cada fluxo.
+
+**Achados:**
+
+1. **A falha assíncrona não tem erro para mostrar.** Na F4, o produtor publica com sucesso e o broker aceita; o problema acontece depois, fora da requisição. Nem o RabbitMQ detectou (seguiu com 1 consumidor e 100 mensagens "entregues, sem ack"). Com propagação, o trace mostra o *buraco*; sem propagação, nem isso.
+2. **Falha de negócio ≠ erro de protocolo.** Na F5, o monitor responde HTTP 200 com `ATM Offline`. O único sinal no trace é um atributo de negócio (`atm.resultado=offline`) que **só existe porque foi colocado na instrumentação manual**. A auto-instrumentação vê "sucesso".
+3. **O trace localiza com precisão, mas a causa depende do que a biblioteca exporta.** Na F1, o span de SQL apontou exatamente o INSERT lento (1,6 → 252 ms), mas não o motivo (trigger). Na F2, a mensagem de exceção do Spring trouxe tudo, até o nome da função do trigger. Detalhe: o `rest-api` (Micrometer) não tem spans de banco, e mesmo assim deu a melhor causa, pela mensagem de exceção.
+4. **O cliente pode não perceber o que o trace mostra.** Na F1, todos os checks do k6 passaram: a TED ficou 6,5× mais lenta e só a latência denunciava.
+5. **A reentrega infinita polui traces antigos.** Mensagens para destinatários offline voltam à fila a cada 5 s (`nack` com `requeue`). Cada tentativa acrescenta um span CONSUMER com erro **ao trace original**, que assim nunca termina (110 traces de TED numa janela que tinha 60 TEDs). O expurgo da fila não remove mensagens que estão "em trânsito" no consumidor.
+
+**Lição de método:** `docker compose run k6` **religa as dependências** do k6 (gateway, comprovantes) e desfez a F3 na primeira tentativa. O container voltou 0,6 s depois do início da janela, e o resultado parecia "falha invisível". Corrigido com `--no-deps` no `rodada-falha.sh`.
+
+**Limitações:** avaliação não cega (a rubrica foi aplicada por quem injetou); uma rodada de 30 s por falha; F6 não executada; os 401 propositais do k6 aparecem como spans de erro em todas as janelas.
+
 ---
 
 ## 10. Reprodução

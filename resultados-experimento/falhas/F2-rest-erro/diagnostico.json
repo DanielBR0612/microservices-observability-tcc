@@ -1,0 +1,95 @@
+{
+  "base": [
+    "2026-11-09T09:26:19.817Z",
+    "2026-11-09T09:27:03.253Z"
+  ],
+  "falha": [
+    "2026-11-09T09:28:09.192Z",
+    "2026-11-09T09:29:00.435Z"
+  ],
+  "fluxos": [
+    {
+      "fluxo": "POST /banco/rest/pix",
+      "traces_base": 60,
+      "traces_falha": 57,
+      "erro_pct": 22.80701754385965,
+      "raiz_p50_base": 31.481344,
+      "raiz_p50_falha": 25.345536,
+      "raiz_p95_base": 47.51488,
+      "raiz_p95_falha": 35.5968,
+      "culpados": [
+        {
+          "span": "rest-api | SERVER | http post /pix/transferir | status: could not execute statement [ERROR: falha injetada F2: erro de persistencia\n  Onde: PL/pgSQL function falha_f2() line 1 at RAISE] [insert into transacao (conta_id,data_hora,tipo,valor) values (?,?,?,?) returning id] | exception=JpaSystemException | exception: org.springframework.orm.jpa.JpaSystemException: could not execute statement [ERROR: falha injetada F2: erro de persistencia\n  Onde: PL/pgS",
+          "traces": 13
+        }
+      ],
+      "maior_aumento_self": [
+        {
+          "span": "rest-api | PRODUCER | /notificacoes.transferencias send",
+          "base_ms": 0,
+          "falha_ms": 0,
+          "delta_ms": 0
+        },
+        {
+          "span": "api-gateway | INTERNAL | middleware - <anonymous>",
+          "base_ms": 0.025344,
+          "falha_ms": 0.023552,
+          "delta_ms": -0.0017919999999999985
+        }
+      ],
+      "servicos_ausentes": []
+    },
+    {
+      "fluxo": "GET /banco/rest/clientes/:numeroConta/chaves-pix",
+      "traces_base": 60,
+      "traces_falha": 57,
+      "erro_pct": 0,
+      "raiz_p50_base": 14.349824,
+      "raiz_p50_falha": 12.512256,
+      "raiz_p95_base": 28.20736,
+      "raiz_p95_falha": 16.78976,
+      "culpados": [],
+      "maior_aumento_self": [
+        {
+          "span": "api-gateway | INTERNAL | middleware - <anonymous>",
+          "base_ms": 0.022016,
+          "falha_ms": 0.02048,
+          "delta_ms": -0.0015359999999999992
+        },
+        {
+          "span": "api-gateway | INTERNAL | middleware - urlencodedParser",
+          "base_ms": 0.01408,
+          "falha_ms": 0.011776,
+          "delta_ms": -0.0023040000000000005
+        }
+      ],
+      "servicos_ausentes": []
+    },
+    {
+      "fluxo": "POST /banco/rest/clientes/:id/chaves-pix",
+      "traces_base": 60,
+      "traces_falha": 57,
+      "erro_pct": 0,
+      "raiz_p50_base": 15.840256,
+      "raiz_p50_falha": 13.046272,
+      "raiz_p95_base": 58.749952,
+      "raiz_p95_falha": 20.049664,
+      "culpados": [],
+      "maior_aumento_self": [
+        {
+          "span": "api-gateway | INTERNAL | middleware - urlencodedParser",
+          "base_ms": 0.016896,
+          "falha_ms": 0.015104,
+          "delta_ms": -0.001792000000000002
+        },
+        {
+          "span": "api-gateway | INTERNAL | middleware - <anonymous>",
+          "base_ms": 0.023552,
+          "falha_ms": 0.020224,
+          "delta_ms": -0.003328000000000001
+        }
+      ],
+      "servicos_ausentes": []
+    }
+  ]
+}

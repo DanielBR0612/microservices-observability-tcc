@@ -1,0 +1,327 @@
+time="2026-11-09T06:28:09-03:00" level=warning msg="project has been loaded without an explicit name from a symlink. Using name \"projeto-dsd\""
+time="2026-11-09T06:28:09-03:00" level=warning msg="Found orphan containers (projeto-dsd-k6-run-8f40d3a8b8b6) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up."
+ Container container_gateway Running 
+ Container atm-monitor Running 
+ Container container_comprovantes Running 
+ Container container_ws Running 
+ Container projeto-dsd-jaeger-1 Running 
+ Container projeto-dsd-rabbitmq Running 
+ Container projeto-dsd-k6-run-c5815001875b Creating 
+ Container projeto-dsd-k6-run-c5815001875b Created 
+
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
+
+
+     execution: local
+        script: /scripts/script.js
+        output: -
+
+     scenarios: (100.00%) 1 scenario, 50 max VUs, 1m0s max duration (incl. graceful stop):
+              * principal: 2.00 iterations/s for 30s (maxVUs: 10-50, gracefulStop: 30s)
+
+
+running (0m01.0s), 02/10 VUs, 0 complete and 0 interrupted iterations
+principal   [   3% ] 02/10 VUs  01.0s/30s  2.00 iters/s
+
+running (0m02.0s), 04/10 VUs, 0 complete and 0 interrupted iterations
+principal   [   7% ] 04/10 VUs  02.0s/30s  2.00 iters/s
+time="2026-11-09T09:28:12Z" level=error msg="[ERRO PIX] status=500 body={\"timestamp\":\"2026-11-09T09:28:12.898+00:00\",\"status\":500,\"error\":\"Internal Server Error\",\"message\":\"could not execute statement [ERROR: falha injetada F2: erro de persistencia\\n  Onde: PL/pgSQL function falha_f2() line 1 at RAISE] [insert into transacao (conta_id,data_hora,tipo,valor) values (?,?,?" source=console
+
+running (0m03.0s), 06/10 VUs, 0 complete and 0 interrupted iterations
+principal   [  10% ] 06/10 VUs  03.0s/30s  2.00 iters/s
+
+running (0m04.0s), 06/10 VUs, 2 complete and 0 interrupted iterations
+principal   [  13% ] 06/10 VUs  04.0s/30s  2.00 iters/s
+
+running (0m05.0s), 07/10 VUs, 3 complete and 0 interrupted iterations
+principal   [  17% ] 07/10 VUs  05.0s/30s  2.00 iters/s
+time="2026-11-09T09:28:16Z" level=error msg="[ERRO PIX] status=500 body={\"timestamp\":\"2026-11-09T09:28:16.074+00:00\",\"status\":500,\"error\":\"Internal Server Error\",\"message\":\"could not execute statement [ERROR: falha injetada F2: erro de persistencia\\n  Onde: PL/pgSQL function falha_f2() line 1 at RAISE] [insert into transacao (conta_id,data_hora,tipo,valor) values (?,?,?" source=console
+
+running (0m06.0s), 07/10 VUs, 5 complete and 0 interrupted iterations
+principal   [  20% ] 07/10 VUs  06.0s/30s  2.00 iters/s
+time="2026-11-09T09:28:16Z" level=error msg="[ERRO PIX] status=500 body={\"timestamp\":\"2026-11-09T09:28:16.541+00:00\",\"status\":500,\"error\":\"Internal Server Error\",\"message\":\"could not execute statement [ERROR: falha injetada F2: erro de persistencia\\n  Onde: PL/pgSQL function falha_f2() line 1 at RAISE] [insert into transacao (conta_id,data_hora,tipo,valor) values (?,?,?" source=console
+time="2026-11-09T09:28:16Z" level=error msg="[ERRO PIX] status=500 body={\"timestamp\":\"2026-11-09T09:28:16.982+00:00\",\"status\":500,\"error\":\"Internal Server Error\",\"message\":\"could not execute statement [ERROR: falha injetada F2: erro de persistencia\\n  Onde: PL/pgSQL function falha_f2() line 1 at RAISE] [insert into transacao (conta_id,data_hora,tipo,valor) values (?,?,?" source=console
+
+running (0m07.0s), 07/10 VUs, 7 complete and 0 interrupted iterations
+principal   [  23% ] 07/10 VUs  07.0s/30s  2.00 iters/s
+time="2026-11-09T09:28:18Z" level=error msg="[ERRO PIX] status=500 body={\"timestamp\":\"2026-11-09T09:28:18.386+00:00\",\"status\":500,\"error\":\"Internal Server Error\",\"message\":\"could not execute statement [ERROR: falha injetada F2: erro de persistencia\\n  Onde: PL/pgSQL function falha_f2() line 1 at RAISE] [insert into transacao (conta_id,data_hora,tipo,valor) values (?,?,?" source=console
+
+running (0m08.0s), 09/10 VUs, 7 complete and 0 interrupted iterations
+principal   [  27% ] 09/10 VUs  08.0s/30s  2.00 iters/s
+
+running (0m09.0s), 09/11 VUs, 8 complete and 0 interrupted iterations
+principal   [  30% ] 09/11 VUs  09.0s/30s  2.00 iters/s
+time="2026-11-09T09:28:19Z" level=error msg="[ERRO PIX] status=500 body={\"timestamp\":\"2026-11-09T09:28:19.830+00:00\",\"status\":500,\"error\":\"Internal Server Error\",\"message\":\"could not execute statement [ERROR: falha injetada F2: erro de persistencia\\n  Onde: PL/pgSQL function falha_f2() line 1 at RAISE] [insert into transacao (conta_id,data_hora,tipo,valor) values (?,?,?" source=console
+
+running (0m10.0s), 10/11 VUs, 9 complete and 0 interrupted iterations
+principal   [  33% ] 10/11 VUs  10.0s/30s  2.00 iters/s
+time="2026-11-09T09:28:21Z" level=error msg="[ERRO PIX] status=500 body={\"timestamp\":\"2026-11-09T09:28:21.353+00:00\",\"status\":500,\"error\":\"Internal Server Error\",\"message\":\"could not execute statement [ERROR: falha injetada F2: erro de persistencia\\n  Onde: PL/pgSQL function falha_f2() line 1 at RAISE] [insert into transacao (conta_id,data_hora,tipo,valor) values (?,?,?" source=console
+
+running (0m11.0s), 10/11 VUs, 11 complete and 0 interrupted iterations
+principal   [  37% ] 10/11 VUs  11.0s/30s  2.00 iters/s
+
+running (0m12.0s), 11/12 VUs, 11 complete and 0 interrupted iterations
+principal   [  40% ] 11/12 VUs  12.0s/30s  2.00 iters/s
+time="2026-11-09T09:28:22Z" level=error msg="[WS] notificacao PIX nao chegou para 649150300600002" source=console
+
+running (0m13.0s), 11/12 VUs, 13 complete and 0 interrupted iterations
+principal   [  43% ] 11/12 VUs  13.0s/30s  2.00 iters/s
+
+running (0m14.0s), 11/12 VUs, 15 complete and 0 interrupted iterations
+principal   [  47% ] 11/12 VUs  14.0s/30s  2.00 iters/s
+
+running (0m15.0s), 12/12 VUs, 16 complete and 0 interrupted iterations
+principal   [  50% ] 12/12 VUs  15.0s/30s  2.00 iters/s
+time="2026-11-09T09:28:26Z" level=error msg="[WS] notificacao PIX nao chegou para 649450300200002" source=console
+time="2026-11-09T09:28:26Z" level=error msg="[ERRO PIX] status=500 body={\"timestamp\":\"2026-11-09T09:28:26.330+00:00\",\"status\":500,\"error\":\"Internal Server Error\",\"message\":\"could not execute statement [ERROR: falha injetada F2: erro de persistencia\\n  Onde: PL/pgSQL function falha_f2() line 1 at RAISE] [insert into transacao (conta_id,data_hora,tipo,valor) values (?,?,?" source=console
+
+running (0m16.0s), 10/13 VUs, 19 complete and 0 interrupted iterations
+principal   [  53% ] 10/13 VUs  16.0s/30s  2.00 iters/s
+time="2026-11-09T09:28:26Z" level=error msg="[WS] notificacao PIX nao chegou para 649500300700002" source=console
+time="2026-11-09T09:28:27Z" level=error msg="[WS] notificacao PIX nao chegou para 649550400100012" source=console
+time="2026-11-09T09:28:27Z" level=error msg="[ERRO PIX] status=500 body={\"timestamp\":\"2026-11-09T09:28:27.323+00:00\",\"status\":500,\"error\":\"Internal Server Error\",\"message\":\"could not execute statement [ERROR: falha injetada F2: erro de persistencia\\n  Onde: PL/pgSQL function falha_f2() line 1 at RAISE] [insert into transacao (conta_id,data_hora,tipo,valor) values (?,?,?" source=console
+
+running (0m17.0s), 08/13 VUs, 23 complete and 0 interrupted iterations
+principal   [  57% ] 08/13 VUs  17.0s/30s  2.00 iters/s
+time="2026-11-09T09:28:28Z" level=error msg="[WS] notificacao PIX nao chegou para 649700401000012" source=console
+
+running (0m18.0s), 09/13 VUs, 24 complete and 0 interrupted iterations
+principal   [  60% ] 09/13 VUs  18.0s/30s  2.00 iters/s
+
+running (0m19.0s), 10/13 VUs, 25 complete and 0 interrupted iterations
+principal   [  63% ] 10/13 VUs  19.0s/30s  2.00 iters/s
+time="2026-11-09T09:28:29Z" level=error msg="[WS] notificacao PIX nao chegou para 649850300400012" source=console
+
+running (0m20.0s), 09/13 VUs, 28 complete and 0 interrupted iterations
+principal   [  67% ] 09/13 VUs  20.0s/30s  2.00 iters/s
+time="2026-11-09T09:28:30Z" level=error msg="[ERRO PIX] status=500 body={\"timestamp\":\"2026-11-09T09:28:30.855+00:00\",\"status\":500,\"error\":\"Internal Server Error\",\"message\":\"could not execute statement [ERROR: falha injetada F2: erro de persistencia\\n  Onde: PL/pgSQL function falha_f2() line 1 at RAISE] [insert into transacao (conta_id,data_hora,tipo,valor) values (?,?,?" source=console
+time="2026-11-09T09:28:31Z" level=error msg="[WS] notificacao PIX nao chegou para 650000300500022" source=console
+
+running (0m21.0s), 09/13 VUs, 30 complete and 0 interrupted iterations
+principal   [  70% ] 09/13 VUs  21.0s/30s  2.00 iters/s
+
+running (0m22.0s), 08/13 VUs, 33 complete and 0 interrupted iterations
+principal   [  73% ] 08/13 VUs  22.0s/30s  2.00 iters/s
+
+running (0m23.0s), 09/13 VUs, 34 complete and 0 interrupted iterations
+principal   [  77% ] 09/13 VUs  23.0s/30s  2.00 iters/s
+
+running (0m24.0s), 09/13 VUs, 36 complete and 0 interrupted iterations
+principal   [  80% ] 09/13 VUs  24.0s/30s  2.00 iters/s
+time="2026-11-09T09:28:35Z" level=error msg="[ERRO PIX] status=500 body={\"timestamp\":\"2026-11-09T09:28:35.350+00:00\",\"status\":500,\"error\":\"Internal Server Error\",\"message\":\"could not execute statement [ERROR: falha injetada F2: erro de persistencia\\n  Onde: PL/pgSQL function falha_f2() line 1 at RAISE] [insert into transacao (conta_id,data_hora,tipo,valor) values (?,?,?" source=console
+
+running (0m25.0s), 09/13 VUs, 38 complete and 0 interrupted iterations
+principal   [  83% ] 09/13 VUs  25.0s/30s  2.00 iters/s
+time="2026-11-09T09:28:36Z" level=error msg="[WS] notificacao PIX nao chegou para 650500300800032" source=console
+
+running (0m26.0s), 09/13 VUs, 40 complete and 0 interrupted iterations
+principal   [  87% ] 09/13 VUs  26.0s/30s  2.00 iters/s
+time="2026-11-09T09:28:37Z" level=error msg="[ERRO PIX] status=500 body={\"timestamp\":\"2026-11-09T09:28:37.340+00:00\",\"status\":500,\"error\":\"Internal Server Error\",\"message\":\"could not execute statement [ERROR: falha injetada F2: erro de persistencia\\n  Onde: PL/pgSQL function falha_f2() line 1 at RAISE] [insert into transacao (conta_id,data_hora,tipo,valor) values (?,?,?" source=console
+time="2026-11-09T09:28:37Z" level=error msg="[WS] notificacao PIX nao chegou para 650600401300002" source=console
+
+running (0m27.0s), 09/13 VUs, 42 complete and 0 interrupted iterations
+principal   [  90% ] 09/13 VUs  27.0s/30s  2.00 iters/s
+
+running (0m28.0s), 08/13 VUs, 45 complete and 0 interrupted iterations
+principal   [  93% ] 08/13 VUs  28.0s/30s  2.00 iters/s
+
+running (0m29.0s), 09/13 VUs, 46 complete and 0 interrupted iterations
+principal   [  97% ] 09/13 VUs  29.0s/30s  2.00 iters/s
+
+running (0m30.0s), 09/13 VUs, 48 complete and 0 interrupted iterations
+principal   [ 100% ] 09/13 VUs  30.0s/30s  2.00 iters/s
+time="2026-11-09T09:28:40Z" level=error msg="[WS] notificacao PIX nao chegou para 650950300100022" source=console
+time="2026-11-09T09:28:41Z" level=error msg="[ERRO PIX] status=500 body={\"timestamp\":\"2026-11-09T09:28:41.384+00:00\",\"status\":500,\"error\":\"Internal Server Error\",\"message\":\"could not execute statement [ERROR: falha injetada F2: erro de persistencia\\n  Onde: PL/pgSQL function falha_f2() line 1 at RAISE] [insert into transacao (conta_id,data_hora,tipo,valor) values (?,?,?" source=console
+
+running (0m31.0s), 06/13 VUs, 51 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 09/13 VUs  30s  2.00 iters/s
+
+running (0m32.0s), 04/13 VUs, 53 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 09/13 VUs  30s  2.00 iters/s
+
+running (0m33.0s), 03/13 VUs, 54 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 09/13 VUs  30s  2.00 iters/s
+
+running (0m34.0s), 03/13 VUs, 54 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 09/13 VUs  30s  2.00 iters/s
+time="2026-11-09T09:28:45Z" level=error msg="[WS] notificacao PIX nao chegou para 651400300500032" source=console
+
+running (0m35.0s), 03/13 VUs, 54 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 09/13 VUs  30s  2.00 iters/s
+
+running (0m36.0s), 02/13 VUs, 55 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 09/13 VUs  30s  2.00 iters/s
+time="2026-11-09T09:28:47Z" level=error msg="[WS] notificacao PIX nao chegou para 651600301200032" source=console
+
+running (0m37.0s), 02/13 VUs, 55 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 09/13 VUs  30s  2.00 iters/s
+
+running (0m38.0s), 01/13 VUs, 56 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 09/13 VUs  30s  2.00 iters/s
+
+running (0m39.0s), 01/13 VUs, 56 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 09/13 VUs  30s  2.00 iters/s
+
+running (0m40.0s), 01/13 VUs, 56 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 09/13 VUs  30s  2.00 iters/s
+time="2026-11-09T09:28:51Z" level=error msg="[WS] notificacao PIX nao chegou para 652000300300062" source=console
+
+running (0m41.0s), 01/13 VUs, 56 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 09/13 VUs  30s  2.00 iters/s
+
+
+  █ THRESHOLDS 
+
+    checks
+    ✗ 'rate==1.0' rate=97.07%
+
+    http_req_duration{protocolo:gRPC}
+    ✓ 'max>=0' max=12.91ms
+
+    http_req_duration{protocolo:REST}
+    ✓ 'max>=0' max=58.51ms
+
+    http_req_duration{protocolo:SOAP}
+    ✓ 'max>=0' max=265.9ms
+
+    http_req_duration{protocolo:TCP}
+    ✓ 'max>=0' max=22.46ms
+
+    http_req_failed
+    ✗ 'rate==0' rate=1.03%
+
+      {protocolo:gRPC}
+      ✓ 'rate>=0' rate=0.00%
+
+      {protocolo:REST}
+      ✓ 'rate>=0' rate=5.70%
+
+      {protocolo:SOAP}
+      ✓ 'rate>=0' rate=0.00%
+
+      {protocolo:TCP}
+      ✓ 'rate>=0' rate=0.00%
+
+    http_reqs{protocolo:gRPC}
+    ✓ 'count>=0' count=57
+
+    http_reqs{protocolo:REST}
+    ✓ 'count>=0' count=228
+
+    http_reqs{protocolo:SOAP}
+    ✓ 'count>=0' count=741
+
+    http_reqs{protocolo:TCP}
+    ✓ 'count>=0' count=171
+
+    ws_connecting{protocolo:WebSocket}
+    ✓ 'max>=0' max=1.95ms
+
+    ws_notificacao_latencia_ms{tipo:PIX}
+    ✓ 'max>=0' max=182ms
+
+    ws_notificacao_latencia_ms{tipo:TED}
+    ✓ 'max>=0' max=142ms
+
+    ws_notificacao_recebida
+    ✗ 'rate==1.0' rate=88.59%
+
+
+  █ TOTAL RESULTS 
+
+    checks_total.......: 2223   54.101767/s
+    checks_succeeded...: 97.07% 2158 out of 2223
+    checks_failed......: 2.92%  65 out of 2223
+
+    ✓ SOAP criarCliente 2xx
+    ✓ SOAP criarCliente retorna id
+    ✓ SOAP criarConta 2xx
+    ✓ SOAP criarConta numero correto
+    ✓ Auth login origem retorna token
+    ✓ Auth login destino retorna token
+    ✓ SOAP saldo (JWT) 200
+    ✓ SOAP saldo inicial correto
+    ✓ SOAP saldo sem token 401
+    ✓ SOAP alterarSenha 2xx
+    ✓ SOAP alterarSenha SUCESSO
+    ✓ Auth login com senha nova
+    ✓ Auth senha antiga rejeitada 401
+    ✓ REST criar chave Pix 2xx
+    ✓ REST listar chaves 200
+    ✓ REST listar chaves contem a nova
+    ✗ REST PIX 2xx
+      ↳  77% — ✓ 44 / ✗ 13
+    ✗ REST PIX credita conta destino
+      ↳  77% — ✓ 44 / ✗ 13
+    ✓ SOAP TED 2xx
+    ✓ SOAP TED SUCESSO
+    ✓ WS handshake 101
+    ✗ WS notificacao PIX recebida
+      ↳  77% — ✓ 44 / ✗ 13
+    ✓ WS notificacao PIX sem duplicata
+    ✓ WS notificacao TED recebida
+    ✓ WS notificacao TED sem duplicata
+    ✗ SOAP saldo final = inicial - PIX - TED
+      ↳  77% — ✓ 44 / ✗ 13
+    ✓ REST extrato 200
+    ✗ REST extrato contem o PIX
+      ↳  77% — ✓ 44 / ✗ 13
+    ✓ gRPC comprovante 2xx
+    ✓ gRPC comprovante e PDF
+    ✓ ATM listar 200
+    ✓ ATM listar contem ATMs via UDP
+    ✓ ATM abastecer enviado
+    ✓ ATM bloquear responde (offline)
+    ✓ RabbitMQ fila tem consumer (ws-service)
+
+    HTTP
+    http_req_duration..............: avg=71.31ms  min=1.08ms   med=74.9ms   p(90)=149.28ms p(95)=168.73ms p(99)=215.04ms max=265.9ms count=1254
+      { expected_response:true }...: avg=71.78ms  min=1.08ms   med=75.25ms  p(90)=149.34ms p(95)=170.1ms  p(99)=215.08ms max=265.9ms count=1241
+      { protocolo:gRPC }...........: avg=6.91ms   min=5.14ms   med=6.3ms    p(90)=9.47ms   p(95)=10.05ms  p(99)=11.57ms  max=12.91ms count=57  
+      { protocolo:REST }...........: avg=17.01ms  min=9.26ms   med=14.09ms  p(90)=26.48ms  p(95)=29.93ms  p(99)=36.84ms  max=58.51ms count=228 
+      { protocolo:SOAP }...........: avg=113.93ms min=1.1ms    med=136.97ms p(90)=160.69ms p(95)=204.85ms p(99)=216.71ms max=265.9ms count=741 
+      { protocolo:TCP }............: avg=3.76ms   min=2.11ms   med=3ms      p(90)=5.58ms   p(95)=8.53ms   p(99)=12.41ms  max=22.46ms count=171 
+    http_req_failed................: 1.03%  13 out of 1254
+      { protocolo:gRPC }...........: 0.00%  0 out of 57
+      { protocolo:REST }...........: 5.70%  13 out of 228
+      { protocolo:SOAP }...........: 0.00%  0 out of 741
+      { protocolo:TCP }............: 0.00%  0 out of 171
+    http_reqs......................: 1254   30.518946/s
+      { protocolo:gRPC }...........: 57     1.387225/s
+      { protocolo:REST }...........: 228    5.548899/s
+      { protocolo:SOAP }...........: 741    18.033922/s
+      { protocolo:TCP }............: 171    4.161674/s
+
+    EXECUTION
+    dropped_iterations.............: 3      0.073012/s
+    iteration_duration.............: avg=5.01s    min=3.01s    med=3.07s    p(90)=11.58s   p(95)=11.61s   p(99)=11.76s   max=11.79s  count=57  
+    iterations.....................: 57     1.387225/s
+    vus............................: 1      min=1          max=12
+    vus_max........................: 13     min=10         max=13
+
+    NETWORK
+    data_received..................: 1.2 MB 30 kB/s
+    data_sent......................: 263 kB 6.4 kB/s
+
+    WEBSOCKET
+    ws_connecting..................: avg=739.27µs min=549.71µs med=663.82µs p(90)=914.61µs p(95)=1.27ms   p(99)=1.7ms    max=1.95ms  count=57  
+      { protocolo:WebSocket }......: avg=739.27µs min=549.71µs med=663.82µs p(90)=914.61µs p(95)=1.27ms   p(99)=1.7ms    max=1.95ms  count=57  
+    ws_msgs_received...............: 158    3.84529/s
+    ws_notificacao_latencia_ms.....: avg=98.24ms  min=80ms     med=93ms     p(90)=116ms    p(95)=121ms    p(99)=142ms    max=182ms   count=101 
+      { tipo:PIX }.................: avg=113.59ms min=103ms    med=111.5ms  p(90)=121ms    p(95)=126.85ms p(99)=160.93ms max=182ms   count=44  
+      { tipo:TED }.................: avg=86.4ms   min=80ms     med=84ms     p(90)=93ms     p(95)=96.6ms   p(99)=120.15ms max=142ms   count=57  
+    ws_notificacao_recebida........: 88.59% 101 out of 114
+    ws_session_duration............: avg=3.55s    min=1.6s     med=1.61s    p(90)=10.11s   p(95)=10.11s   p(99)=10.14s   max=10.14s  count=57  
+    ws_sessions....................: 57     1.387225/s
+
+
+
+
+running (0m41.1s), 00/13 VUs, 57 complete and 0 interrupted iterations
+principal ✓ [ 100% ] 00/13 VUs  30s  2.00 iters/s
+time="2026-11-09T09:28:51Z" level=error msg="thresholds on metrics 'checks, http_req_failed, ws_notificacao_recebida' have been crossed"
+

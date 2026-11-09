@@ -1,0 +1,38 @@
+{
+  "base": [
+    "2026-11-09T09:26:19.817Z",
+    "2026-11-09T09:27:03.253Z"
+  ],
+  "falha": [
+    "2026-11-09T09:27:11.652Z",
+    "2026-11-09T09:27:55.332Z"
+  ],
+  "fluxos": [
+    {
+      "fluxo": "POST /banco/soap/TED",
+      "traces_base": 60,
+      "traces_falha": 61,
+      "erro_pct": 0,
+      "raiz_p50_base": 91.01824,
+      "raiz_p50_falha": 591.217408,
+      "raiz_p95_base": 114.378752,
+      "raiz_p95_falha": 621.775872,
+      "culpados": [],
+      "maior_aumento_self": [
+        {
+          "span": "banco-soap | CLIENT | INSERT banco_dsd.transacao",
+          "base_ms": 1.56032,
+          "falha_ms": 252.274944,
+          "delta_ms": 250.71462400000001
+        },
+        {
+          "span": "banco-soap | CLIENT | UPDATE banco_dsd.contas",
+          "base_ms": 0.921856,
+          "falha_ms": 0.97408,
+          "delta_ms": 0.05222399999999994
+        }
+      ],
+      "servicos_ausentes": []
+    }
+  ]
+}

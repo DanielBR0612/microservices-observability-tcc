@@ -1,0 +1,64 @@
+{
+  "base": [
+    "2026-11-09T09:26:19.817Z",
+    "2026-11-09T09:27:03.253Z"
+  ],
+  "falha": [
+    "2026-11-09T09:31:27.137Z",
+    "2026-11-09T09:32:12.240Z"
+  ],
+  "fluxos": [
+    {
+      "fluxo": "GET /banco/rest/clientes/:numeroConta/chaves-pix",
+      "traces_base": 60,
+      "traces_falha": 59,
+      "erro_pct": 0,
+      "raiz_p50_base": 14.349824,
+      "raiz_p50_falha": 12.364032,
+      "raiz_p95_base": 28.20736,
+      "raiz_p95_falha": 18.868992,
+      "culpados": [],
+      "maior_aumento_self": [
+        {
+          "span": "api-gateway | SERVER | GET /banco/rest/clientes/:numeroConta/chaves-pix",
+          "base_ms": 0.18892800000000065,
+          "falha_ms": 0.19660799999999945,
+          "delta_ms": 0.007679999999998799
+        },
+        {
+          "span": "api-gateway | INTERNAL | middleware - corsMiddleware",
+          "base_ms": 0.025344,
+          "falha_ms": 0.027392,
+          "delta_ms": 0.002048000000000001
+        }
+      ],
+      "servicos_ausentes": []
+    },
+    {
+      "fluxo": "POST /banco/rest/clientes/:id/chaves-pix",
+      "traces_base": 60,
+      "traces_falha": 59,
+      "erro_pct": 0,
+      "raiz_p50_base": 15.840256,
+      "raiz_p50_falha": 13.385216,
+      "raiz_p95_base": 58.749952,
+      "raiz_p95_falha": 21.814016,
+      "culpados": [],
+      "maior_aumento_self": [
+        {
+          "span": "api-gateway | INTERNAL | middleware - <anonymous>",
+          "base_ms": 0.023552,
+          "falha_ms": 0.022784,
+          "delta_ms": -0.0007680000000000013
+        },
+        {
+          "span": "api-gateway | INTERNAL | middleware - urlencodedParser",
+          "base_ms": 0.016896,
+          "falha_ms": 0.015104,
+          "delta_ms": -0.001792000000000002
+        }
+      ],
+      "servicos_ausentes": []
+    }
+  ]
+}

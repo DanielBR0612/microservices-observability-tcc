@@ -1,0 +1,392 @@
+time="2026-11-09T06:33:02-03:00" level=warning msg="project has been loaded without an explicit name from a symlink. Using name \"projeto-dsd\""
+time="2026-11-09T06:33:02-03:00" level=warning msg="Found orphan containers (projeto-dsd-k6-run-8f40d3a8b8b6) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up."
+ Container projeto-dsd-k6-run-a9b6d6ba7940 Creating 
+ Container projeto-dsd-k6-run-a9b6d6ba7940 Created 
+
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
+
+
+     execution: local
+        script: /scripts/script.js
+        output: -
+
+     scenarios: (100.00%) 1 scenario, 50 max VUs, 1m0s max duration (incl. graceful stop):
+              * principal: 2.00 iterations/s for 30s (maxVUs: 10-50, gracefulStop: 30s)
+
+
+running (0m01.0s), 02/10 VUs, 0 complete and 0 interrupted iterations
+principal   [   3% ] 02/10 VUs  01.0s/30s  2.00 iters/s
+
+running (0m02.0s), 04/10 VUs, 0 complete and 0 interrupted iterations
+principal   [   7% ] 04/10 VUs  02.0s/30s  2.00 iters/s
+
+running (0m03.0s), 06/10 VUs, 0 complete and 0 interrupted iterations
+principal   [  10% ] 06/10 VUs  03.0s/30s  2.00 iters/s
+
+running (0m04.0s), 08/10 VUs, 0 complete and 0 interrupted iterations
+principal   [  13% ] 08/10 VUs  04.0s/30s  2.00 iters/s
+
+running (0m05.0s), 10/10 VUs, 0 complete and 0 interrupted iterations
+principal   [  17% ] 10/10 VUs  05.0s/30s  2.00 iters/s
+
+running (0m06.0s), 11/11 VUs, 0 complete and 0 interrupted iterations
+principal   [  20% ] 11/11 VUs  06.0s/30s  2.00 iters/s
+
+running (0m07.0s), 12/12 VUs, 0 complete and 0 interrupted iterations
+principal   [  23% ] 12/12 VUs  07.0s/30s  2.00 iters/s
+
+running (0m08.0s), 13/13 VUs, 0 complete and 0 interrupted iterations
+principal   [  27% ] 13/13 VUs  08.0s/30s  2.00 iters/s
+
+running (0m09.0s), 14/14 VUs, 0 complete and 0 interrupted iterations
+principal   [  30% ] 14/14 VUs  09.0s/30s  2.00 iters/s
+
+running (0m10.0s), 15/15 VUs, 0 complete and 0 interrupted iterations
+principal   [  33% ] 15/15 VUs  10.0s/30s  2.00 iters/s
+
+running (0m11.0s), 16/16 VUs, 0 complete and 0 interrupted iterations
+principal   [  37% ] 16/16 VUs  11.0s/30s  2.00 iters/s
+time="2026-11-09T09:33:14Z" level=error msg="[WS] notificacao PIX nao chegou para 678275800100002" source=console
+time="2026-11-09T09:33:14Z" level=error msg="[WS] notificacao TED nao chegou para 678275800100002" source=console
+time="2026-11-09T09:33:14Z" level=error msg="[WS] notificacao PIX nao chegou para 678325900200002" source=console
+time="2026-11-09T09:33:14Z" level=error msg="[WS] notificacao TED nao chegou para 678325900200002" source=console
+
+running (0m12.0s), 16/17 VUs, 1 complete and 0 interrupted iterations
+principal   [  40% ] 16/17 VUs  12.0s/30s  2.00 iters/s
+time="2026-11-09T09:33:15Z" level=error msg="[WS] notificacao PIX nao chegou para 678375900400002" source=console
+time="2026-11-09T09:33:15Z" level=error msg="[WS] notificacao TED nao chegou para 678375900400002" source=console
+time="2026-11-09T09:33:15Z" level=error msg="[WS] notificacao PIX nao chegou para 678426000300002" source=console
+time="2026-11-09T09:33:15Z" level=error msg="[WS] notificacao TED nao chegou para 678426000300002" source=console
+
+running (0m13.0s), 16/17 VUs, 3 complete and 0 interrupted iterations
+principal   [  43% ] 16/17 VUs  13.0s/30s  2.00 iters/s
+time="2026-11-09T09:33:16Z" level=error msg="[WS] notificacao PIX nao chegou para 678475900500002" source=console
+time="2026-11-09T09:33:16Z" level=error msg="[WS] notificacao TED nao chegou para 678475900500002" source=console
+time="2026-11-09T09:33:16Z" level=error msg="[WS] notificacao PIX nao chegou para 678525901000002" source=console
+time="2026-11-09T09:33:16Z" level=error msg="[WS] notificacao TED nao chegou para 678525901000002" source=console
+
+running (0m14.0s), 16/17 VUs, 5 complete and 0 interrupted iterations
+principal   [  47% ] 16/17 VUs  14.0s/30s  2.00 iters/s
+time="2026-11-09T09:33:17Z" level=error msg="[WS] notificacao PIX nao chegou para 678575900800002" source=console
+time="2026-11-09T09:33:17Z" level=error msg="[WS] notificacao TED nao chegou para 678575900800002" source=console
+time="2026-11-09T09:33:17Z" level=error msg="[WS] notificacao PIX nao chegou para 678625900600002" source=console
+time="2026-11-09T09:33:17Z" level=error msg="[WS] notificacao TED nao chegou para 678625900600002" source=console
+
+running (0m15.0s), 16/17 VUs, 7 complete and 0 interrupted iterations
+principal   [  50% ] 16/17 VUs  15.0s/30s  2.00 iters/s
+time="2026-11-09T09:33:18Z" level=error msg="[WS] notificacao PIX nao chegou para 678675900900002" source=console
+time="2026-11-09T09:33:18Z" level=error msg="[WS] notificacao TED nao chegou para 678675900900002" source=console
+
+running (0m16.0s), 16/17 VUs, 9 complete and 0 interrupted iterations
+principal   [  53% ] 16/17 VUs  16.0s/30s  2.00 iters/s
+time="2026-11-09T09:33:18Z" level=error msg="[WS] notificacao PIX nao chegou para 678725900700002" source=console
+time="2026-11-09T09:33:18Z" level=error msg="[WS] notificacao TED nao chegou para 678725900700002" source=console
+
+running (0m17.0s), 17/17 VUs, 10 complete and 0 interrupted iterations
+principal   [  57% ] 17/17 VUs  17.0s/30s  2.00 iters/s
+time="2026-11-09T09:33:19Z" level=error msg="[WS] notificacao PIX nao chegou para 678825901100002" source=console
+time="2026-11-09T09:33:19Z" level=error msg="[WS] notificacao TED nao chegou para 678825901100002" source=console
+
+running (0m18.0s), 17/18 VUs, 11 complete and 0 interrupted iterations
+principal   [  60% ] 17/18 VUs  18.0s/30s  2.00 iters/s
+time="2026-11-09T09:33:20Z" level=error msg="[WS] notificacao PIX nao chegou para 678925901200002" source=console
+time="2026-11-09T09:33:20Z" level=error msg="[WS] notificacao TED nao chegou para 678925901200002" source=console
+time="2026-11-09T09:33:21Z" level=error msg="[WS] notificacao PIX nao chegou para 679025901300002" source=console
+time="2026-11-09T09:33:21Z" level=error msg="[WS] notificacao TED nao chegou para 679025901300002" source=console
+
+running (0m19.0s), 18/18 VUs, 12 complete and 0 interrupted iterations
+principal   [  63% ] 18/18 VUs  19.0s/30s  2.00 iters/s
+
+running (0m20.0s), 18/19 VUs, 13 complete and 0 interrupted iterations
+principal   [  67% ] 18/19 VUs  20.0s/30s  2.00 iters/s
+time="2026-11-09T09:33:22Z" level=error msg="[WS] notificacao PIX nao chegou para 679125701400002" source=console
+time="2026-11-09T09:33:22Z" level=error msg="[WS] notificacao TED nao chegou para 679125701400002" source=console
+
+running (0m21.0s), 19/19 VUs, 14 complete and 0 interrupted iterations
+principal   [  70% ] 19/19 VUs  21.0s/30s  2.00 iters/s
+time="2026-11-09T09:33:23Z" level=error msg="[WS] notificacao PIX nao chegou para 679225701500002" source=console
+time="2026-11-09T09:33:23Z" level=error msg="[WS] notificacao TED nao chegou para 679225701500002" source=console
+time="2026-11-09T09:33:24Z" level=error msg="[WS] notificacao PIX nao chegou para 679325701600002" source=console
+time="2026-11-09T09:33:24Z" level=error msg="[WS] notificacao TED nao chegou para 679325701600002" source=console
+
+running (0m22.0s), 19/20 VUs, 15 complete and 0 interrupted iterations
+principal   [  73% ] 19/20 VUs  22.0s/30s  2.00 iters/s
+time="2026-11-09T09:33:25Z" level=error msg="[WS] notificacao PIX nao chegou para 679425701700002" source=console
+time="2026-11-09T09:33:25Z" level=error msg="[WS] notificacao TED nao chegou para 679425701700002" source=console
+
+running (0m23.0s), 20/20 VUs, 16 complete and 0 interrupted iterations
+principal   [  77% ] 20/20 VUs  23.0s/30s  2.00 iters/s
+time="2026-11-09T09:33:26Z" level=error msg="[WS] notificacao PIX nao chegou para 679475700100012" source=console
+time="2026-11-09T09:33:26Z" level=error msg="[WS] notificacao TED nao chegou para 679475700100012" source=console
+time="2026-11-09T09:33:26Z" level=error msg="[WS] notificacao PIX nao chegou para 679525700200012" source=console
+time="2026-11-09T09:33:26Z" level=error msg="[WS] notificacao TED nao chegou para 679525700200012" source=console
+
+running (0m24.0s), 19/21 VUs, 18 complete and 0 interrupted iterations
+principal   [  80% ] 19/21 VUs  24.0s/30s  2.00 iters/s
+time="2026-11-09T09:33:27Z" level=error msg="[WS] notificacao PIX nao chegou para 679575800400012" source=console
+time="2026-11-09T09:33:27Z" level=error msg="[WS] notificacao TED nao chegou para 679575800400012" source=console
+
+running (0m25.0s), 19/21 VUs, 20 complete and 0 interrupted iterations
+principal   [  83% ] 19/21 VUs  25.0s/30s  2.00 iters/s
+time="2026-11-09T09:33:27Z" level=error msg="[WS] notificacao PIX nao chegou para 679625700300012" source=console
+time="2026-11-09T09:33:27Z" level=error msg="[WS] notificacao TED nao chegou para 679625700300012" source=console
+time="2026-11-09T09:33:28Z" level=error msg="[WS] notificacao PIX nao chegou para 679675800500012" source=console
+time="2026-11-09T09:33:28Z" level=error msg="[WS] notificacao TED nao chegou para 679675800500012" source=console
+
+running (0m26.0s), 19/21 VUs, 22 complete and 0 interrupted iterations
+principal   [  87% ] 19/21 VUs  26.0s/30s  2.00 iters/s
+time="2026-11-09T09:33:28Z" level=error msg="[WS] notificacao PIX nao chegou para 679725701000012" source=console
+time="2026-11-09T09:33:28Z" level=error msg="[WS] notificacao TED nao chegou para 679725701000012" source=console
+time="2026-11-09T09:33:29Z" level=error msg="[WS] notificacao PIX nao chegou para 679775800800012" source=console
+time="2026-11-09T09:33:29Z" level=error msg="[WS] notificacao TED nao chegou para 679775800800012" source=console
+
+running (0m27.0s), 19/21 VUs, 24 complete and 0 interrupted iterations
+principal   [  90% ] 19/21 VUs  27.0s/30s  2.00 iters/s
+time="2026-11-09T09:33:29Z" level=error msg="[WS] notificacao PIX nao chegou para 679825800600012" source=console
+time="2026-11-09T09:33:29Z" level=error msg="[WS] notificacao TED nao chegou para 679825800600012" source=console
+time="2026-11-09T09:33:30Z" level=error msg="[WS] notificacao PIX nao chegou para 679875800900012" source=console
+time="2026-11-09T09:33:30Z" level=error msg="[WS] notificacao TED nao chegou para 679875800900012" source=console
+time="2026-11-09T09:33:30Z" level=error msg="[WS] notificacao PIX nao chegou para 679925800700012" source=console
+time="2026-11-09T09:33:30Z" level=error msg="[WS] notificacao TED nao chegou para 679925800700012" source=console
+
+running (0m28.0s), 19/21 VUs, 26 complete and 0 interrupted iterations
+principal   [  93% ] 19/21 VUs  28.0s/30s  2.00 iters/s
+
+running (0m29.0s), 20/21 VUs, 27 complete and 0 interrupted iterations
+principal   [  97% ] 20/21 VUs  29.0s/30s  2.00 iters/s
+time="2026-11-09T09:33:31Z" level=error msg="[WS] notificacao PIX nao chegou para 680025801800002" source=console
+time="2026-11-09T09:33:31Z" level=error msg="[WS] notificacao TED nao chegou para 680025801800002" source=console
+time="2026-11-09T09:33:32Z" level=error msg="[WS] notificacao PIX nao chegou para 680075801100012" source=console
+time="2026-11-09T09:33:32Z" level=error msg="[WS] notificacao TED nao chegou para 680075801100012" source=console
+
+running (0m30.0s), 20/21 VUs, 29 complete and 0 interrupted iterations
+principal   [ 100% ] 20/21 VUs  30.0s/30s  2.00 iters/s
+time="2026-11-09T09:33:32Z" level=error msg="[WS] notificacao PIX nao chegou para 680125701200012" source=console
+time="2026-11-09T09:33:32Z" level=error msg="[WS] notificacao TED nao chegou para 680125701200012" source=console
+time="2026-11-09T09:33:33Z" level=error msg="[WS] notificacao PIX nao chegou para 680225801900002" source=console
+time="2026-11-09T09:33:33Z" level=error msg="[WS] notificacao TED nao chegou para 680225801900002" source=console
+
+running (0m31.0s), 20/21 VUs, 30 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 21/21 VUs  30s  2.00 iters/s
+time="2026-11-09T09:33:34Z" level=error msg="[WS] notificacao PIX nao chegou para 680275801300012" source=console
+time="2026-11-09T09:33:34Z" level=error msg="[WS] notificacao TED nao chegou para 680275801300012" source=console
+time="2026-11-09T09:33:34Z" level=error msg="[WS] notificacao PIX nao chegou para 680325801400012" source=console
+time="2026-11-09T09:33:34Z" level=error msg="[WS] notificacao TED nao chegou para 680325801400012" source=console
+
+running (0m32.0s), 18/21 VUs, 32 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 21/21 VUs  30s  2.00 iters/s
+time="2026-11-09T09:33:35Z" level=error msg="[WS] notificacao PIX nao chegou para 680425802000002" source=console
+time="2026-11-09T09:33:35Z" level=error msg="[WS] notificacao TED nao chegou para 680425802000002" source=console
+
+running (0m33.0s), 17/21 VUs, 33 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 21/21 VUs  30s  2.00 iters/s
+time="2026-11-09T09:33:36Z" level=error msg="[WS] notificacao PIX nao chegou para 680475701500012" source=console
+time="2026-11-09T09:33:36Z" level=error msg="[WS] notificacao TED nao chegou para 680475701500012" source=console
+time="2026-11-09T09:33:36Z" level=error msg="[WS] notificacao PIX nao chegou para 680525701600012" source=console
+time="2026-11-09T09:33:36Z" level=error msg="[WS] notificacao TED nao chegou para 680525701600012" source=console
+
+running (0m34.0s), 15/21 VUs, 35 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 21/21 VUs  30s  2.00 iters/s
+time="2026-11-09T09:33:37Z" level=error msg="[WS] notificacao PIX nao chegou para 680625702100002" source=console
+time="2026-11-09T09:33:37Z" level=error msg="[WS] notificacao TED nao chegou para 680625702100002" source=console
+
+running (0m35.0s), 14/21 VUs, 36 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 21/21 VUs  30s  2.00 iters/s
+time="2026-11-09T09:33:38Z" level=error msg="[WS] notificacao PIX nao chegou para 680675801700012" source=console
+time="2026-11-09T09:33:38Z" level=error msg="[WS] notificacao TED nao chegou para 680675801700012" source=console
+time="2026-11-09T09:33:38Z" level=error msg="[WS] notificacao PIX nao chegou para 680725700100022" source=console
+time="2026-11-09T09:33:38Z" level=error msg="[WS] notificacao TED nao chegou para 680725700100022" source=console
+
+running (0m36.0s), 12/21 VUs, 38 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 21/21 VUs  30s  2.00 iters/s
+time="2026-11-09T09:33:39Z" level=error msg="[WS] notificacao PIX nao chegou para 680775700200022" source=console
+time="2026-11-09T09:33:39Z" level=error msg="[WS] notificacao TED nao chegou para 680775700200022" source=console
+time="2026-11-09T09:33:39Z" level=error msg="[WS] notificacao PIX nao chegou para 680825800400022" source=console
+time="2026-11-09T09:33:39Z" level=error msg="[WS] notificacao TED nao chegou para 680825800400022" source=console
+
+running (0m37.0s), 10/21 VUs, 40 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 21/21 VUs  30s  2.00 iters/s
+time="2026-11-09T09:33:40Z" level=error msg="[WS] notificacao PIX nao chegou para 680875700300022" source=console
+time="2026-11-09T09:33:40Z" level=error msg="[WS] notificacao TED nao chegou para 680875700300022" source=console
+time="2026-11-09T09:33:40Z" level=error msg="[WS] notificacao PIX nao chegou para 680925700500022" source=console
+time="2026-11-09T09:33:40Z" level=error msg="[WS] notificacao TED nao chegou para 680925700500022" source=console
+
+running (0m38.0s), 08/21 VUs, 42 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 21/21 VUs  30s  2.00 iters/s
+time="2026-11-09T09:33:41Z" level=error msg="[WS] notificacao PIX nao chegou para 680975801000022" source=console
+time="2026-11-09T09:33:41Z" level=error msg="[WS] notificacao TED nao chegou para 680975801000022" source=console
+time="2026-11-09T09:33:41Z" level=error msg="[WS] notificacao PIX nao chegou para 681025800800022" source=console
+time="2026-11-09T09:33:41Z" level=error msg="[WS] notificacao TED nao chegou para 681025800800022" source=console
+
+running (0m39.0s), 06/21 VUs, 44 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 21/21 VUs  30s  2.00 iters/s
+time="2026-11-09T09:33:42Z" level=error msg="[WS] notificacao PIX nao chegou para 681075800600022" source=console
+time="2026-11-09T09:33:42Z" level=error msg="[WS] notificacao TED nao chegou para 681075800600022" source=console
+time="2026-11-09T09:33:42Z" level=error msg="[WS] notificacao PIX nao chegou para 681125800900022" source=console
+time="2026-11-09T09:33:42Z" level=error msg="[WS] notificacao TED nao chegou para 681125800900022" source=console
+
+running (0m40.0s), 04/21 VUs, 46 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 21/21 VUs  30s  2.00 iters/s
+time="2026-11-09T09:33:43Z" level=error msg="[WS] notificacao PIX nao chegou para 681175800700022" source=console
+time="2026-11-09T09:33:43Z" level=error msg="[WS] notificacao TED nao chegou para 681175800700022" source=console
+time="2026-11-09T09:33:43Z" level=error msg="[WS] notificacao PIX nao chegou para 681225701800012" source=console
+time="2026-11-09T09:33:43Z" level=error msg="[WS] notificacao TED nao chegou para 681225701800012" source=console
+
+running (0m41.0s), 02/21 VUs, 48 complete and 0 interrupted iterations
+principal ↓ [ 100% ] 21/21 VUs  30s  2.00 iters/s
+time="2026-11-09T09:33:44Z" level=error msg="[WS] notificacao PIX nao chegou para 681275701100022" source=console
+time="2026-11-09T09:33:44Z" level=error msg="[WS] notificacao TED nao chegou para 681275701100022" source=console
+
+
+  █ THRESHOLDS 
+
+    checks
+    ✗ 'rate==1.0' rate=94.87%
+
+    http_req_duration{protocolo:gRPC}
+    ✓ 'max>=0' max=13.99ms
+
+    http_req_duration{protocolo:REST}
+    ✓ 'max>=0' max=138.86ms
+
+    http_req_duration{protocolo:SOAP}
+    ✓ 'max>=0' max=355.21ms
+
+    http_req_duration{protocolo:TCP}
+    ✓ 'max>=0' max=11.89ms
+
+    http_req_failed
+    ✓ 'rate==0' rate=0.00%
+
+      {protocolo:gRPC}
+      ✓ 'rate>=0' rate=0.00%
+
+      {protocolo:REST}
+      ✓ 'rate>=0' rate=0.00%
+
+      {protocolo:SOAP}
+      ✓ 'rate>=0' rate=0.00%
+
+      {protocolo:TCP}
+      ✓ 'rate>=0' rate=0.00%
+
+    http_reqs{protocolo:gRPC}
+    ✓ 'count>=0' count=50
+
+    http_reqs{protocolo:REST}
+    ✓ 'count>=0' count=200
+
+    http_reqs{protocolo:SOAP}
+    ✓ 'count>=0' count=650
+
+    http_reqs{protocolo:TCP}
+    ✓ 'count>=0' count=150
+
+    ws_connecting{protocolo:WebSocket}
+    ✓ 'max>=0' max=2.4ms
+
+    ws_notificacao_latencia_ms{tipo:PIX}
+    ✓ 'max>=0' max=0s
+
+    ws_notificacao_latencia_ms{tipo:TED}
+    ✓ 'max>=0' max=0s
+
+    ws_notificacao_recebida
+    ✗ 'rate==1.0' rate=0.00%
+
+
+  █ TOTAL RESULTS 
+
+    checks_total.......: 1950   46.870508/s
+    checks_succeeded...: 94.87% 1850 out of 1950
+    checks_failed......: 5.12%  100 out of 1950
+
+    ✓ SOAP criarCliente 2xx
+    ✓ SOAP criarCliente retorna id
+    ✓ SOAP criarConta 2xx
+    ✓ SOAP criarConta numero correto
+    ✓ Auth login origem retorna token
+    ✓ Auth login destino retorna token
+    ✓ SOAP saldo (JWT) 200
+    ✓ SOAP saldo inicial correto
+    ✓ SOAP saldo sem token 401
+    ✓ SOAP alterarSenha 2xx
+    ✓ SOAP alterarSenha SUCESSO
+    ✓ Auth login com senha nova
+    ✓ Auth senha antiga rejeitada 401
+    ✓ REST criar chave Pix 2xx
+    ✓ REST listar chaves 200
+    ✓ REST listar chaves contem a nova
+    ✓ REST PIX 2xx
+    ✓ REST PIX credita conta destino
+    ✓ SOAP TED 2xx
+    ✓ SOAP TED SUCESSO
+    ✓ WS handshake 101
+    ✗ WS notificacao PIX recebida
+      ↳  0% — ✓ 0 / ✗ 50
+    ✓ WS notificacao PIX sem duplicata
+    ✗ WS notificacao TED recebida
+      ↳  0% — ✓ 0 / ✗ 50
+    ✓ WS notificacao TED sem duplicata
+    ✓ SOAP saldo final = inicial - PIX - TED
+    ✓ REST extrato 200
+    ✓ REST extrato contem o PIX
+    ✓ gRPC comprovante 2xx
+    ✓ gRPC comprovante e PDF
+    ✓ ATM listar 200
+    ✓ ATM listar contem ATMs via UDP
+    ✓ ATM abastecer enviado
+    ✓ ATM bloquear responde (offline)
+    ✓ RabbitMQ fila tem consumer (ws-service)
+
+    HTTP
+    http_req_duration..............: avg=72.92ms  min=1.11ms   med=75.5ms   p(90)=152.22ms p(95)=188.46ms p(99)=215.75ms max=355.21ms count=1100
+      { expected_response:true }...: avg=72.92ms  min=1.11ms   med=75.5ms   p(90)=152.22ms p(95)=188.46ms p(99)=215.75ms max=355.21ms count=1100
+      { protocolo:gRPC }...........: avg=6.37ms   min=5.1ms    med=5.79ms   p(90)=8.19ms   p(95)=8.99ms   p(99)=12.31ms  max=13.99ms  count=50  
+      { protocolo:REST }...........: avg=19.32ms  min=8.88ms   med=15.36ms  p(90)=30.55ms  p(95)=36.89ms  p(99)=60.68ms  max=138.86ms count=200 
+      { protocolo:SOAP }...........: avg=116.1ms  min=1.22ms   med=137.27ms p(90)=167.8ms  p(95)=205.48ms p(99)=224.72ms max=355.21ms count=650 
+      { protocolo:TCP }............: avg=3.3ms    min=2.12ms   med=2.68ms   p(90)=4.81ms   p(95)=7.88ms   p(99)=10.35ms  max=11.89ms  count=150 
+    http_req_failed................: 0.00%  0 out of 1100
+      { protocolo:gRPC }...........: 0.00%  0 out of 50
+      { protocolo:REST }...........: 0.00%  0 out of 200
+      { protocolo:SOAP }...........: 0.00%  0 out of 650
+      { protocolo:TCP }............: 0.00%  0 out of 150
+    http_reqs......................: 1100   26.439774/s
+      { protocolo:gRPC }...........: 50     1.201808/s
+      { protocolo:REST }...........: 200    4.807232/s
+      { protocolo:SOAP }...........: 650    15.623503/s
+      { protocolo:TCP }............: 150    3.605424/s
+
+    EXECUTION
+    dropped_iterations.............: 11     0.264398/s
+    iteration_duration.............: avg=11.61s   min=11.5s    med=11.59s   p(90)=11.73s   p(95)=11.77s   p(99)=11.85s   max=11.87s   count=50  
+    iterations.....................: 50     1.201808/s
+    vus............................: 2      min=2         max=20
+    vus_max........................: 21     min=10        max=21
+
+    NETWORK
+    data_received..................: 1.0 MB 25 kB/s
+    data_sent......................: 230 kB 5.5 kB/s
+
+    WEBSOCKET
+    ws_connecting..................: avg=801.52µs min=596.12µs med=742.57µs p(90)=944.98µs p(95)=1.14ms   p(99)=1.9ms    max=2.4ms    count=50  
+      { protocolo:WebSocket }......: avg=801.52µs min=596.12µs med=742.57µs p(90)=944.98µs p(95)=1.14ms   p(99)=1.9ms    max=2.4ms    count=50  
+    ws_msgs_received...............: 50     1.201808/s
+    ws_notificacao_latencia_ms.....: avg=0s       min=0s       med=0s       p(90)=0s       p(95)=0s       p(99)=0s       max=0s       count=0   
+      { tipo:PIX }.................: avg=0s       min=0s       med=0s       p(90)=0s       p(95)=0s       p(99)=0s       max=0s       count=0   
+      { tipo:TED }.................: avg=0s       min=0s       med=0s       p(90)=0s       p(95)=0s       p(99)=0s       max=0s       count=0   
+    ws_notificacao_recebida........: 0.00%  0 out of 100
+    ws_session_duration............: avg=10.11s   min=10.1s    med=10.11s   p(90)=10.12s   p(95)=10.13s   p(99)=10.22s   max=10.22s   count=50  
+    ws_sessions....................: 50     1.201808/s
+
+
+
+
+running (0m41.6s), 00/21 VUs, 50 complete and 0 interrupted iterations
+principal ✓ [ 100% ] 00/21 VUs  30s  2.00 iters/s
+time="2026-11-09T09:33:44Z" level=error msg="thresholds on metrics 'checks, ws_notificacao_recebida' have been crossed"
+

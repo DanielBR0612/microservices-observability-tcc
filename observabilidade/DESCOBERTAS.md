@@ -84,6 +84,9 @@ Teste T2 feito em 2026-11-09 (METODOLOGIA 9.7; evidências em `resultados-experi
 7. **Não coloque dados sensíveis na URL** ou mascare `url.*` no coletor: a URL vai inteira para a telemetria (D14, D15).
 8. **Trate o contexto de trace externo como entrada não confiável**: no gateway, descarte `traceparent`/`baggage` de clientes ou use *span link*; amostre na borda com um amostrador que ignore a flag remota (D18).
 9. **Antes de instrumentar algo novo, audite o que ele vai exportar**: mais cobertura significa mais superfície de exposição (D15).
+10. **Monitore spans ausentes, não só spans com erro**: em fluxos assíncronos, a falha aparece como um salto que deveria existir e não existe (D19).
+11. **Instrumente a semântica de negócio**: resultados como "offline", "recusado" ou "sem saldo" dentro de respostas 200 precisam virar atributos ou status de erro, porque o protocolo não os conhece (D20).
+12. **Limite as reentregas e use dead-letter**: retry infinito polui traces antigos e infla o armazenamento (D23).
 
 ---
 
@@ -114,6 +117,16 @@ Desenho: `sem-otel` × `otel-10` × `otel-100`; 2 ciclos com ordem alternada × 
 - **D12. Falha de transporte invisível ao tracing.** Requisições paravam ~63 s, o tempo das retransmissões de SYN do TCP (1+2+4+8+16+32 s). A causa (cliente SOAP abrindo conexões novas a cada chamada, `Connection: close`, colisão com sockets em TIME_WAIT) foi achada nos contadores do kernel e no `netstat`, **não no Jaeger**. No trace aparecia só um span longo no gateway, sem filhos. Bom exemplo para o eixo 3 (diagnóstico).
 - **D13. Fidelidade:** no gRPC, o span raiz do gateway mede ~6,6 ms e o serviço Python ~2,2 ms; dois terços da latência estão no gateway. O tracing permite separar o custo do protocolo do custo das camadas intermediárias.
 
+### Injeção de falhas (T3, 2026-11-09; METODOLOGIA 9.8, `resultados-experimento/falhas/`)
+
+Rubrica (detecção / localização / causa, 0–2): **F1 SOAP 2/2/1 · F2 REST 2/2/2 · F3 gRPC 2/2/2 · F4 AMQP 1/1/0 · F5 TCP 1/2/1**. Sem a propagação manual, F4 e F5 seriam **0/0/0**.
+
+- **D19. A falha assíncrona não tem erro para mostrar.** Com o consumidor isolado do broker (F4), TED e PIX responderam 200 com latência normal; o produtor publicou e o broker aceitou. O único sinal é o *buraco* no trace (o `ws-service` some depois do PRODUCER). Nem o RabbitMQ detectou (1 consumidor, 100 mensagens sem ack). *Afirmação para o artigo:* em fluxos assíncronos, a propagação transforma uma falha invisível numa falha detectável por ausência. A detecção exige conhecer a topologia esperada, e as ferramentas não alertam sobre spans que deveriam existir.
+- **D20. Falha de negócio não é erro de protocolo.** Com os ATMs desligados (F5), o monitor responde 200 com "ATM Offline", e a auto-instrumentação registra sucesso. Só o atributo manual `atm.resultado=offline` (criado na propagação TCP) denuncia o problema. A semântica de erro precisa ser instrumentada; ela não vem do protocolo.
+- **D21. O trace localiza; a causa depende do que a biblioteca exporta.** F1: o span de SQL apontou exatamente o INSERT lento (1,6 → 252 ms), mas não o motivo (trigger). F2: a exceção do Spring trouxe a causa inteira, inclusive o nome da função do trigger, mesmo sem spans de banco no `rest-api`. F3: o código gRPC 14 (UNAVAILABLE) e os spans de rede (`ECONNREFUSED`, `ENOTFOUND`) explicaram a indisponibilidade.
+- **D22. O cliente pode não perceber o que o trace mostra.** Na F1, 100% dos checks do k6 passaram: a TED ficou 6,5× mais lenta, e só a latência denunciava. O inverso também ocorre: na F4/F5, o cliente percebe (notificação não chega, ATM offline) e o trace parece normal.
+- **D23. A reentrega infinita gera traces que nunca terminam.** Mensagens para destinatários offline voltam à fila a cada 5 s (`nack` + `requeue`), e cada tentativa acrescenta um span CONSUMER com erro **ao trace original**: uma janela com 60 TEDs mostrou 110 traces de TED. É ruído de diagnóstico e de custo de armazenamento criado pela política de retry, não pela instrumentação.
+
 ---
 
 ## 5. Lições de método (ameaças descobertas na prática)
@@ -128,6 +141,10 @@ Desenho: `sem-otel` × `otel-10` × `otel-100`; 2 ciclos com ordem alternada × 
 | Logs DEBUG/TRACE do Spring | custavam mais que a instrumentação | logs em WARN durante o experimento |
 | Deriva ambiental entre ciclos | o ciclo 2 foi mais lento em tudo | ordem alternada (ABC/CBA) e coluna `ciclo` |
 | Git Bash converte `/scripts` em `C:/Program Files/Git/scripts` | o k6 não achava o script | `MSYS_NO_PATHCONV=1` no `docker compose run` |
+| `docker compose run k6` religa as dependências do k6 | desfez a falha F3 (container parado) 0,6 s depois do início da janela, e o resultado parecia "falha invisível" | `--no-deps` no `rodada-falha.sh` |
+| Parar o `ws-service` derruba também o WebSocket | o k6 deixa de executar TED/PIX e não há o que diagnosticar | F4 refeita como partição consumidor–broker (`iptables`) |
+| Kernel do Docker Desktop/WSL2 sem `netem` | F6 (`tc netem`) impossível | usar um proxy de falhas (Toxiproxy) |
+| Mensagens sem ack voltam à fila ao reiniciar o consumidor | ciclo de reentrega a cada 5 s, poluindo as janelas seguintes | parar o consumidor, esvaziar a fila e religar |
 | `MSYS_NO_PATHCONV=1` quebra o `mvnw` | o Maven não iniciava | não exportar a variável ao compilar |
 
 **Checklist antes de medir:** k6 com `exit=0` e 100% de checks; `dropped_iterations` = 0; Jaeger vazio em `sem-otel`; gateway e ATMs respondendo.
@@ -164,7 +181,9 @@ Desenho: `sem-otel` × `otel-10` × `otel-100`; 2 ciclos com ordem alternada × 
 | T2b | `traceparent` forjado (adoção, supressão, amplificação) | OE3 | feito: os três confirmados | `resultados-experimento/seguranca/fronteira-confianca.md`, seção 9.7 |
 | T2c | Baggage do cliente chegando aos serviços internos | OE3 | pendente | — |
 | T2d | Mitigação na borda (descartar contexto externo) e novo teste | OE3, OE4 | pendente, opcional | — |
-| T3 | Injeção de falhas F1–F6 (antes/depois da propagação) | OE1 (eficácia) | pendente | protocolo na seção 6 da METODOLOGIA |
+| T3 | Injeção de falhas F1–F5 | OE1 (eficácia) | feito (avaliação não cega; F6 inviável no WSL2) | `resultados-experimento/falhas/`, seção 9.8 |
+| T3b | Avaliação cega da rubrica por outra pessoa, usando as janelas gravadas | OE1 | pendente, recomendado | `resultados-experimento/falhas/*/janela.txt` |
+| T3c | F6 com proxy de falhas (Toxiproxy) entre o gateway e um backend | OE1 | pendente, opcional | — |
 | T4 | Incompatibilidade de propagadores W3C × B3 | OE2, OE4 | pendente | — |
 | T5 | Tabela de esforço de instrumentação por serviço e linguagem | OE2 | parcial (seção 2 deste arquivo) | — |
 | — | UDP (heartbeat dos ATMs) | OE1 | não tratado | — |
@@ -180,4 +199,5 @@ Desenho: `sem-otel` × `otel-10` × `otel-100`; 2 ciclos com ordem alternada × 
 - "Em protocolos sem cabeçalhos, como TCP cru, tornar a comunicação observável exigiu alterar o formato das mensagens, transformando a observabilidade em parte do contrato entre os serviços."
 - "O rastreamento indicou onde o tempo foi gasto, mas não por quê, quando a causa estava na camada de transporte."
 - "As auto-instrumentações não capturaram corpos nem cabeçalhos, mas trataram a URL como metadado inofensivo: o número da conta, presente na rota da API, foi exportado em 488 de 25.526 spans."
+- "Nas falhas injetadas em protocolos síncronos, o rastreamento permitiu detectar, localizar e, em dois de três casos, explicar a causa; nas falhas após saltos assíncronos ou de protocolo próprio, as requisições apareceram como bem-sucedidas, e a falha só foi perceptível pela ausência de um span esperado, sinal que existe apenas quando o contexto é propagado."
 - "Com o amostrador baseado no pai, a decisão de rastrear pertence a quem chama: um cliente externo conseguiu suprimir do rastreamento as próprias tentativas de login, mesmo com amostragem de 100%, e forçar a gravação de todas as suas requisições com amostragem de 0%."

@@ -1,0 +1,92 @@
+{
+  "base": [
+    "2026-11-09T09:26:19.817Z",
+    "2026-11-09T09:27:03.253Z"
+  ],
+  "falha": [
+    "2026-11-09T09:34:26.537Z",
+    "2026-11-09T09:35:09.774Z"
+  ],
+  "fluxos": [
+    {
+      "fluxo": "GET /atms",
+      "traces_base": 60,
+      "traces_falha": 61,
+      "erro_pct": 0,
+      "raiz_p50_base": 2.94656,
+      "raiz_p50_falha": 2.58688,
+      "raiz_p95_base": 17.042432,
+      "raiz_p95_falha": 7.486208,
+      "culpados": [],
+      "maior_aumento_self": [
+        {
+          "span": "api-gateway | SERVER | GET /atms",
+          "base_ms": 0.1646080000000003,
+          "falha_ms": 0.17868800000000018,
+          "delta_ms": 0.01407999999999987
+        },
+        {
+          "span": "api-gateway | CLIENT | tcp GET_ALL",
+          "base_ms": 0,
+          "falha_ms": 0,
+          "delta_ms": 0
+        }
+      ],
+      "servicos_ausentes": []
+    },
+    {
+      "fluxo": "POST /atms/block",
+      "traces_base": 60,
+      "traces_falha": 61,
+      "erro_pct": 0,
+      "raiz_p50_base": 3.117312,
+      "raiz_p50_falha": 2.417152,
+      "raiz_p95_base": 10.004992,
+      "raiz_p95_falha": 3.774208,
+      "culpados": [],
+      "maior_aumento_self": [
+        {
+          "span": "api-gateway | CLIENT | tcp BLOCK",
+          "base_ms": 0,
+          "falha_ms": 0,
+          "delta_ms": 0
+        },
+        {
+          "span": "api-gateway | INTERNAL | middleware - urlencodedParser",
+          "base_ms": 0.016384,
+          "falha_ms": 0.012544,
+          "delta_ms": -0.0038399999999999997
+        }
+      ],
+      "servicos_ausentes": []
+    },
+    {
+      "fluxo": "POST /atms/refill",
+      "traces_base": 60,
+      "traces_falha": 61,
+      "erro_pct": 0,
+      "raiz_p50_base": 3.252224,
+      "raiz_p50_falha": 2.540032,
+      "raiz_p95_base": 32.517888,
+      "raiz_p95_falha": 4.694272,
+      "culpados": [],
+      "maior_aumento_self": [
+        {
+          "span": "api-gateway | CLIENT | tcp ABASTECER",
+          "base_ms": 0,
+          "falha_ms": 0,
+          "delta_ms": 0
+        },
+        {
+          "span": "api-gateway | INTERNAL | middleware - <anonymous>",
+          "base_ms": 0.021248,
+          "falha_ms": 0.019456,
+          "delta_ms": -0.0017919999999999985
+        }
+      ],
+      "servicos_ausentes": [
+        "atm-cluster"
+      ]
+    }
+  ]
+}
